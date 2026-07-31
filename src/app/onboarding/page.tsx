@@ -10,6 +10,7 @@ import {
 } from "@/components/onboarding/ProfileFields";
 import { getProfile, saveProfile } from "@/lib/db/repo";
 import { t } from "@/lib/i18n";
+import { asset } from "@/lib/ui/asset";
 
 type Step = "slides" | "form" | "done";
 
@@ -130,7 +131,7 @@ export default function OnboardingPage() {
         />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/art/duo-hero.webp"
+          src={asset("/art/duo-hero.webp")}
           alt=""
           aria-hidden
           width={800}

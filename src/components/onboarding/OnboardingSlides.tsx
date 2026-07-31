@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { Disclaimer } from "@/components/Disclaimer";
 import { t } from "@/lib/i18n";
+import { asset } from "@/lib/ui/asset";
 
 const SLIDE_COUNT = 3;
 
@@ -108,7 +109,7 @@ export function OnboardingSlides({ onFinish }: { onFinish: () => void }) {
               />
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/brand/logo-clean.png"
+                src={asset("/brand/logo-clean.png")}
                 alt={t("onboarding.slide1.imageAlt")}
                 width={900}
                 height={672}

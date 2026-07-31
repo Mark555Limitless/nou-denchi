@@ -1,6 +1,7 @@
 "use client";
 
 import { t } from "@/lib/i18n";
+import { asset } from "@/lib/ui/asset";
 
 /**
  * 「キミの100%! 確定!!」celebration(§4.4 confirmed=1)。
@@ -29,7 +30,7 @@ export function ConfirmedCelebration({ onShare }: { onShare: () => void }) {
         </span>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/characters/fal.jpg"
+          src={asset("/characters/fal.jpg")}
           alt=""
           aria-hidden
           className="h-[120px] w-auto rounded-2xl bg-surface nd-confirmed-pop-delayed"

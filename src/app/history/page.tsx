@@ -8,6 +8,7 @@ import { TrendChart } from "@/components/history/TrendChart";
 import type { SessionRecord } from "@/lib/db/db";
 import { listSessions } from "@/lib/db/repo";
 import { t } from "@/lib/i18n";
+import { asset } from "@/lib/ui/asset";
 
 /** %が算出済みのセッション(履歴表示対象) */
 type ScoredSession = SessionRecord & { percent: number };
@@ -76,7 +77,7 @@ function EmptyState() {
       {/* 案内役の女の子(装飾)。背景除去済み画像のため白面に直置きする */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/characters/girl.jpg"
+        src={asset("/characters/girl.jpg")}
         alt=""
         aria-hidden="true"
         width={605}

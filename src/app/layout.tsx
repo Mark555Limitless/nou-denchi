@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: t("app.name"),
   description: `${t("app.tagline")} — 1〜2分の認知テストで「今の判断力」を全盛期比で測定するセルフコンディション管理アプリ`,
-  manifest: "/manifest.webmanifest",
+  manifest: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/manifest.webmanifest`,
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",

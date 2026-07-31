@@ -6,6 +6,7 @@ import { t } from "@/lib/i18n";
 import { playRelaxCue, playRelaxEnd } from "@/lib/audio/sfx";
 import { BreathCircle, type BreathPhase } from "./BreathCircle";
 import { FloatingBubbles } from "./FloatingBubbles";
+import { asset } from "@/lib/ui/asset";
 
 /**
  * RELAX: 呼吸にあわせるブリージングセッション。
@@ -83,7 +84,7 @@ function GirlRelaxArt() {
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src="/art/girl-relax.webp"
+      src={asset("/art/girl-relax.webp")}
       alt=""
       aria-hidden
       draggable={false}

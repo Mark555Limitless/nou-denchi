@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { playBellSoft } from "@/lib/audio/sfx";
 import { t } from "@/lib/i18n";
+import { asset } from "@/lib/ui/asset";
 
 /**
  * タスク間の2秒自動遷移インタースティシャル(§4.3)。
@@ -45,7 +46,7 @@ export function Interstitial({ label, desc, paused, onDone }: InterstitialProps)
     <div className="flex-1 flex flex-col items-center justify-center gap-3 px-8 text-center select-none">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/characters/fal.jpg"
+        src={asset("/characters/fal.jpg")}
         alt=""
         aria-hidden
         draggable={false}

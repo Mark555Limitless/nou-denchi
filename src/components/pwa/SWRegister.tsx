@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { BASE_PATH } from "@/lib/ui/asset";
 
 /** Service Worker 登録(§7 オフライン動作)。本番ビルドでのみ有効。 */
 export function SWRegister() {
@@ -12,7 +13,7 @@ export function SWRegister() {
     ) {
       return;
     }
-    navigator.serviceWorker.register("/sw.js").catch(() => {
+    navigator.serviceWorker.register(`${BASE_PATH}/sw.js`).catch(() => {
       // オフライン強化の失敗はアプリ動作を妨げない
     });
   }, []);

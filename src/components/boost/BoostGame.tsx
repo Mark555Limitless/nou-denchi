@@ -11,6 +11,7 @@ import {
 } from "@/lib/audio/sfx";
 import { BoostLogo, BoostOutlineText } from "./BoostLogo";
 import { NumberGrid, type TapResult } from "./NumberGrid";
+import { asset } from "@/lib/ui/asset";
 
 /**
  * BOOST!! — ナンバーラッシュ(あそび)。
@@ -265,7 +266,7 @@ export function BoostGame() {
           </div>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/art/fal-boost.webp"
+            src={asset("/art/fal-boost.webp")}
             alt=""
             aria-hidden
             draggable={false}
@@ -304,7 +305,7 @@ export function BoostGame() {
         <div className="relative flex-1 flex flex-col items-center justify-center gap-6 text-center">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/art/fal-boost.webp"
+            src={asset("/art/fal-boost.webp")}
             alt=""
             aria-hidden
             draggable={false}
@@ -369,7 +370,7 @@ export function BoostGame() {
           <div className="w-full bg-surface-2 rounded-3xl border border-hairline shadow-md p-6 flex flex-col items-center gap-3">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/art/fal-boost.webp"
+              src={asset("/art/fal-boost.webp")}
               alt=""
               aria-hidden
               draggable={false}

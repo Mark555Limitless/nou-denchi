@@ -207,3 +207,20 @@
 - **[2] PVT(覚醒度)の待ち時間上限を4秒に短縮**: 刺激提示までのランダム待ち時間を
   2〜6秒 → **2〜4秒**(scoringConfig.pvt.maxIntervalMs 6000→4000)に変更。
   8試行の総所要時間が最大で約16秒短くなる。下限2秒は予測タップ防止のため維持
+
+## 2026-07-31 追加変更 その8(ユーザー指示・GitHub公開)
+
+- **GitHubリポジトリ公開**: https://github.com/Mark555Limitless/nou-denchi (public)。
+  APIキー等の機密が含まれないことをスキャン確認のうえ全ソースをコミット
+- **GitHub Pages 公開**: https://mark555limitless.github.io/nou-denchi/
+  (gh-pages ブランチ配信。トークンに workflow スコープがないため Actions ではなく
+  ブランチ方式。再デプロイは `npm run deploy:pages`)
+- **サブパス配信対応(basePath=/nou-denchi)**:
+  - next.config.ts: NEXT_PUBLIC_BASE_PATH 環境変数で basePath を切替
+    (未設定=ローカル・ルート配信では従来どおり)
+  - 素の <img src> / Canvas Image.src は next/link と違い basePath が自動付与されない
+    ため、src/lib/ui/asset.ts の asset() ヘルパーを全画像参照(14箇所)に適用
+  - manifest.webmanifest: id/start_url/scope/icons を相対URL化(どのベースでも動作)
+  - Service Worker: 登録パス(SWRegister)と precache リスト・ナビゲーション
+    フォールバック(gen-sw.mjs)を BASE_PATH 対応。.DS_Store を precache から除外
+  - gh-pages ブランチには .nojekyll を同梱(Jekyll が _next/ を落とす事故防止)

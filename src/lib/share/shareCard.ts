@@ -3,6 +3,7 @@ import { zoneHex, zoneTextHexOf } from "@/lib/ui/zone";
 import { brandColors } from "@/lib/config";
 import { t } from "@/lib/i18n";
 import { timeLabel } from "@/lib/ui/format";
+import { asset } from "@/lib/ui/asset";
 
 /**
  * シェアカード生成(§6 MUST)。1080×1350 縦型PNG を Canvas に描画する関数。
@@ -57,7 +58,7 @@ function loadLogo(): Promise<HTMLImageElement | null> {
       logoPromise = null; // 次回の生成で再試行できるようにする
       resolve(null);
     };
-    img.src = "/brand/logo.png";
+    img.src = asset("/brand/logo.png");
   });
   logoPromise = p;
   return p;

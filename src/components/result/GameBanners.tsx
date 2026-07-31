@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { t } from "@/lib/i18n";
+import { asset } from "@/lib/ui/asset";
 
 /**
  * BOOST!!/RELAX ゲームバナー(§4.4 結果画面)。
@@ -47,12 +48,12 @@ export function GameBanners() {
       <GameBanner
         href="/boost/"
         ariaLabel={t("result.boost.aria")}
-        imgSrc="/games/banner-boost.webp"
+        imgSrc={asset("/games/banner-boost.webp")}
       />
       <GameBanner
         href="/relax/"
         ariaLabel={t("result.relax.aria")}
-        imgSrc="/games/banner-relax.webp"
+        imgSrc={asset("/games/banner-relax.webp")}
       />
     </div>
   );

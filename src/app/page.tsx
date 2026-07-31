@@ -10,6 +10,7 @@ import { zoneClasses } from "@/lib/ui/zone";
 import { getHomeState, type HomeState } from "@/lib/service/measurement";
 import { BatteryGauge } from "@/components/home/BatteryGauge";
 import { ProvisionalModal } from "@/components/home/ProvisionalModal";
+import { asset } from "@/lib/ui/asset";
 
 /** ホーム画面(§4.2): 今日の判断力%を脳バッテリー残量メタファーで表示する。 */
 
@@ -52,7 +53,7 @@ function HomeHeader() {
       {/* ロゴ&キャッチコピー(Nano Banana Pro で背景を除去した抽出版・純白背景) */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/brand/logo-clean.png"
+        src={asset("/brand/logo-clean.png")}
         alt={`${t("app.name")} — ${t("app.tagline")}`}
         width={900}
         height={655}

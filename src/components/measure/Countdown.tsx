@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { playBellSoft } from "@/lib/audio/sfx";
 import { t } from "@/lib/i18n";
 import { PvtInstruction } from "./PvtInstruction";
+import { asset } from "@/lib/ui/asset";
 
 /** 測定開始前の3秒カウントダウン(§4.3)。Task A のタスク名称と1行説明も添える。 */
 export function Countdown({ onDone }: { onDone: () => void }) {
@@ -40,7 +41,7 @@ export function Countdown({ onDone }: { onDone: () => void }) {
       </div>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/characters/fal.jpg"
+        src={asset("/characters/fal.jpg")}
         alt=""
         aria-hidden
         draggable={false}
