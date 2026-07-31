@@ -1,26 +1,82 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+ * デザイントークン — 白背景リッチテーマ(2026-07-31 改訂・GPT Image 2 生成の
+ * docs/design/mock-rich-home.png / mock-rich-result.png 準拠)。
+ * 純白 × 光沢ブルーグラデーション × 金のオーナメント × 濃紺タイポグラフィ。
+ * 主要ボタンの推奨レシピ:
+ *   bg-linear-to-b from-primary to-primary-deep text-primary-ink font-bold
+ *   rounded-full shadow-lg ring-1 ring-gold-soft
+ *
+ * ゾーン4色(fill)は検証済みステータスパレット。白面上で文字として使う場合は
+ * 必ず --color-zone-*-text(コントラスト4.5:1以上を検証済み)を使うこと。
+ * ゾーン色は必ずラベル文言と併記し、色単独で意味を伝えない(色覚多様性対応)。
+ */
+@theme {
+  --color-surface: #ffffff;
+  --color-surface-2: #ffffff;
+  --color-surface-3: #edf2fa;
+  --color-ink: #232f5c;
+  --color-ink-2: #46538a;
+  --color-ink-mute: #5f6d98;
+  --color-hairline: rgba(35, 47, 92, 0.14);
+
+  /* 主要アクション: 光沢ブルーのグラデーション
+     (bg-linear-to-b from-primary to-primary-deep + text-primary-ink)。
+     白文字は下端 #1c5cab で 6.6:1、上端 #2a78d6 でも太字で成立 */
+  --color-primary: #2a78d6;
+  --color-primary-deep: #1c5cab;
+  --color-primary-ink: #ffffff;
+
+  /* 金のオーナメント(装飾専用。文字に使う場合は gold-deep=5.05:1) */
+  --color-gold: #b8912f;
+  --color-gold-deep: #8a6a1c;
+  --color-gold-soft: #ead9ab;
+
+  /* BOOST!! / RELAX(白面上の文字は -deep を使用・6.5:1) */
+  --color-boost: #d64545;
+  --color-boost-deep: #b3261e;
+  --color-relax: #2f9e63;
+  --color-relax-deep: #166b3f;
+
+  /* ゾーン fill(ゲージ・バー等の図形用) */
+  --color-zone-green: #0ca30c;
+  --color-zone-yellow: #fab219;
+  --color-zone-orange: #ec835a;
+  --color-zone-red: #d03b3b;
+
+  /* ゾーン text(白面上の文字用・4.5:1検証済み) */
+  --color-zone-green-text: #077f07;
+  --color-zone-yellow-text: #8a6100;
+  --color-zone-orange-text: #b5490f;
+  --color-zone-red-text: #d03b3b;
+
+  /* アクセントの青(ロゴ・スコア数字にのみ使用。白面で5.4:1) */
+  --color-chart: #256abf;
+
+  --font-sans: var(--font-geist-sans), "Hiragino Sans",
+    "Hiragino Kaku Gothic ProN", "Noto Sans JP", Meiryo, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  height: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-tap-highlight-color: transparent;
+  /* ダブルタップズーム由来のタップ遅延を排除(計時精度・§7) */
+  touch-action: manipulation;
+  overscroll-behavior-y: none;
+}
+
+/*
+ * スマホ比率(縦16:横9)の表示枠。
+ * 実機ではほぼ全幅、PC等の広い画面では高さ基準で 9:16 の幅に制限する。
+ */
+:root {
+  --app-max-w: min(28rem, calc(100dvh * 9 / 16));
 }

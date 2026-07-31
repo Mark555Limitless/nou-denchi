@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 脳でんち — 「キミ! 今何%!?」
 
-## Getting Started
+「今」の自分の判断力は、「ベストな状態の自分」の何%か? を1〜2分の認知テストで測定・可視化する
+セルフコンディション管理 PWA(MVP / v1.0)。
 
-First, run the development server:
+比較対象は常に**過去の自分自身**。他人との比較・ランキングは行わない。
+
+## 測定の中身(コア電池3種)
+
+| タスク | 内容 | 測るもの |
+|---|---|---|
+| A: PVT簡易版 | ランダム出現するターゲットを即タップ ×8試行 | 覚醒度 |
+| B: 単純計算 | 30秒で解けるだけ4択計算 | 処理速度 |
+| C: ストループ | 「文字の色」を答える(一致:不一致=1:2) | 切替力 |
+
+総合スコア S = 0.40×覚醒度 + 0.30×処理速度 + 0.30×切替力(正規化後)。
+%(全盛期比) = S ÷ 自分のMAX × 100。**その時点までに計測された最高スコアが常に「100%」の基準**で、
+初回測定がそのまま最初の100%になり、MAXを超えるスコアが出るたびに基準は即時更新される(ベスト更新)。
+
+## 開発
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run dev        # 開発サーバー
+npm test           # 測定エンジンの単体テスト(Vitest)
+npm run build      # 静的エクスポート(out/)+ Service Worker 生成
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Next.js (App Router) + TypeScript + Tailwind CSS / グラフ: Recharts / DB: Dexie.js (IndexedDB)
+- 測定エンジン(出題・採点・ベースライン)は `src/lib/engine/` の**UI非依存の純粋関数**
+  (将来のネイティブ移植・B2B転用を想定)。仕様上の不明点への判断は [docs/DECISIONS.md](docs/DECISIONS.md)
+- 反応時間は `performance.now()` で ms 単位計測、入力は `pointerdown` で計時
+- データスキーマは `schemaVersion` を持ち、マイグレーション可能
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## プライバシー / 倫理設計(変更してはならない設計思想)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **完全ローカル**: データは端末内 IndexedDB のみ。サーバー送信ゼロ、アカウントなし、**アナリティクスも一切入れない**
+- **非医療**: 本アプリは医療機器ではなく、診断を目的としない(オンボーディングと設定画面に明記)。
+  認知症スクリーニング等の医療的訴求は行わない(薬機法対応)
+- **低スコア時に商品・広告・外部リンクを一切出さない**。MVP に広告はなく、
+  将来もスコア低下時のレコメンドは**禁止**(この設計思想は Phase 2 以降も維持すること)
+- 他者比較ランキングは実装しない
+- シェアカードに載るのは % と日付のみ(個人情報なし)
 
-## Learn More
+## スコープ外(Phase 2 以降・未実装)
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+アカウント/サーバー同期・課金・広告・B2B管理画面・ランキング・ウェアラブル連携・AIコーチ・プッシュ通知。
+ただし測定エンジン分離・機能フラグ(`featureFlags`)・スキーマバージョニングで拡張余地は確保済み。
