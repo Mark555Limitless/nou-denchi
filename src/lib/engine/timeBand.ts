@@ -9,8 +9,3 @@ export function timeBandOf(date: Date): TimeBand {
   return "night";
 }
 
-/** ローカル日付キー(測定日数のカウント用) */
-export function dayKeyOf(epochMs: number): string {
-  const d = new Date(epochMs);
-  return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
-}

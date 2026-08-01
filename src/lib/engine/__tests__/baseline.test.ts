@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { SessionSummary, TimeBand } from "../types";
 import { beatBaseline, computeTimeBandBaseline } from "../baseline";
-import { dayKeyOf, timeBandOf } from "../timeBand";
+import { timeBandOf } from "../timeBand";
 
 const DAY = 86_400_000;
 const NOW = new Date(2026, 6, 30, 12, 0, 0).getTime();
@@ -64,14 +64,6 @@ describe("computeTimeBandBaseline (§3.3(c)改: 区分内MAX)", () => {
     const comp = computeTimeBandBaseline(sessions, "night", NOW);
     expect(comp?.value).toBe(1.2);
     expect(comp?.sourceSessionIds).not.toContain("old");
-  });
-});
-
-describe("dayKeyOf", () => {
-  it("日付境界(23:59 と 翌0:01)は別日として数える", () => {
-    const d1 = new Date(2026, 6, 29, 23, 59).getTime();
-    const d2 = new Date(2026, 6, 30, 0, 1).getTime();
-    expect(dayKeyOf(d1)).not.toBe(dayKeyOf(d2));
   });
 });
 

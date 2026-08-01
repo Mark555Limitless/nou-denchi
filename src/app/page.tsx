@@ -105,11 +105,11 @@ export default function Home() {
     );
   }
 
-  const { todaySession: today } = home;
-  const rawPercent = today?.percent ?? 0;
-  const display = today ? displayPercent(rawPercent) : undefined;
-  const zone = today ? zoneOf(rawPercent) : undefined;
-  const provisional = today?.baselineType === "provisional";
+  const { latestSession: latest } = home;
+  const rawPercent = latest?.percent ?? 0;
+  const display = latest ? displayPercent(rawPercent) : undefined;
+  const zone = latest ? zoneOf(rawPercent) : undefined;
+  const provisional = latest?.baselineType === "provisional";
 
   return (
     <div className="relative flex flex-1 flex-col overflow-hidden px-5 pb-6">
@@ -117,9 +117,9 @@ export default function Home() {
       <HomeHeader />
 
       <section className="relative flex flex-1 flex-col items-center justify-center gap-4 py-4">
-        {today && (
+        {latest && (
           <p className="text-sm text-ink-2">
-            {t("percent.label", { time: timeLabel(today.startedAt) })}
+            {t("percent.label", { time: timeLabel(latest.startedAt) })}
           </p>
         )}
 
@@ -146,12 +146,12 @@ export default function Home() {
           </div>
         )}
 
-        {today?.baselineType === "personalTimeBand" && (
+        {latest?.baselineType === "personalTimeBand" && (
           <p className="text-center text-xs text-ink-mute">
             {t("percent.timeBandNote")}
           </p>
         )}
-        {today?.baselineType === "personal" && (
+        {latest?.baselineType === "personal" && (
           <p className="text-center text-xs text-ink-mute">
             {t("percent.globalNote")}
           </p>

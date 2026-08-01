@@ -10,7 +10,7 @@ import {
   zoneOf,
   type DisplayPercent,
 } from "@/lib/engine/scoring";
-import { dayKeyOf, timeBandOf } from "@/lib/engine/timeBand";
+import { timeBandOf } from "@/lib/engine/timeBand";
 import type {
   BaselineType,
   SessionScore,
@@ -176,24 +176,22 @@ export async function completeSession(
 
 export interface HomeState {
   profile: UserProfile | undefined;
-  /** 今日測定済みの最新セッション(未測定なら undefined) */
-  todaySession: SessionRecord | undefined;
+  /**
+   * 直近の測定セッション(未測定なら undefined)。
+   * 2026-07-31 ユーザー指示: 日付が変わってもホーム表示をリセットせず、
+   * 常に最新の測定結果を表示し続ける(データは恒久保持・削除される仕組みはない)。
+   */
   latestSession: SessionRecord | undefined;
   /** MAX(100%基準)が登録済みか(=1回でも測定済みか) */
   baselineConfirmed: boolean;
 }
 
-export async function getHomeState(now = Date.now()): Promise<HomeState> {
+export async function getHomeState(): Promise<HomeState> {
   const profile = await getProfile();
   const sessions = await listSessions();
   const globalBl = await getBaseline("global");
-  const todayKey = dayKeyOf(now);
-  const todaySession = [...sessions]
-    .reverse()
-    .find((s) => dayKeyOf(s.startedAt) === todayKey);
   return {
     profile,
-    todaySession,
     latestSession: sessions[sessions.length - 1],
     baselineConfirmed: !!globalBl,
   };
