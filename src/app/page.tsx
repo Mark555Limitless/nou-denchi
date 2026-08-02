@@ -41,7 +41,7 @@ function HomeHeader() {
         alt={`${t("app.name")} — ${t("app.tagline")}`}
         width={900}
         height={672}
-        className="mx-auto h-[173px] w-auto"
+        className="mx-auto h-[138px] w-auto"
         style={{ filter: "drop-shadow(0 2px 6px rgba(255,255,255,0.8))" }}
       />
     </header>
@@ -121,7 +121,7 @@ export default function Home() {
         {zone && (
           <div className="flex items-center justify-center gap-2.5">
             <span
-              className={`shrink-0 rounded-full border border-white/80 bg-white/85 px-4 py-1 text-sm font-bold shadow-sm backdrop-blur-sm ${zoneClasses[zone].text}`}
+              className={`shrink-0 rounded-full border border-[#c6cdd8] bg-white/85 px-4 py-1 text-sm font-bold shadow-sm backdrop-blur-sm ${zoneClasses[zone].text}`}
             >
               {t(`zone.${zone}.label`)}
             </span>

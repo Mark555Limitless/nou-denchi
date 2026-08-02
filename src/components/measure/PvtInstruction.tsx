@@ -29,7 +29,7 @@ export function PvtInstruction({
     >
       <span aria-hidden className="block">
         <span
-          className={`inline-block rounded-full bg-radial-[at_33%_28%] from-white/70 via-[#d7ebf8]/45 to-[#9cc4e6]/60 ring-1 ring-white/90 shadow-[inset_0_1px_2px_rgba(255,255,255,0.9),inset_0_-2px_3px_rgba(90,140,190,0.4)] ${iconClassName}`}
+          className={`inline-block rounded-full bg-radial-[at_33%_28%] from-[#cfe6f8]/75 via-[#9ecbee]/60 to-[#5f9bd6]/70 ring-1 ring-white/90 shadow-[inset_0_1px_2px_rgba(255,255,255,0.9),inset_0_-2px_3px_rgba(70,120,180,0.45)] ${iconClassName}`}
         />
         {t("measure.pvt.instructionAfter")}
       </span>

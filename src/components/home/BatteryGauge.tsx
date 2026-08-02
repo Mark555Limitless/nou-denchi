@@ -18,7 +18,6 @@ import { zoneClasses } from "@/lib/ui/zone";
 const RING_MAX_PERCENT = 105;
 const CX = 110;
 const CY = 110;
-const R = 96;
 
 export interface BatteryGaugeProps {
   /** 表示用%(クリップ済)。undefined = 未測定 */
@@ -47,12 +46,37 @@ export function BatteryGauge({
     ? Math.min(Math.max(rawPercent ?? value, 0), RING_MAX_PERCENT) /
       RING_MAX_PERCENT
     : 0;
-  const circumference = 2 * Math.PI * R;
-  // Start画面11 準拠: リングは12時に恒常的な切れ目(丸キャップの管の両端が
-  // 11時〜1時に見える)。0〜105% を切れ目を除いた316°にマップする。
-  const GAP_DEG = 44;
-  const usable = (360 - GAP_DEG) / 360;
-  const startRotate = -90 + GAP_DEG / 2;
+  // Nano Banana Pro 生成のゲージ写真素材(public/art/gauge.webp・Start画面11を完全再現)を
+  // そのまま表示し、%はガラス管部分だけをドーナツ扇形クリップで開示して表現する。
+  // 素材の実測比率(トリム後2048px原画・中心からの半径/最大半径):
+  //   ディスク外縁 0.769 / 管の内縁 0.824 / 管の外縁 1.0 / 12時に約20°の切れ目
+  const S = 216; // viewBox 内での素材表示サイズ
+  const IMG_MAX = 1725; // 真円補正・トリム後素材の長辺
+  const scale = S / IMG_MAX;
+  const R_OUT = 870 * scale; // 管外縁(余白ぶん少し広め)
+  const R_IN = 708 * scale; // 管内縁(グロー帯との境界)
+  const GAP_DEG = 20; // 12時の切れ目(素材に焼き込み済み)
+  const USABLE = 360 - GAP_DEG;
+  /** 12時起点・時計回り deg → viewBox 座標 */
+  const pt = (r: number, deg: number): string => {
+    const rad = ((deg - 90) * Math.PI) / 180;
+    return `${(CX + r * Math.cos(rad)).toFixed(2)} ${(CY + r * Math.sin(rad)).toFixed(2)}`;
+  };
+  /** ガラス管のドーナツ扇形パス(a0°から時計回りに sweep°) */
+  const donutSector = (a0: number, sweep: number): string => {
+    const a1 = a0 + sweep;
+    const large = sweep > 180 ? 1 : 0;
+    return [
+      `M ${pt(R_OUT, a0)}`,
+      `A ${R_OUT.toFixed(2)} ${R_OUT.toFixed(2)} 0 ${large} 1 ${pt(R_OUT, a1)}`,
+      `L ${pt(R_IN, a1)}`,
+      `A ${R_IN.toFixed(2)} ${R_IN.toFixed(2)} 0 ${large} 0 ${pt(R_IN, a0)}`,
+      "Z",
+    ].join(" ");
+  };
+  // ほぼ満充電(約101%以上)は素材の丸キャップ両端をそのまま見せる(クリップなし)
+  const fullRing = frac >= 0.96;
+  const arcPath = donutSector(GAP_DEG / 2 + 1, Math.max(0, frac) * (USABLE - 2));
 
   return (
     <div className="relative aspect-square w-[78vw] max-w-[330px]">
@@ -63,107 +87,52 @@ export function BatteryGauge({
         style={{ filter: "drop-shadow(0 12px 24px rgba(44, 93, 168, 0.25))" }}
       >
         <defs>
-          {/* 青いガラス管(残量アーク)の断面グラデ: 白い上面反射→水色→青の底 */}
-          <linearGradient id="blueTube" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#eaf5fc" />
-            <stop offset="45%" stopColor="#bcd9f0" />
-            <stop offset="100%" stopColor="#8fb9e0" />
-          </linearGradient>
-          <linearGradient id="trackTube" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.85" />
-            <stop offset="100%" stopColor="#dcebf7" stopOpacity="0.6" />
-          </linearGradient>
-          <filter id="tealSoft" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="3.2" />
-          </filter>
+          {/* 静的部分: ディスク+ミントのグロー帯(管の内側全体) */}
+          <clipPath id="gaugeInner">
+            <circle cx={CX} cy={CY} r={R_IN + 1} />
+          </clipPath>
+          {/* 動的部分: ガラス管を%ぶんだけ開示するドーナツ扇形 */}
+          {!fullRing && (
+            <clipPath id="gaugeArc">
+              <path d={arcPath} />
+            </clipPath>
+          )}
         </defs>
-        {/* 内側の静的な青緑グロー帯(ディスクとガラス管の間・Start画面11準拠) */}
+        {/* 未達分のかすかなトラック(位置の手がかり。参照に馴染む白ガラスの細帯) */}
         <circle
           cx={CX}
           cy={CY}
-          r={R - 9}
+          r={(R_IN + R_OUT) / 2}
           fill="none"
-          stroke="#bfe8d9"
-          strokeWidth="9"
-          opacity="0.85"
-          filter="url(#tealSoft)"
-        />
-        {/* トラック: 白いガラス管(未達分。12時の切れ目を除く316°) */}
-        <circle
-          cx={CX} cy={CY} r={R} fill="none" stroke="#a9c8e2" strokeWidth="15" opacity="0.45"
+          stroke="#ffffff"
+          strokeOpacity="0.32"
+          strokeWidth={R_OUT - R_IN - 7}
           strokeLinecap="round"
-          strokeDasharray={`${circumference * usable} ${circumference}`}
-          transform={`rotate(${startRotate} ${CX} ${CY})`}
+          strokeDasharray={`${2 * Math.PI * ((R_IN + R_OUT) / 2) * ((USABLE - 6) / 360)} ${2 * Math.PI * ((R_IN + R_OUT) / 2)}`}
+          transform={`rotate(${-90 + GAP_DEG / 2 + 3} ${CX} ${CY})`}
         />
-        <circle
-          cx={CX} cy={CY} r={R} fill="none" stroke="url(#trackTube)" strokeWidth="12"
-          strokeLinecap="round"
-          strokeDasharray={`${circumference * usable} ${circumference}`}
-          transform={`rotate(${startRotate} ${CX} ${CY})`}
-        />
-        {/* 残量アーク: 青いガラス管(丸キャップ・12時起点。満充電時は上部に丸い切れ目が残る) */}
-        {measured && frac > 0 && (
-          <g
-            className="transition-[stroke-dasharray] duration-700 ease-out"
-            style={{ filter: "drop-shadow(0 2px 4px rgba(90, 140, 190, 0.45))" }}
-          >
-            {/* 管の外縁(濃いめの青のリム) */}
-            <circle
-              cx={CX}
-              cy={CY}
-              r={R}
-              fill="none"
-              stroke="#7ba8d4"
-              strokeWidth="15"
-              strokeLinecap="round"
-              strokeDasharray={`${circumference * usable * frac} ${circumference}`}
-              transform={`rotate(${startRotate} ${CX} ${CY})`}
-            />
-            {/* 管の本体(ガラスグラデ) */}
-            <circle
-              cx={CX}
-              cy={CY}
-              r={R}
-              fill="none"
-              stroke="url(#blueTube)"
-              strokeWidth="11.5"
-              strokeLinecap="round"
-              strokeDasharray={`${circumference * usable * frac} ${circumference}`}
-              transform={`rotate(${startRotate} ${CX} ${CY})`}
-            />
-            {/* 管の上面ハイライト(細い白) */}
-            <circle
-              cx={CX}
-              cy={CY}
-              r={R + 3.2}
-              fill="none"
-              stroke="#ffffff"
-              strokeWidth="1.8"
-              opacity="0.9"
-              strokeLinecap="round"
-              strokeDasharray={`${circumference * usable * frac * 0.97} ${circumference}`}
-              transform={`rotate(${startRotate + 2} ${CX} ${CY})`}
-            />
-          </g>
-        )}
-        {/* 中央: ブラッシュドシルバーの金属ディスク */}
+        {/* ゲージ写真素材(ディスク+グロー: 常時表示) */}
         <image
-          href={asset("/art/metal-disc.webp")}
-          x={CX - (R - 14)}
-          y={CY - (R - 14)}
-          width={(R - 14) * 2}
-          height={(R - 14) * 2}
+          href={asset("/art/gauge.webp")}
+          x={CX - S / 2}
+          y={CY - S / 2}
+          width={S}
+          height={S}
+          preserveAspectRatio="xMidYMid meet"
+          clipPath="url(#gaugeInner)"
         />
-        {/* ディスク縁: 白銀のベベル+接地の陰影 */}
-        <circle cx={CX} cy={CY} r={R - 13.4} fill="none" stroke="#f4f9fd" strokeWidth="1.6" opacity="0.9" />
-        <circle
-          cx={CX}
-          cy={CY}
-          r={R - 14.8}
-          fill="none"
-          stroke="rgba(28,58,102,0.3)"
-          strokeWidth="1"
-        />
+        {/* ゲージ写真素材(ガラス管: %ぶんだけ開示) */}
+        {measured && frac > 0 && (
+          <image
+            href={asset("/art/gauge.webp")}
+            x={CX - S / 2}
+            y={CY - S / 2}
+            width={S}
+            height={S}
+            preserveAspectRatio="xMidYMid meet"
+            clipPath={fullRing ? undefined : "url(#gaugeArc)"}
+          />
+        )}
       </svg>
 
       {/* 中央表示(金属ディスク上の濃紺エンボス) */}

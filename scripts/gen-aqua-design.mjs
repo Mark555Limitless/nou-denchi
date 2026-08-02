@@ -176,6 +176,16 @@ const jobs = [
 条件: 文字・UI・ロゴ・脳・物体は一切描かない。純粋な背景のみ。中央部は特に穏やかでフラット(上にUIが載るため)。明るさは参照画像と同じく白っぽい水色。`,
   },
   {
+    name: "asset-gauge",
+    file: "asset-gauge.png",
+    prompt: `参照画像はスマホアプリの確定デザインです。画面中央にある円形ゲージ(スコア表示部品)を注意深く観察してください。構造は:
+- 外側: 透明な青いガラスの管でできたリング。12時の位置に切れ目があり、管の丸い端が11時と1時の位置に見える。管の中には微細な気泡と水滴が入り、白いハイライトと青い縁が繊細に描かれている
+- 内側: リングと銀色の円盤の間に、淡い青緑(ミント)色のやわらかい光の帯が一周している
+- 中央: ヘアライン(同心円ブラシ)加工のブラッシュドシルバー金属円盤。縁は明るくベベル加工
+この円形ゲージ部品「だけ」を、参照画像と寸分違わぬ質感・色・繊細さで再現してください。
+条件: 純白(#ffffff)背景の中央に大きく1つ。**円盤の上に文字・数字は一切描かない**(無地の金属面)。周囲の背景の水面・泡・他のUIは描かない。`,
+  },
+  {
     name: "asset-logo-v2",
     file: "asset-logo-v2.png",
     prompt: `参照画像はアプリ「脳でんち」のロゴ&キャッチコピーの原典(2026-08-02更新版)です。
@@ -212,7 +222,7 @@ const main = async () => {
         : [{ path: REF_START, mime: "image/png" }];
     if (!j.name.startsWith("asset-")) refs.push({ path: REF_LOGO, mime: "image/png" });
     const aspect =
-      j.name === "asset-metal-disc" ? "1:1" :
+      j.name === "asset-metal-disc" || j.name === "asset-gauge" ? "1:1" :
       j.name === "asset-logo-v2" ? "16:9" : "9:16";
     await nanoBanana(j.name, j.prompt, refs, aspect, path.join(OUT, j.file));
   }

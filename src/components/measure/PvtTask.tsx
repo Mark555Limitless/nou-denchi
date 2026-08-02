@@ -244,13 +244,14 @@ export function PvtTask({ seed, paused, trialsOverride, onDone }: PvtTaskProps) 
         <p className="pt-3 font-mono text-sm text-ink-2">
           {t("measure.progress", { n: trialNo, total: totalTrials })}
         </p>
-        <div className="flex-1 flex flex-col items-center justify-center gap-6 w-full">
+        {/* 泡・フィードバックは画面全体の縦中央に配置(ユーザー指示[3]) */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 w-full pointer-events-none">
           {phase === "waiting" && (
             <p className="text-lg text-ink-2">{t("measure.pvt.waiting")}</p>
           )}
           {phase === "shown" && (
             <div
-              className="relative w-44 h-44 rounded-full flex flex-col items-center justify-center bg-radial-[at_33%_28%] from-white/60 via-[#d7ebf8]/40 to-[#9cc4e6]/55 ring-2 ring-white/90 shadow-lg shadow-primary/25"
+              className="relative w-44 h-44 rounded-full flex flex-col items-center justify-center bg-radial-[at_33%_28%] from-[#cfe6f8]/70 via-[#9ecbee]/55 to-[#5f9bd6]/65 ring-2 ring-white/90 shadow-lg shadow-primary/25"
               style={{
                 boxShadow:
                   "inset 0 10px 18px rgba(255,255,255,0.8), inset 0 -12px 26px rgba(90,140,190,0.35), 0 10px 24px rgba(44,93,168,0.25)",
@@ -307,7 +308,7 @@ export function PvtTask({ seed, paused, trialsOverride, onDone }: PvtTaskProps) 
         {/* 下部ヒント(2段組み・ユーザー指示*14): 現在より20%上に配置し、さらに薄いグレー。
             375px 級の狭い端末でも各行が折り返さないよう 8.5vw を上限併用(min())する */}
         <PvtInstruction
-          className="text-center text-[min(1.5rem,8.5vw)] leading-snug text-[#a9bfdc]"
+          className="mt-auto text-center text-[min(1.5rem,8.5vw)] leading-snug text-[#a9bfdc]"
           iconClassName="w-6 h-6 align-[-3px]"
           style={{
             paddingBottom: "max(2.5rem, env(safe-area-inset-bottom))",

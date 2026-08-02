@@ -198,7 +198,7 @@ export function StroopTask({
         )}
       </div>
       <div className="flex-1 flex flex-col items-center justify-center gap-5">
-        <p className="text-sm text-ink-2">{t("measure.stroop.hint")}</p>
+        <p className="text-[21px] text-ink-faint">{t("measure.stroop.hint")}</p>
         <p
           className="text-6xl font-bold"
           style={{ color: stroopInkHex[q.ink] }}
