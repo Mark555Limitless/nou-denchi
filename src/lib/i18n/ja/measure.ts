@@ -15,9 +15,10 @@ export const measure = {
   // カウントダウン
   "measure.countdown.ready": "まもなくスタート",
 
-  // Task A: PVT(「○」は実刺激と同色の円をインライン表示するため前後分割)
-  "measure.pvt.instructionAfter": "が出たら、すぐに画面をタップ!",
-  "measure.pvt.instructionAria": "円が出たら、すぐに画面をタップ!",
+  // Task A: PVT(「○」は実刺激と同色の円をインライン表示するため前後分割・2段組み)
+  "measure.pvt.instructionAfter": "が出たら、",
+  "measure.pvt.instructionLine2": "素早く画面をタップ!",
+  "measure.pvt.instructionAria": "円が出たら、素早く画面をタップ",
   "measure.pvt.waiting": "そのまま待って…",
   "measure.pvt.timeout": "時間切れ",
   "measure.msUnit": "ms",

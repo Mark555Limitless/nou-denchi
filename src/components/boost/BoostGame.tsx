@@ -11,7 +11,58 @@ import {
 } from "@/lib/audio/sfx";
 import { BoostLogo, BoostOutlineText } from "./BoostLogo";
 import { NumberGrid, type TapResult } from "./NumberGrid";
-import { asset } from "@/lib/ui/asset";
+
+/**
+ * 雷の紋章(BOOST!! の世界観装飾)。赤グラデの光る円盤+白い稲妻+金のリング。
+ * 画像アセット不使用(キャラ廃止後のSVG装飾)。size はピクセル。
+ */
+function BoltEmblem({ size }: { size: number }) {
+  return (
+    <div
+      aria-hidden
+      className="pointer-events-none relative flex items-center justify-center"
+      style={{ width: size, height: size }}
+    >
+      {/* 背後の赤い光彩 */}
+      <div
+        className="absolute -inset-4 rounded-full"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(214,69,69,0.22) 0%, rgba(214,69,69,0) 70%)",
+        }}
+      />
+      <svg viewBox="0 0 100 100" className="relative h-full w-full drop-shadow-md">
+        <defs>
+          <linearGradient id="boost-bolt-disc" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" style={{ stopColor: "var(--color-boost)" }} />
+            <stop offset="1" style={{ stopColor: "var(--color-boost-deep)" }} />
+          </linearGradient>
+          <linearGradient id="boost-bolt-gloss" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#ffffff" stopOpacity="0.45" />
+            <stop offset="1" stopColor="#ffffff" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <circle cx="50" cy="50" r="44" fill="url(#boost-bolt-disc)" />
+        {/* 上部の光沢(主要ボタンのグロスと同じ質感) */}
+        <ellipse cx="50" cy="30" rx="28" ry="14" fill="url(#boost-bolt-gloss)" />
+        {/* 金のリング */}
+        <circle
+          cx="50"
+          cy="50"
+          r="44"
+          fill="none"
+          stroke="var(--color-gold-soft)"
+          strokeWidth="2.5"
+        />
+        {/* 稲妻 */}
+        <path
+          d="M56 16 L28 54 L45 54 L40 86 L74 42 L52 42 Z"
+          fill="#ffffff"
+        />
+      </svg>
+    </div>
+  );
+}
 
 /**
  * BOOST!! — ナンバーラッシュ(あそび)。
@@ -264,14 +315,7 @@ export function BoostGame() {
               {t("boost.subtitle")}
             </p>
           </div>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={asset("/art/fal-boost.webp")}
-            alt=""
-            aria-hidden
-            draggable={false}
-            className="h-40 w-40 rounded-3xl ring-1 ring-gold-soft shadow-md pointer-events-none"
-          />
+          <BoltEmblem size={144} />
           <div className="w-full bg-surface-2 rounded-3xl border border-hairline shadow-md p-5 flex flex-col gap-1.5">
             <p className="text-base font-extrabold text-ink">
               {t("boost.intro.lead")}
@@ -303,14 +347,7 @@ export function BoostGame() {
 
       {phase === "countdown" && (
         <div className="relative flex-1 flex flex-col items-center justify-center gap-6 text-center">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={asset("/art/fal-boost.webp")}
-            alt=""
-            aria-hidden
-            draggable={false}
-            className="h-32 w-32 rounded-3xl ring-1 ring-gold-soft shadow-md pointer-events-none"
-          />
+          <BoltEmblem size={112} />
           <p
             aria-live="polite"
             className="font-mono text-8xl font-black text-boost-deep"
@@ -368,14 +405,7 @@ export function BoostGame() {
         <div className="relative flex-1 flex flex-col items-center justify-center gap-5 text-center">
           <BoostLogo size="sm" />
           <div className="w-full bg-surface-2 rounded-3xl border border-hairline shadow-md p-6 flex flex-col items-center gap-3">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={asset("/art/fal-boost.webp")}
-              alt=""
-              aria-hidden
-              draggable={false}
-              className="h-24 w-24 rounded-2xl ring-1 ring-gold-soft pointer-events-none"
-            />
+            <BoltEmblem size={80} />
             <p className="text-sm font-bold text-ink-mute">
               {t("boost.result.label")}
             </p>

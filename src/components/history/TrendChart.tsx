@@ -105,12 +105,12 @@ function TrendTooltip({ active, payload }: TooltipContentProps) {
   if (!p) return null;
   return (
     <div className="rounded-xl border border-hairline bg-surface-2 px-3 py-2 shadow-lg">
-      <p className="text-[11px] text-ink-mute">{formatDateTime(p.startedAt)}</p>
+      <p className="text-[17px] text-ink-mute">{formatDateTime(p.startedAt)}</p>
       <p className="mt-0.5 font-mono text-base tabular-nums text-ink">
         {p.value}
         <span className="text-xs">%</span>
       </p>
-      <p className={`text-[11px] ${zoneClasses[p.zone].text}`}>
+      <p className={`text-[17px] ${zoneClasses[p.zone].text}`}>
         {t(`zone.${p.zone}.label`)}
       </p>
     </div>

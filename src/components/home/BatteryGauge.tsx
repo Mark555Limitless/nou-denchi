@@ -108,11 +108,15 @@ export function BatteryGauge({
       <div className="absolute inset-0 flex flex-col items-center justify-center px-9 text-center">
         {measured ? (
           <>
-            <p className="text-[11px] font-bold tracking-[0.22em] text-ink-mute">
+            <p className="text-[17px] font-bold tracking-[0.22em] text-ink-mute">
               {t("home.gaugeLabel")}
             </p>
             <div className="flex items-baseline">
-              <span className="font-mono text-[58px] font-bold leading-none tracking-tight text-ink">
+              {/* 狭幅端末で3桁(100%)が白ディスクから溢れないよう流体サイズ(通常幅では84px) */}
+              <span
+                className="font-mono font-bold leading-none tracking-tight text-ink"
+                style={{ fontSize: "min(84px, 20vw)" }}
+              >
                 {value}
               </span>
               <span className="ml-0.5 font-mono text-2xl font-bold text-primary-deep">
@@ -126,7 +130,7 @@ export function BatteryGauge({
                   aria-label={t("percent.provisional.badge")}
                   className="-m-3 ml-0 self-center p-3"
                 >
-                  <span className="inline-block rounded-md border border-hairline bg-surface-3 px-1.5 py-0.5 text-[10px] leading-tight text-ink-2">
+                  <span className="inline-block rounded-md border border-hairline bg-surface-3 px-1.5 py-0.5 text-[15px] leading-tight text-ink-2">
                     {t("percent.provisional.badge")}
                   </span>
                 </button>
@@ -145,7 +149,7 @@ export function BatteryGauge({
             <span className="font-mono text-6xl font-bold text-ink-mute">
               ?
             </span>
-            <span className="mt-3 text-xs leading-relaxed text-ink-mute">
+            <span className="mt-3 text-xs leading-relaxed text-balance text-ink-mute">
               {t("home.notMeasured")}
             </span>
           </>

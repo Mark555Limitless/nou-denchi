@@ -238,3 +238,28 @@
   - 「まだ測定していません」の表示条件も「本日未測定」ではなく「一度も測定していない
     (セッション0件)」に変わる(文言も「今日はまだ」→「まだ」に修正)
   - 未使用になった `dayKeyOf`(src/lib/engine/timeBand.ts)とそのテストを削除
+
+## 2026-08-02 追加変更 その10(ユーザー指示 [0]〜[6])
+
+- **[0] キャラクター全廃+GPT Image 2 による再デザイン**: 女の子とFalの2キャラを
+  アプリから全て削除(参照14箇所を装飾SVG/ロゴ/光彩に置換、public/characters・
+  public/art・public/art-src をファイルごと削除)。GPT Image 2(gpt-image-2)で
+  白背景リッチデザインのモックを再生成(docs/design/mock-rich2-home/result.png)し、
+  これを基準にキャラ不在の装飾(金ヘアライン+青グラデの光彩・宝冠エンブレム等)で再構成。
+  ※指定パスの参照画像2枚(~/fable5-x-bot/イラスト参考/)は X ボット側の正典画像のため
+  ファイル自体は削除していない(アプリからの排除のみ)
+- **[1] ゲームバナー維持**: BOOST05/RELAX01 由来の banner-boost/relax.webp は継続使用
+- **[2] 全文字1.5倍**: html { font-size: 150% }(rem基準を一括拡大)+px指定の文字
+  (ゲージ58→84px 等)を個別に1.5倍。--app-max-w は448px固定にして表示枠の拡大を防止。
+  溢れ対策: ゲージ数字は min(84px,20vw) の流体サイズ、オンボ完了ロゴは max-w-[70vw]
+- **[3] 覚醒度の説明画面 3秒→6秒**(Countdown を 6・5・4…の6秒に)
+- **[4] 処理速度/切替力の説明画面 ×3**(Interstitial DURATION_MS 2000→6000)
+- **[5] PVTヒント2段組み**: 「●が出たら、」/「素早く画面をタップ!」の2行・約2倍
+  (min(1.75rem,10vw) 流体)・専用の淡グレー --color-ink-faint #9aa5c4(装飾専用トークン)
+- **[6] トレオタ(追加トレーニング)新機能**: 結果画面の RELAX 下に第3バナー(トレオタ)を
+  追加 → /training/ 選択メニュー(3バナー)→ 覚醒度×30回 / 処理速度×2分 / 切替力×50問。
+  既存タスクコンポーネントに trialsOverride / durationMsOverride / maxQuestionsOverride /
+  hideTimer のオプション props を追加して再利用(未指定時は本計測と完全同一挙動)。
+  トレーニング結果は表示のみで DB 保存なし(スコア・履歴・ベースラインに影響しない)。
+  バナー4枚(トレオタ+3種)は GPT Image 2 で BOOST05/RELAX01 と同系統デザインとして生成し、
+  1200×298 に統一(public/games/banner-treota / tr-pvt / tr-math / tr-stroop.webp)

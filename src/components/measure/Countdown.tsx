@@ -4,11 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import { playBellSoft } from "@/lib/audio/sfx";
 import { t } from "@/lib/i18n";
 import { PvtInstruction } from "./PvtInstruction";
-import { asset } from "@/lib/ui/asset";
 
-/** 測定開始前の3秒カウントダウン(§4.3)。Task A のタスク名称と1行説明も添える。 */
+/** 測定開始前の6秒カウントダウン(§4.3)。Task A のタスク名称と説明も添える。 */
 export function Countdown({ onDone }: { onDone: () => void }) {
-  const [count, setCount] = useState(3);
+  const [count, setCount] = useState(6);
   const onDoneRef = useRef(onDone);
   useEffect(() => {
     onDoneRef.current = onDone;
@@ -39,14 +38,12 @@ export function Countdown({ onDone }: { onDone: () => void }) {
         </p>
         <PvtInstruction className="text-sm text-ink-2" />
       </div>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={asset("/characters/fal.jpg")}
-        alt=""
-        aria-hidden
-        draggable={false}
-        className="h-24 w-auto pointer-events-none"
-      />
+      {/* 金のヘアライン+青グラデーションのダイヤ形アクセント(装飾) */}
+      <div aria-hidden className="flex w-full max-w-56 items-center gap-3">
+        <span className="h-px flex-1 bg-linear-to-r from-transparent to-gold-soft" />
+        <span className="size-2.5 rotate-45 rounded-[2px] bg-linear-to-b from-primary to-primary-deep shadow-md shadow-primary/40 ring-1 ring-gold-soft" />
+        <span className="h-px flex-1 bg-linear-to-l from-transparent to-gold-soft" />
+      </div>
     </div>
   );
 }

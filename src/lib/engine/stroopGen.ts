@@ -27,7 +27,8 @@ export interface StroopQuestion {
 
 export function generateStroopQuestions(
   seed: string,
-  count = scoringConfig.stroop.maxQuestions,
+  /** 出題数(トレオタは50問等を指定可。既定=config値で従来挙動) */
+  count: number = scoringConfig.stroop.maxQuestions,
   cfg = scoringConfig.stroop,
 ): StroopQuestion[] {
   const rng = createRng(`stroop:${seed}`);

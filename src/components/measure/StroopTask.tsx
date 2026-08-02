@@ -30,16 +30,34 @@ interface StroopTaskProps {
   questions: StroopQuestion[];
   /** 中断確認ダイアログ表示中 */
   paused: boolean;
+  /** トレーニング用: 出題数上限の上書き(未指定時は questions.length=従来挙動) */
+  maxQuestionsOverride?: number;
+  /** トレーニング用: 制限時間の上書き(未指定時は config 値=従来挙動) */
+  durationMsOverride?: number;
+  /** トレーニング用: 残り秒表示を隠す(時間無制限相当モード)。既定は false */
+  hideTimer?: boolean;
   onDone: (result: StroopResult) => void;
 }
 
 /** 連打・二重発火防止のタップ間ガード */
 const TAP_GUARD_MS = 200;
 
-export function StroopTask({ questions, paused, onDone }: StroopTaskProps) {
+export function StroopTask({
+  questions,
+  paused,
+  maxQuestionsOverride,
+  durationMsOverride,
+  hideTimer = false,
+  onDone,
+}: StroopTaskProps) {
   const cfg = scoringConfig.stroop;
+  const durationMs = durationMsOverride ?? cfg.durationMs;
+  const totalQuestions = Math.min(
+    questions.length,
+    maxQuestionsOverride ?? questions.length,
+  );
   const [index, setIndex] = useState(0);
-  const [remainSec, setRemainSec] = useState(Math.ceil(cfg.durationMs / 1000));
+  const [remainSec, setRemainSec] = useState(Math.ceil(durationMs / 1000));
 
   const startRef = useRef(0);
   const qStartRef = useRef(0);
@@ -74,7 +92,7 @@ export function StroopTask({ questions, paused, onDone }: StroopTaskProps) {
     clearTimers();
     endTimerRef.current = setTimeout(finish, remainingMs);
     secTimerRef.current = setInterval(() => {
-      const left = cfg.durationMs - (performance.now() - startRef.current);
+      const left = durationMs - (performance.now() - startRef.current);
       setRemainSec(Math.max(0, Math.ceil(left / 1000)));
     }, 200);
   }
@@ -92,7 +110,7 @@ export function StroopTask({ questions, paused, onDone }: StroopTaskProps) {
         incongruentRtsRef.current,
       ),
       durationMs: Math.min(
-        cfg.durationMs,
+        durationMs,
         Math.round(performance.now() - startRef.current),
       ),
     });
@@ -117,7 +135,7 @@ export function StroopTask({ questions, paused, onDone }: StroopTaskProps) {
       wrongRef.current += 1;
       playMeasureBad();
     }
-    if (index + 1 >= questions.length) {
+    if (index + 1 >= totalQuestions) {
       finish();
       return;
     }
@@ -137,7 +155,7 @@ export function StroopTask({ questions, paused, onDone }: StroopTaskProps) {
     lastTapRef.current = 0;
     doneRef.current = false;
     pausedAtRef.current = 0;
-    armTimers(cfg.durationMs);
+    armTimers(durationMs);
     return clearTimers;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -155,7 +173,7 @@ export function StroopTask({ questions, paused, onDone }: StroopTaskProps) {
       pausedAtRef.current = 0;
       startRef.current += pauseDur;
       qStartRef.current += pauseDur;
-      const remaining = cfg.durationMs - (performance.now() - startRef.current);
+      const remaining = durationMs - (performance.now() - startRef.current);
       if (remaining <= 0) {
         finish();
         return;
@@ -173,9 +191,11 @@ export function StroopTask({ questions, paused, onDone }: StroopTaskProps) {
       {/* 左は✕ボタンと重ならないよう余白を取る */}
       <div className="flex justify-between pt-3 pl-12 font-mono text-sm text-ink-mute">
         <span>
-          {t("measure.progress", { n: index + 1, total: questions.length })}
+          {t("measure.progress", { n: index + 1, total: totalQuestions })}
         </span>
-        <span>{t("measure.secondsLeft", { sec: remainSec })}</span>
+        {!hideTimer && (
+          <span>{t("measure.secondsLeft", { sec: remainSec })}</span>
+        )}
       </div>
       <div className="flex-1 flex flex-col items-center justify-center gap-5">
         <p className="text-sm text-ink-mute">{t("measure.stroop.hint")}</p>

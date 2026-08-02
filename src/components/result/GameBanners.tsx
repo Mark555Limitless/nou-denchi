@@ -55,6 +55,12 @@ export function GameBanners() {
         ariaLabel={t("result.relax.aria")}
         imgSrc={asset("/games/banner-relax.webp")}
       />
+      {/* トレオタ(追加トレーニング)第3バナー(2026-08-02 ユーザー指示[6]) */}
+      <GameBanner
+        href="/training/"
+        ariaLabel={t("training.banner.aria")}
+        imgSrc={asset("/games/banner-treota.webp")}
+      />
     </div>
   );
 }

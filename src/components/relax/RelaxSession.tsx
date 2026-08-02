@@ -6,7 +6,6 @@ import { t } from "@/lib/i18n";
 import { playRelaxCue, playRelaxEnd } from "@/lib/audio/sfx";
 import { BreathCircle, type BreathPhase } from "./BreathCircle";
 import { FloatingBubbles } from "./FloatingBubbles";
-import { asset } from "@/lib/ui/asset";
 
 /**
  * RELAX: 呼吸にあわせるブリージングセッション。
@@ -80,18 +79,36 @@ function CycleDots({ cycle }: { cycle: number }) {
   );
 }
 
-function GirlRelaxArt() {
+/**
+ * 呼吸円の世界観にあわせた緑の光の装飾(画像アセット不使用)。
+ * 同心の淡いリング+中央の光る球+ただよう泡で BreathCircle と調和させる。
+ */
+function RelaxGlowArt() {
   return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
-      src={asset("/art/girl-relax.webp")}
-      alt=""
+    <div
       aria-hidden
-      draggable={false}
-      width={512}
-      height={512}
-      className="pointer-events-none h-40 w-auto rounded-3xl ring-1 ring-gold-soft shadow-md"
-    />
+      className="pointer-events-none relative flex h-40 w-40 items-center justify-center"
+    >
+      {/* 緑の光彩 */}
+      <div
+        className="absolute inset-0 rounded-full"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(47,158,99,0.20) 0%, rgba(47,158,99,0) 70%)",
+        }}
+      />
+      {/* 同心のリング(呼吸の波紋) */}
+      <div className="absolute inset-4 rounded-full border border-relax/30" />
+      <div className="absolute inset-9 rounded-full border border-relax/50" />
+      {/* 中央の光る球(緑グラデ+グロス+金の細リング) */}
+      <div className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-linear-to-b from-relax to-relax-deep shadow-lg ring-1 ring-gold-soft">
+        <span className="absolute inset-x-2 top-1 h-1/2 rounded-full bg-linear-to-b from-white/40 to-white/0" />
+      </div>
+      {/* ただよう泡 */}
+      <span className="absolute right-2 top-6 h-3 w-3 rounded-full bg-relax/30" />
+      <span className="absolute bottom-8 left-3 h-2 w-2 rounded-full bg-relax/40" />
+      <span className="absolute bottom-3 right-6 h-2.5 w-2.5 rounded-full bg-relax/25" />
+    </div>
   );
 }
 
@@ -163,7 +180,7 @@ export function RelaxSession() {
         {stage === "idle" && (
           <>
             <section className="flex flex-1 flex-col items-center justify-center gap-5 text-center">
-              <GirlRelaxArt />
+              <RelaxGlowArt />
               <p className="text-lg font-bold text-ink">
                 {t("relax.intro.lead")}
               </p>
@@ -211,7 +228,7 @@ export function RelaxSession() {
         {stage === "done" && (
           <>
             <section className="flex flex-1 flex-col items-center justify-center gap-5 text-center">
-              <GirlRelaxArt />
+              <RelaxGlowArt />
               <p role="status" className="text-2xl font-extrabold text-relax-deep">
                 {t("relax.done.title")}
               </p>

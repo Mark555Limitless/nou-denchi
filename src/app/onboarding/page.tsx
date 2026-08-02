@@ -119,7 +119,7 @@ export default function OnboardingPage() {
           }}
         />
       </div>
-      {/* 2人が歓迎してくれる(装飾画像・背景がほぼ純白のため白面に直置きして抜き出し感を出す) */}
+      {/* ブランドロゴ+光彩(装飾。白面に直置きして抜き出し感を出す) */}
       <div className="relative">
         <div
           aria-hidden
@@ -131,12 +131,12 @@ export default function OnboardingPage() {
         />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={asset("/art/duo-hero.webp")}
+          src={asset("/brand/logo-clean.png")}
           alt=""
           aria-hidden
-          width={800}
-          height={597}
-          className="relative w-64 h-auto"
+          width={900}
+          height={672}
+          className="relative w-60 max-w-[70vw] h-auto"
         />
       </div>
       <h1 className="relative text-2xl font-bold">

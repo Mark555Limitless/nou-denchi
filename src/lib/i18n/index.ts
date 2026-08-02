@@ -8,6 +8,7 @@ import { settings } from "./ja/settings";
 import { share } from "./ja/share";
 import { boost } from "./ja/boost";
 import { relax } from "./ja/relax";
+import { training } from "./ja/training";
 
 /**
  * i18n(§7 SHOULD)。MVPは日本語のみだが、文言はすべて辞書に分離する。
@@ -24,6 +25,7 @@ export const ja = {
   ...share,
   ...boost,
   ...relax,
+  ...training,
 } as const;
 
 export type MsgKey = keyof typeof ja;

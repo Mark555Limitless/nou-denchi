@@ -54,6 +54,9 @@
   /* アクセントの青(ロゴ・スコア数字にのみ使用。白面で5.4:1) */
   --color-chart: #256abf;
 
+  /* 装飾的ヒント用の淡いグレー(コントラスト低下は意図的・aria-label で補完) */
+  --color-ink-faint: #9aa5c4;
+
   --font-sans: var(--font-geist-sans), "Hiragino Sans",
     "Hiragino Kaku Gothic ProN", "Noto Sans JP", Meiryo, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
@@ -61,6 +64,10 @@
 
 html {
   height: 100%;
+  /* 全ページ文字サイズ 1.5倍(ユーザー指示・2026-08-02)。
+     Tailwind ユーティリティは rem 基準のため、文字・余白が一括で 1.5 倍になる。
+     px 指定の文字サイズ(text-[..px])は影響を受けないので個別に調整する。 */
+  font-size: 150%;
 }
 
 body {
@@ -78,5 +85,7 @@ body {
  * 実機ではほぼ全幅、PC等の広い画面では高さ基準で 9:16 の幅に制限する。
  */
 :root {
-  --app-max-w: min(28rem, calc(100dvh * 9 / 16));
+  /* 28rem 相当を px 固定(448px)。rem のままだと html の font-size 150% で
+     表示枠自体が 1.5 倍に広がってしまうため。 */
+  --app-max-w: min(448px, calc(100dvh * 9 / 16));
 }

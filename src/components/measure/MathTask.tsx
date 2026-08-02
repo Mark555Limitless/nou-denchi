@@ -25,16 +25,24 @@ interface MathTaskProps {
   problems: MathProblem[];
   /** 中断確認ダイアログ表示中 */
   paused: boolean;
+  /** トレーニング用: 制限時間の上書き(未指定時は config 値=従来挙動) */
+  durationMsOverride?: number;
   onDone: (result: MathResult) => void;
 }
 
 /** 連打・二重発火防止のタップ間ガード */
 const TAP_GUARD_MS = 200;
 
-export function MathTask({ problems, paused, onDone }: MathTaskProps) {
+export function MathTask({
+  problems,
+  paused,
+  durationMsOverride,
+  onDone,
+}: MathTaskProps) {
   const cfg = scoringConfig.math;
+  const durationMs = durationMsOverride ?? cfg.durationMs;
   const [index, setIndex] = useState(0);
-  const [remainSec, setRemainSec] = useState(Math.ceil(cfg.durationMs / 1000));
+  const [remainSec, setRemainSec] = useState(Math.ceil(durationMs / 1000));
 
   const startRef = useRef(0);
   const problemStartRef = useRef(0);
@@ -66,7 +74,7 @@ export function MathTask({ problems, paused, onDone }: MathTaskProps) {
     clearTimers();
     endTimerRef.current = setTimeout(finish, remainingMs);
     secTimerRef.current = setInterval(() => {
-      const left = cfg.durationMs - (performance.now() - startRef.current);
+      const left = durationMs - (performance.now() - startRef.current);
       setRemainSec(Math.max(0, Math.ceil(left / 1000)));
     }, 200);
   }
@@ -80,7 +88,7 @@ export function MathTask({ problems, paused, onDone }: MathTaskProps) {
       wrong: wrongRef.current,
       rtList: rtListRef.current,
       durationMs: Math.min(
-        cfg.durationMs,
+        durationMs,
         Math.round(performance.now() - startRef.current),
       ),
     });
@@ -121,7 +129,7 @@ export function MathTask({ problems, paused, onDone }: MathTaskProps) {
     lastTapRef.current = 0;
     doneRef.current = false;
     pausedAtRef.current = 0;
-    armTimers(cfg.durationMs);
+    armTimers(durationMs);
     return clearTimers;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -139,7 +147,7 @@ export function MathTask({ problems, paused, onDone }: MathTaskProps) {
       pausedAtRef.current = 0;
       startRef.current += pauseDur;
       problemStartRef.current += pauseDur;
-      const remaining = cfg.durationMs - (performance.now() - startRef.current);
+      const remaining = durationMs - (performance.now() - startRef.current);
       if (remaining <= 0) {
         finish();
         return;

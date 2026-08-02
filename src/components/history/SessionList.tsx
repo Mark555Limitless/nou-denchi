@@ -65,7 +65,7 @@ export function SessionList({
                   <p className="text-sm text-ink">
                     {formatDateTime(s.startedAt, nowYear)}
                   </p>
-                  <p className="mt-0.5 flex items-center gap-1.5 text-[11px] text-ink-mute">
+                  <p className="mt-0.5 flex items-center gap-1.5 text-[17px] text-ink-mute">
                     <span>{t(`timeBand.${s.timeBand}`)}</span>
                     {s.baselineType === "provisional" && (
                       <span className="rounded-full bg-surface-3 px-1.5 py-px">
@@ -79,7 +79,7 @@ export function SessionList({
                   <span className="text-xs text-ink-2">%</span>
                 </span>
                 <span
-                  className={`rounded-full border px-2 py-0.5 text-[11px] ${zoneClasses[zone].border} ${zoneClasses[zone].text}`}
+                  className={`rounded-full border px-2 py-0.5 text-[17px] ${zoneClasses[zone].border} ${zoneClasses[zone].text}`}
                 >
                   {t(`zone.${zone}.label`)}
                 </span>

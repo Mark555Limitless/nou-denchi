@@ -8,7 +8,6 @@ import { TrendChart } from "@/components/history/TrendChart";
 import type { SessionRecord } from "@/lib/db/db";
 import { listSessions } from "@/lib/db/repo";
 import { t } from "@/lib/i18n";
-import { asset } from "@/lib/ui/asset";
 
 /** %が算出済みのセッション(履歴表示対象) */
 type ScoredSession = SessionRecord & { percent: number };
@@ -74,16 +73,24 @@ export default function HistoryPage() {
 function EmptyState() {
   return (
     <section className="mt-6 text-center">
-      {/* 案内役の女の子(装飾)。背景除去済み画像のため白面に直置きする */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={asset("/characters/girl.jpg")}
-        alt=""
-        aria-hidden="true"
-        width={605}
-        height={720}
-        className="mx-auto h-40 w-auto"
-      />
+      {/* 青グラデの光る円+金のヘアラインリング(装飾・白背景リッチテーマ) */}
+      <div
+        aria-hidden
+        className="relative mx-auto flex h-28 w-28 items-center justify-center"
+      >
+        <div
+          className="absolute inset-0 rounded-full"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(42,120,214,0.14) 0%, rgba(42,120,214,0) 70%)",
+          }}
+        />
+        <div className="absolute inset-4 rounded-full border border-gold-soft" />
+        <div className="relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-linear-to-b from-primary to-primary-deep shadow-lg ring-1 ring-gold-soft">
+          <span className="absolute inset-x-1.5 top-0.5 h-1/2 rounded-full bg-linear-to-b from-white/40 to-white/0" />
+          <span className="relative block h-2 w-2 rotate-45 bg-gold-soft" />
+        </div>
+      </div>
       <div className="mt-4 rounded-3xl border border-hairline bg-surface-2 p-6 shadow-md">
         <h2 className="text-base font-semibold text-ink">
           {t("history.empty.title")}

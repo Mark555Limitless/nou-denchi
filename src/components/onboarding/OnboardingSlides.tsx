@@ -41,7 +41,7 @@ function CalibrationBars() {
             />
           </div>
           <span
-            className={`text-[10px] font-mono ${
+            className={`text-[15px] font-mono ${
               i === maxIndex ? "text-gold-deep font-bold" : "text-ink-mute"
             }`}
           >

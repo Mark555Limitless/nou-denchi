@@ -34,6 +34,8 @@ interface PvtTaskProps {
   seed: string;
   /** 中断確認ダイアログ表示中は試行を止める(再開時はその試行を新しい待機でやり直し) */
   paused: boolean;
+  /** トレーニング用: 試行数の上書き(未指定時は config 値=従来挙動) */
+  trialsOverride?: number;
   onDone: (result: PvtResult) => void;
 }
 
@@ -42,8 +44,9 @@ const FEEDBACK_MS = 600;
 /** False Start 警告の表示時間 */
 const FALSE_START_MS = 900;
 
-export function PvtTask({ seed, paused, onDone }: PvtTaskProps) {
+export function PvtTask({ seed, paused, trialsOverride, onDone }: PvtTaskProps) {
   const cfg = scoringConfig.pvt;
+  const totalTrials = trialsOverride ?? cfg.trials;
   const [phase, setPhase] = useState<PvtPhase>("waiting");
   const [trialNo, setTrialNo] = useState(1);
   const [lastRt, setLastRt] = useState<number | null>(null);
@@ -104,7 +107,7 @@ export function PvtTask({ seed, paused, onDone }: PvtTaskProps) {
 
   function startWait() {
     if (doneRef.current) return;
-    if (trialsRef.current.length >= cfg.trials) {
+    if (trialsRef.current.length >= totalTrials) {
       finish();
       return;
     }
@@ -161,7 +164,7 @@ export function PvtTask({ seed, paused, onDone }: PvtTaskProps) {
     transition("feedback");
     nextTimerRef.current = setTimeout(() => {
       nextTimerRef.current = null;
-      if (trialsRef.current.length >= cfg.trials) finish();
+      if (trialsRef.current.length >= totalTrials) finish();
       else startWait();
     }, FEEDBACK_MS);
   }
@@ -239,7 +242,7 @@ export function PvtTask({ seed, paused, onDone }: PvtTaskProps) {
         }}
       >
         <p className="pt-3 font-mono text-sm text-ink-mute">
-          {t("measure.progress", { n: trialNo, total: cfg.trials })}
+          {t("measure.progress", { n: trialNo, total: totalTrials })}
         </p>
         <div className="flex-1 flex flex-col items-center justify-center gap-6 w-full">
           {phase === "waiting" && (
@@ -275,8 +278,11 @@ export function PvtTask({ seed, paused, onDone }: PvtTaskProps) {
             </p>
           )}
         </div>
+        {/* 文字サイズは text-sm の2倍(1.75rem)。375px 級の狭い端末でのみ
+            2行目が折り返さないよう 10.6vw を上限併用(min())する */}
         <PvtInstruction
-          className="pb-10 text-sm text-ink-mute"
+          className="pb-10 text-center text-[min(1.75rem,10vw)] leading-snug text-ink-faint"
+          iconClassName="w-7 h-7 align-[-4px]"
           style={{ paddingBottom: "max(2.5rem, env(safe-area-inset-bottom))" }}
         />
       </div>
