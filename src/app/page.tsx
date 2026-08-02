@@ -41,7 +41,7 @@ function HomeHeader() {
         alt={`${t("app.name")} — ${t("app.tagline")}`}
         width={900}
         height={672}
-        className="mx-auto h-36 w-auto"
+        className="mx-auto h-[173px] w-auto"
         style={{ filter: "drop-shadow(0 2px 6px rgba(255,255,255,0.8))" }}
       />
     </header>
@@ -121,11 +121,11 @@ export default function Home() {
         {zone && (
           <div className="flex items-center justify-center gap-2.5">
             <span
-              className={`shrink-0 rounded-full border bg-white/80 px-3.5 py-1 text-sm font-bold shadow-sm backdrop-blur-sm ${zoneClasses[zone].text} ${zoneClasses[zone].border}`}
+              className={`shrink-0 rounded-full border border-white/80 bg-white/85 px-4 py-1 text-sm font-bold shadow-sm backdrop-blur-sm ${zoneClasses[zone].text}`}
             >
               {t(`zone.${zone}.label`)}
             </span>
-            <span className="text-sm text-ink-2">
+            <span className="text-sm font-medium text-ink">
               {t(`zone.${zone}.message`)}
             </span>
           </div>
@@ -136,24 +136,19 @@ export default function Home() {
             {t("percent.timeBandNote")}
           </p>
         )}
-        {latest?.baselineType === "personal" && (
-          <p className="text-center text-xs text-ink-mute">
-            {t("percent.globalNote")}
-          </p>
-        )}
+
       </section>
 
       {/* 測定済みでも再測定できるよう常時表示(水滴をまとった青いガラスのピル) */}
       <Link
         href="/measure/"
-        className="relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-linear-to-b from-aqua-btn to-aqua-btn-deep py-4 text-center text-lg font-bold text-primary-ink shadow-lg shadow-primary/30 ring-1 ring-white/60 active:translate-y-0.5 active:shadow-md"
+        className="relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-linear-to-b from-aqua-btn/85 to-aqua-btn-deep/90 py-4 text-center text-lg font-bold text-primary-ink shadow-lg shadow-primary/30 ring-1 ring-white/70 backdrop-blur-[2px] active:translate-y-0.5 active:shadow-md"
       >
         <span
           aria-hidden
           className="pointer-events-none absolute inset-x-4 top-1 h-1/2 rounded-full bg-linear-to-b from-white/45 to-white/0"
         />
-        {t("common.measure")}
-        <span aria-hidden>→</span>
+        <span className="relative">{t("common.measure")}</span>
       </Link>
 
       <ProvisionalModal

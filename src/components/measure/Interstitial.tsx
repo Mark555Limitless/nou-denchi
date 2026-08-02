@@ -51,11 +51,11 @@ export function Interstitial({ label, desc, paused, onDone }: InterstitialProps)
         <span className="size-1.5 rounded-full bg-white/70 ring-1 ring-white/80 shadow-sm" />
         <span className="h-px flex-1 bg-linear-to-l from-transparent to-white/90" />
       </div>
-      <p className="text-sm text-ink-2">{t("measure.interstitial.next")}</p>
+      <p className="text-[21px] text-ink-faint">{t("measure.interstitial.next")}</p>
       <h2 className="text-3xl font-bold text-ink">
         {t("measure.taskTitle", { name: label })}
       </h2>
-      <p className="text-sm leading-relaxed text-ink-2">{desc}</p>
+      <p className="whitespace-pre-line text-[21px] leading-snug text-ink-faint">{desc}</p>
     </div>
   );
 }

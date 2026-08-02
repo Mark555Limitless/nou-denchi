@@ -176,6 +176,16 @@ const jobs = [
 条件: 文字・UI・ロゴ・脳・物体は一切描かない。純粋な背景のみ。中央部は特に穏やかでフラット(上にUIが載るため)。明るさは参照画像と同じく白っぽい水色。`,
   },
   {
+    name: "asset-logo-v2",
+    file: "asset-logo-v2.png",
+    prompt: `参照画像はアプリ「脳でんち」のロゴ&キャッチコピーの原典(2026-08-02更新版)です。
+この画像を注意深く観察し、内容を一切変えずに忠実に再現してください:
+- 上: 頭部+脳+電球のアイコン(紺の線画、脳は紺地に黄色の電球)
+- 中: 「脳でんち」の青グラデーション太文字(「ん」に電池のイラスト)
+- 下: キャッチコピー「いま何%!?」(水色〜青グラデーションの斜体。※「キミ！」等の余計な文字は絶対に追加しない。文字列は正確に「いま何%!?」)
+条件: 背景は純白(#ffffff)。影は控えめ。構図・比率は参照画像と同じ。`,
+  },
+  {
     name: "asset-holo-brain",
     file: "asset-holo-brain.png",
     prompt: `最初の参照画像の右上にある半透明のホログラム風の脳と同じものを、素材として単体で生成してください。
@@ -196,9 +206,14 @@ const main = async () => {
   const only = process.env.ONLY ? process.env.ONLY.split(",") : null;
   for (const j of jobs) {
     if (only && !only.includes(j.name)) continue;
-    const refs = [{ path: REF_START, mime: "image/png" }];
+    const refs =
+      j.name === "asset-logo-v2"
+        ? [{ path: REF_LOGO, mime: "image/png" }]
+        : [{ path: REF_START, mime: "image/png" }];
     if (!j.name.startsWith("asset-")) refs.push({ path: REF_LOGO, mime: "image/png" });
-    const aspect = j.name === "asset-metal-disc" ? "1:1" : "9:16";
+    const aspect =
+      j.name === "asset-metal-disc" ? "1:1" :
+      j.name === "asset-logo-v2" ? "16:9" : "9:16";
     await nanoBanana(j.name, j.prompt, refs, aspect, path.join(OUT, j.file));
   }
   console.log("done");

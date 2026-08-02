@@ -16,9 +16,9 @@ export const measure = {
   "measure.countdown.ready": "まもなくスタート",
 
   // Task A: PVT(「○」は実刺激と同色の円をインライン表示するため前後分割・2段組み)
-  "measure.pvt.instructionAfter": "が出たら、",
-  "measure.pvt.instructionLine2": "素早く画面をタップ!",
-  "measure.pvt.instructionAria": "円が出たら、素早く画面をタップ",
+  "measure.pvt.instructionAfter": "が出たら",
+  "measure.pvt.instructionLine2": "素早く画面をタップ!!",
+  "measure.pvt.instructionAria": "円が出たら素早く画面をタップ",
   "measure.pvt.waiting": "そのまま待って…",
   "measure.pvt.timeout": "時間切れ",
   "measure.msUnit": "ms",
@@ -29,7 +29,7 @@ export const measure = {
 
   // インタースティシャル(次タスク予告)
   "measure.interstitial.next": "つぎのタスク",
-  "measure.math.desc": "計算の答えを4つのボタンから選んでタップ(30秒)",
+  "measure.math.desc": "計算の答えを\n選んでタップ!!",
   "measure.stroop.desc": "ことばに惑わされず「文字の色」のボタンをタップ(20問)",
   "measure.stroop.hint": "文字の「色」は?",
 
