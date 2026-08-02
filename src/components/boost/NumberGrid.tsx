@@ -19,6 +19,7 @@ const SHAKE_MS = 320;
  * ナンバーラッシュの 3×3 グリッド。計時ゲームのため pointerdown で反応し、
  * キーボード(Enter/Space)は click(detail=0)で拾う。
  * 誤タップはペナルティなし・CSSシェイクのみ(テンポ優先)。
+ * 見た目はアクア・ガラステーマ: 未タップ=白ガラス、タップ済み=青グラデの水滴。
  */
 export function NumberGrid({ grid, nextNumber, onTap }: NumberGridProps) {
   const [shakeIdx, setShakeIdx] = useState<number | null>(null);
@@ -58,13 +59,20 @@ export function NumberGrid({ grid, nextNumber, onTap }: NumberGridProps) {
               // マウス/タッチは pointerdown 済み。detail=0(キーボード)のみ処理
               if (e.detail === 0 && !tapped) tap(value, i);
             }}
-            className={`aspect-square min-h-[72px] rounded-2xl flex items-center justify-center text-4xl font-extrabold transition-colors ${
+            className={`relative overflow-hidden aspect-square min-h-[72px] rounded-2xl flex items-center justify-center text-4xl font-extrabold transition-colors ${
               tapped
-                ? "bg-linear-to-b from-primary to-primary-deep text-primary-ink shadow-sm"
-                : "bg-surface-2 text-ink border border-hairline shadow-md"
-            } ${justTapped ? "boost-pop ring-2 ring-gold-soft" : ""} ${shakeIdx === i ? "boost-shake" : ""}`}
+                ? "bg-linear-to-b from-aqua-btn to-aqua-btn-deep text-primary-ink ring-1 ring-white/60 shadow-sm"
+                : "bg-white/70 backdrop-blur text-ink border border-white/80 shadow-md"
+            } ${justTapped ? "boost-pop" : ""} ${shakeIdx === i ? "boost-shake" : ""}`}
           >
-            {value}
+            {/* タップ済みセルの上面グロス(水滴の質感) */}
+            {tapped && (
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-x-2 top-1 h-1/2 rounded-full bg-linear-to-b from-white/45 to-white/0"
+              />
+            )}
+            <span className="relative">{value}</span>
           </button>
         );
       })}

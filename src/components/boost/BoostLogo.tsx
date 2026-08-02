@@ -36,15 +36,15 @@ export function BoostOutlineText({
 }
 
 /**
- * BOOST!! ロゴ(白背景リッチテーマ・mock-rich-result.png の BOOST!! バナー準拠)。
+ * BOOST!! ロゴ(アクア・ガラステーマ・2026-08-02 改訂)。
  * 赤グラデーション(boost → boost-deep)のピルに白文字、上端に白の光沢ハイライト、
- * 金のヘアラインリングでプレミアムな質感に。旧テーマの黒地+放射状バーストは全廃。
+ * 白のガラスリング(ring-white/60)で水滴の質感に。BOOST の赤アイデンティティは維持。
  */
 export function BoostLogo({ size = "lg" }: { size?: "lg" | "sm" }) {
   const isLg = size === "lg";
   return (
     <span
-      className={`relative inline-flex items-center justify-center overflow-hidden rounded-full bg-linear-to-b from-boost to-boost-deep ring-1 ring-gold-soft ${
+      className={`relative inline-flex items-center justify-center overflow-hidden rounded-full bg-linear-to-b from-boost to-boost-deep ring-1 ring-white/60 ${
         isLg ? "px-8 py-3 shadow-lg" : "px-6 py-1.5 shadow-md"
       }`}
     >

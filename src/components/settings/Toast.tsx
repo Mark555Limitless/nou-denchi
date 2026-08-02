@@ -9,7 +9,8 @@ export function Toast({ message }: { message: string | null }) {
       role="status"
       aria-live="polite"
     >
-      <div className="bg-surface-2 border border-gold-soft rounded-full px-5 py-3 text-sm font-semibold text-ink shadow-lg">
+      {/* 白ガラスのトースト */}
+      <div className="bg-white/85 backdrop-blur-md border border-white/70 rounded-full px-5 py-3 text-sm font-semibold text-ink shadow-glass">
         {message}
       </div>
     </div>

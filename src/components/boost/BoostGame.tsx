@@ -13,7 +13,7 @@ import { BoostLogo, BoostOutlineText } from "./BoostLogo";
 import { NumberGrid, type TapResult } from "./NumberGrid";
 
 /**
- * 雷の紋章(BOOST!! の世界観装飾)。赤グラデの光る円盤+白い稲妻+金のリング。
+ * 雷の紋章(BOOST!! の世界観装飾)。赤グラデの光る円盤+白い稲妻+白ガラスのリング。
  * 画像アセット不使用(キャラ廃止後のSVG装飾)。size はピクセル。
  */
 function BoltEmblem({ size }: { size: number }) {
@@ -45,13 +45,13 @@ function BoltEmblem({ size }: { size: number }) {
         <circle cx="50" cy="50" r="44" fill="url(#boost-bolt-disc)" />
         {/* 上部の光沢(主要ボタンのグロスと同じ質感) */}
         <ellipse cx="50" cy="30" rx="28" ry="14" fill="url(#boost-bolt-gloss)" />
-        {/* 金のリング */}
+        {/* 白ガラスのリング(水滴の質感) */}
         <circle
           cx="50"
           cy="50"
           r="44"
           fill="none"
-          stroke="var(--color-gold-soft)"
+          stroke="rgba(255,255,255,0.7)"
           strokeWidth="2.5"
         />
         {/* 稲妻 */}
@@ -287,7 +287,7 @@ export function BoostGame() {
     >
       <style>{boostCss}</style>
 
-      {/* 背景装飾(リッチ白背景テーマ: やわらかな光彩をごく淡く) */}
+      {/* 背景装飾(水面の上にやわらかな光彩をごく淡く。背景色は塗らない) */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 overflow-hidden"
@@ -301,7 +301,7 @@ export function BoostGame() {
         <Link
           href="/"
           aria-label={t("boost.exit")}
-          className="w-11 h-11 flex items-center justify-center rounded-full text-xl text-ink-2 active:bg-surface-3"
+          className="w-11 h-11 flex items-center justify-center rounded-full text-xl text-ink-2 active:bg-white/50"
         >
           ✕
         </Link>
@@ -316,14 +316,15 @@ export function BoostGame() {
             </p>
           </div>
           <BoltEmblem size={144} />
-          <div className="w-full bg-surface-2 rounded-3xl border border-hairline shadow-md p-5 flex flex-col gap-1.5">
+          {/* ルール説明はすりガラスカード */}
+          <div className="w-full bg-white/60 backdrop-blur-md rounded-3xl border border-white/70 shadow-glass p-5 flex flex-col gap-1.5">
             <p className="text-base font-extrabold text-ink">
               {t("boost.intro.lead")}
             </p>
             <p className="text-sm text-ink-2">{t("boost.intro.rounds")}</p>
           </div>
           {bestMs !== null && (
-            <p className="rounded-full bg-surface-3 px-4 py-1.5 text-sm text-ink-2">
+            <p className="rounded-full border border-white/70 bg-white/70 backdrop-blur-sm px-4 py-1.5 text-sm text-ink-2">
               {t("boost.best.label")}{" "}
               <span className="font-mono font-bold text-ink tabular-nums">
                 {fmtSec(bestMs)}
@@ -331,14 +332,15 @@ export function BoostGame() {
               {t("boost.secUnit")}
             </p>
           )}
+          {/* スタート: 赤系の水滴ピル(BOOST の赤は維持しつつ白リング+グロス) */}
           <button
             type="button"
             onClick={startGame}
-            className="relative w-full overflow-hidden rounded-full bg-linear-to-b from-boost to-boost-deep text-primary-ink text-xl font-extrabold py-4 min-h-[56px] shadow-lg ring-1 ring-gold-soft active:opacity-85"
+            className="relative w-full overflow-hidden rounded-full bg-linear-to-b from-boost to-boost-deep text-primary-ink text-xl font-extrabold py-4 min-h-[56px] shadow-lg shadow-boost/30 ring-1 ring-white/60 active:translate-y-0.5 active:shadow-md"
           >
             <span
               aria-hidden
-              className="pointer-events-none absolute inset-x-3 top-1 h-1/2 rounded-full bg-linear-to-b from-white/40 to-white/0"
+              className="pointer-events-none absolute inset-x-4 top-1 h-1/2 rounded-full bg-linear-to-b from-white/45 to-white/0"
             />
             <span className="relative">{t("boost.start")}</span>
           </button>
@@ -366,7 +368,7 @@ export function BoostGame() {
           <div className="w-full max-w-xs flex items-center justify-between">
             <span
               aria-live="polite"
-              className="rounded-full bg-surface-2 border border-hairline shadow-sm px-3.5 py-1.5 text-sm font-bold text-ink"
+              className="rounded-full bg-white/70 backdrop-blur-sm border border-white/70 shadow-sm px-3.5 py-1.5 text-sm font-bold text-ink"
             >
               {t("boost.round", { n: round, total: TOTAL_ROUNDS })}
             </span>
@@ -404,7 +406,8 @@ export function BoostGame() {
       {phase === "done" && (
         <div className="relative flex-1 flex flex-col items-center justify-center gap-5 text-center">
           <BoostLogo size="sm" />
-          <div className="w-full bg-surface-2 rounded-3xl border border-hairline shadow-md p-6 flex flex-col items-center gap-3">
+          {/* 結果カードはすりガラス */}
+          <div className="w-full bg-white/60 backdrop-blur-md rounded-3xl border border-white/70 shadow-glass p-6 flex flex-col items-center gap-3">
             <BoltEmblem size={80} />
             <p className="text-sm font-bold text-ink-mute">
               {t("boost.result.label")}
@@ -425,8 +428,9 @@ export function BoostGame() {
                     : "boost.praise.warm",
               )}
             </p>
+            {/* ベスト更新の祝福バッジ(白ガラス地+金オーナメントリングは装飾として維持) */}
             {bestUpdated ? (
-              <span className="boost-pop-in rounded-full bg-surface-2 ring-1 ring-gold-soft shadow-sm px-4 py-1.5 text-sm font-extrabold text-boost-deep">
+              <span className="boost-pop-in rounded-full bg-white/80 backdrop-blur-sm ring-1 ring-gold-soft shadow-sm px-4 py-1.5 text-sm font-extrabold text-boost-deep">
                 🎉 {t("boost.best.updated")}
               </span>
             ) : (
@@ -444,11 +448,11 @@ export function BoostGame() {
           <button
             type="button"
             onClick={startGame}
-            className="relative w-full overflow-hidden rounded-full bg-linear-to-b from-boost to-boost-deep text-primary-ink text-lg font-extrabold py-4 min-h-[56px] shadow-lg ring-1 ring-gold-soft active:opacity-85"
+            className="relative w-full overflow-hidden rounded-full bg-linear-to-b from-boost to-boost-deep text-primary-ink text-lg font-extrabold py-4 min-h-[56px] shadow-lg shadow-boost/30 ring-1 ring-white/60 active:translate-y-0.5 active:shadow-md"
           >
             <span
               aria-hidden
-              className="pointer-events-none absolute inset-x-3 top-1 h-1/2 rounded-full bg-linear-to-b from-white/40 to-white/0"
+              className="pointer-events-none absolute inset-x-4 top-1 h-1/2 rounded-full bg-linear-to-b from-white/45 to-white/0"
             />
             <span className="relative">{t("boost.retry")}</span>
           </button>

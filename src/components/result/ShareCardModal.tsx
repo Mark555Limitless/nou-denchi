@@ -131,14 +131,14 @@ export function ShareCardModal({
     <div
       ref={dialogRef}
       tabIndex={-1}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50 backdrop-blur-sm"
       role="dialog"
       aria-modal="true"
       aria-label={t("result.share.modalTitle")}
       onClick={onClose}
     >
       <div
-        className="w-full max-w-sm bg-surface-2 border border-hairline rounded-3xl shadow-lg p-4 flex flex-col gap-3"
+        className="w-full max-w-sm bg-white/80 backdrop-blur-lg border border-white/70 rounded-3xl shadow-glass p-4 flex flex-col gap-3"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between">
@@ -146,12 +146,12 @@ export function ShareCardModal({
           <button
             type="button"
             onClick={onClose}
-            className="text-sm text-ink-mute px-3 py-2 -mr-2 min-h-[44px]"
+            className="text-sm text-ink-2 px-3 py-2 -mr-2 min-h-[44px]"
           >
             {t("common.close")}
           </button>
         </div>
-        <div className="rounded-xl overflow-hidden bg-surface border border-hairline aspect-[4/5] flex items-center justify-center">
+        <div className="rounded-xl overflow-hidden bg-white/60 border border-white/70 aspect-[4/5] flex items-center justify-center">
           {url ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -160,7 +160,7 @@ export function ShareCardModal({
               className="w-full h-full object-contain"
             />
           ) : (
-            <p className="text-sm text-ink-mute px-4 text-center">
+            <p className="text-sm text-ink-2 px-4 text-center">
               {failed ? t("result.share.error") : t("result.share.generating")}
             </p>
           )}
@@ -170,15 +170,19 @@ export function ShareCardModal({
             type="button"
             onClick={handleShare}
             disabled={!blob}
-            className="rounded-full bg-linear-to-b from-primary to-primary-deep text-primary-ink font-bold py-3.5 min-h-[44px] shadow-lg ring-1 ring-gold-soft disabled:opacity-40 active:opacity-80"
+            className="relative overflow-hidden rounded-full bg-linear-to-b from-aqua-btn to-aqua-btn-deep text-primary-ink font-bold py-3.5 min-h-[44px] shadow-lg shadow-primary/30 ring-1 ring-white/60 disabled:opacity-40 active:opacity-80"
           >
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-x-4 top-1 h-1/2 rounded-full bg-linear-to-b from-white/45 to-white/0"
+            />
             {t("result.share.share")}
           </button>
           <button
             type="button"
             onClick={handleSave}
             disabled={!url}
-            className="rounded-full border-2 border-primary bg-surface-2 text-primary-deep font-bold py-3.5 min-h-[44px] shadow-sm disabled:opacity-40 active:opacity-80"
+            className="rounded-full border-2 border-primary/70 bg-white/70 backdrop-blur-sm text-primary-deep font-bold py-3.5 min-h-[44px] shadow-sm disabled:opacity-40 active:opacity-80"
           >
             {t("result.share.save")}
           </button>
@@ -187,7 +191,7 @@ export function ShareCardModal({
       {toast && (
         <div
           role="status"
-          className="fixed bottom-24 left-1/2 -translate-x-1/2 whitespace-nowrap bg-surface-3 border border-hairline rounded-full px-4 py-2 text-sm text-ink shadow-lg"
+          className="fixed bottom-24 left-1/2 -translate-x-1/2 whitespace-nowrap bg-white/85 backdrop-blur-md border border-white/70 rounded-full px-4 py-2 text-sm text-ink shadow-glass"
         >
           {toast}
         </div>

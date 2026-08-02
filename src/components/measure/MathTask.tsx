@@ -162,7 +162,7 @@ export function MathTask({
 
   return (
     <div className="flex-1 flex flex-col px-5 pb-8 select-none">
-      <p className="pt-3 text-center font-mono text-sm text-ink-mute">
+      <p className="pt-3 text-center font-mono text-sm text-ink-2">
         {t("measure.secondsLeft", { sec: remainSec })}
       </p>
       <div className="flex-1 flex items-center justify-center">
@@ -180,7 +180,7 @@ export function MathTask({
               // キーボード操作(§7): detail===0 はキーボード由来の click
               if (e.detail === 0) handleAnswer(c);
             }}
-            className="py-6 rounded-2xl bg-surface-2 border border-hairline shadow-md font-mono text-3xl text-ink active:bg-surface-3"
+            className="py-6 rounded-2xl bg-white/70 backdrop-blur border border-white/80 shadow-glass font-mono text-3xl text-ink active:bg-white/90"
           >
             {c}
           </button>

@@ -73,7 +73,7 @@ export default function HistoryPage() {
 function EmptyState() {
   return (
     <section className="mt-6 text-center">
-      {/* 青グラデの光る円+金のヘアラインリング(装飾・白背景リッチテーマ) */}
+      {/* 青く光る水の球(気泡)+ガラスのリング(装飾・アクアテーマ) */}
       <div
         aria-hidden
         className="relative mx-auto flex h-28 w-28 items-center justify-center"
@@ -82,16 +82,16 @@ function EmptyState() {
           className="absolute inset-0 rounded-full"
           style={{
             background:
-              "radial-gradient(circle, rgba(42,120,214,0.14) 0%, rgba(42,120,214,0) 70%)",
+              "radial-gradient(circle, rgba(62,127,208,0.30) 0%, rgba(62,127,208,0) 70%)",
           }}
         />
-        <div className="absolute inset-4 rounded-full border border-gold-soft" />
-        <div className="relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-linear-to-b from-primary to-primary-deep shadow-lg ring-1 ring-gold-soft">
-          <span className="absolute inset-x-1.5 top-0.5 h-1/2 rounded-full bg-linear-to-b from-white/40 to-white/0" />
-          <span className="relative block h-2 w-2 rotate-45 bg-gold-soft" />
+        <div className="absolute inset-4 rounded-full border border-white/80" />
+        <div className="relative h-12 w-12 overflow-hidden rounded-full bg-linear-to-b from-aqua-btn to-aqua-btn-deep shadow-lg shadow-primary/40 ring-1 ring-white/70">
+          <span className="absolute inset-x-2 top-1 h-1/2 rounded-full bg-linear-to-b from-white/70 to-white/0" />
+          <span className="absolute left-2.5 top-2.5 h-2 w-2 rounded-full bg-white/90 blur-[1px]" />
         </div>
       </div>
-      <div className="mt-4 rounded-3xl border border-hairline bg-surface-2 p-6 shadow-md">
+      <div className="mt-4 rounded-3xl border border-white/70 bg-white/60 p-6 shadow-glass backdrop-blur-md">
         <h2 className="text-base font-semibold text-ink">
           {t("history.empty.title")}
         </h2>
@@ -102,8 +102,12 @@ function EmptyState() {
         </p>
         <Link
           href="/measure/"
-          className="mt-6 flex h-12 items-center justify-center rounded-full bg-linear-to-b from-primary to-primary-deep text-base font-bold text-primary-ink shadow-lg ring-1 ring-gold-soft active:opacity-80"
+          className="relative mt-6 flex h-12 items-center justify-center overflow-hidden rounded-full bg-linear-to-b from-aqua-btn to-aqua-btn-deep text-base font-bold text-primary-ink shadow-lg shadow-primary/30 ring-1 ring-white/60 active:translate-y-0.5 active:shadow-md"
         >
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-x-4 top-1 h-1/2 rounded-full bg-linear-to-b from-white/45 to-white/0"
+          />
           {t("common.measure")}
         </Link>
       </div>

@@ -43,7 +43,7 @@ export function SessionList({
 
   return (
     <section>
-      <h2 className="px-1 text-sm font-semibold text-ink-2">
+      <h2 className="px-1 text-base font-bold text-ink">
         {t("history.list.title")}
       </h2>
       {/* 金のヘアライン(見出しの下・装飾) */}
@@ -51,7 +51,8 @@ export function SessionList({
         aria-hidden
         className="mt-2 h-px bg-linear-to-r from-gold-soft to-transparent"
       />
-      <ul className="mt-3 divide-y divide-hairline overflow-hidden rounded-3xl border border-hairline bg-surface-2 shadow-md">
+      {/* すりガラスカード。行区切りはガラスの hairline(白の光る線) */}
+      <ul className="mt-3 divide-y divide-white/70 overflow-hidden rounded-3xl border border-white/70 bg-white/60 shadow-glass backdrop-blur-md">
         {sorted.map((s) => {
           const zone = zoneOf(s.percent);
           const value = displayPercent(s.percent).value;
@@ -59,16 +60,16 @@ export function SessionList({
             <li key={s.id}>
               <Link
                 href={`/result/?sid=${s.id}`}
-                className="flex min-h-14 items-center gap-3 px-4 py-3 transition-colors active:bg-surface-3/60"
+                className="flex min-h-14 items-center gap-3 px-4 py-3 transition-colors active:bg-white/60"
               >
                 <div className="min-w-0 flex-1">
                   <p className="text-sm text-ink">
                     {formatDateTime(s.startedAt, nowYear)}
                   </p>
-                  <p className="mt-0.5 flex items-center gap-1.5 text-[17px] text-ink-mute">
+                  <p className="mt-0.5 flex items-center gap-1.5 text-xs text-ink-2">
                     <span>{t(`timeBand.${s.timeBand}`)}</span>
                     {s.baselineType === "provisional" && (
-                      <span className="rounded-full bg-surface-3 px-1.5 py-px">
+                      <span className="rounded-full bg-white/80 px-1.5 py-px ring-1 ring-hairline">
                         {t("percent.provisional.badge")}
                       </span>
                     )}
@@ -79,7 +80,7 @@ export function SessionList({
                   <span className="text-xs text-ink-2">%</span>
                 </span>
                 <span
-                  className={`rounded-full border px-2 py-0.5 text-[17px] ${zoneClasses[zone].border} ${zoneClasses[zone].text}`}
+                  className={`rounded-full border bg-white/80 px-2 py-0.5 text-xs font-bold ${zoneClasses[zone].border} ${zoneClasses[zone].text}`}
                 >
                   {t(`zone.${zone}.label`)}
                 </span>

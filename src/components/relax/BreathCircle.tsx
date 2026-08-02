@@ -18,9 +18,10 @@ const TRANSITION_MS: Record<BreathPhase, number> = {
 };
 
 /**
- * 呼吸円(白背景リッチテーマ)。relax グリーンのやわらかいグラデーションに
- * 多層の box-shadow 光彩と上面の光沢ハイライトを重ね、外周には静的な
- * 金のヘアラインリングを添える(mock-rich-home.png のゲージ装飾準拠)。
+ * 呼吸円(アクア・ガラステーマ・2026-08-02 改訂)。
+ * 「水面の波紋+青緑ガラスの球」: relax グリーンに ring-teal の青緑を溶かした
+ * ガラス球に、多層の光彩と上面グロス+白のヘアラインを重ね、外周には静的な
+ * 白い波紋リングを同心に広げる(呼吸のスケール変化には追従しない)。
  * CSS transition(easeInOutSine 近似)でなめらかに拡縮し、
  * prefers-reduced-motion では固定サイズのまま動かない。
  */
@@ -58,26 +59,28 @@ export function BreathCircle({
       className="relative shrink-0"
       style={{ width: "min(62vw, 15rem)", aspectRatio: "1 / 1" }}
     >
-      {/* 外周の金ヘアラインリング(静的・呼吸のスケール変化には追従しない) */}
-      <div className="absolute -inset-5 rounded-full border border-gold-soft" />
-      {/* 外側のぼかし光輪 */}
+      {/* 水面の波紋(静的な白の同心リング・呼吸のスケール変化には追従しない) */}
+      <div className="absolute -inset-5 rounded-full border-2 border-white/60" />
+      <div className="absolute -inset-10 rounded-full border border-white/40" />
+      <div className="absolute -inset-14 rounded-full border border-ring-teal/30" />
+      {/* 外側のぼかし光輪(青緑) */}
       <div
-        className="absolute inset-0 rounded-full bg-relax/35 blur-2xl"
+        className="absolute inset-0 rounded-full bg-ring-teal/35 blur-2xl"
         style={{ transform: `scale(${scale})`, transition }}
       />
-      {/* 本体(relax グリーンのやわらかいグラデーション+多層光彩) */}
+      {/* 本体(relax グリーン×青緑ガラスのグラデーション+多層光彩+白ヘアライン) */}
       <div
-        className="absolute inset-0 overflow-hidden rounded-full"
+        className="absolute inset-0 overflow-hidden rounded-full border border-white/60"
         style={{
           transform: `scale(${scale})`,
           transition,
           background:
-            "radial-gradient(circle at 35% 28%, #effbf4 0%, #c4ecd6 34%, #6cc394 66%, var(--color-relax) 82%, #1f8a52 100%)",
+            "radial-gradient(circle at 35% 28%, #f0fbf7 0%, #c9eee0 30%, #7fd0c6 56%, #4db08a 76%, var(--color-relax) 90%, #1f8a52 100%)",
           boxShadow:
-            "0 0 22px rgba(47, 158, 99, 0.30), 0 0 60px rgba(47, 158, 99, 0.20), 0 0 110px rgba(47, 158, 99, 0.12), inset 0 -18px 36px rgba(22, 107, 63, 0.18)",
+            "0 0 22px rgba(63, 168, 155, 0.32), 0 0 60px rgba(47, 158, 99, 0.20), 0 0 110px rgba(127, 208, 198, 0.14), inset 0 -18px 36px rgba(22, 107, 63, 0.18)",
         }}
       >
-        {/* 上面の光沢ハイライト */}
+        {/* 上面の光沢ハイライト(水滴のグロス) */}
         <div className="absolute inset-x-[14%] top-[5%] h-[38%] rounded-full bg-linear-to-b from-white/55 to-white/0 blur-md" />
       </div>
     </div>

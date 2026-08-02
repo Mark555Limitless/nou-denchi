@@ -10,8 +10,9 @@ const MAX_PERCENT = 120;
 
 /**
  * タスク別内訳(§4.4)。norm×100 を「基準比%」として3本の横バーで表示。
- * 単一系列のため青1色系(リッチテーマの光沢ブルーグラデーション)・値ラベル併記。
- * トラックは surface-3(淡い青灰)、値ラベルは濃紺(text-ink)。
+ * アクア・ガラステーマ: 「水の入ったガラス管」風
+ * (トラック=白ガラス管、塗り=青の水グラデ+上面ハイライト)・値ラベル併記。
+ * 値ラベルは濃紺(text-ink)。
  */
 export function TaskBars({ norm }: { norm: TaskScores }) {
   const [grown, setGrown] = useState(false);
@@ -31,11 +32,16 @@ export function TaskBars({ norm }: { norm: TaskScores }) {
             className="grid grid-cols-[4.5rem_1fr_3.5rem] items-center gap-3"
           >
             <span className="text-sm text-ink-2">{t(`task.${task}.label`)}</span>
-            <div className="h-3 rounded-full bg-surface-3 overflow-hidden">
+            <div className="h-4 rounded-full bg-white/50 border border-white/80 shadow-[inset_0_1px_3px_rgba(28,58,102,0.18)] overflow-hidden">
               <div
-                className="h-full rounded-full bg-linear-to-r from-[#5da3ef] to-primary-deep motion-safe:transition-[width] motion-safe:duration-700 motion-safe:ease-out"
+                className="relative h-full rounded-full bg-linear-to-r from-[#7db8e8] to-[#3e7fd0] motion-safe:transition-[width] motion-safe:duration-700 motion-safe:ease-out"
                 style={{ width: grown ? `${widthPct}%` : "0%" }}
-              />
+              >
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-x-1 top-0.5 h-[38%] rounded-full bg-linear-to-b from-white/70 to-white/0"
+                />
+              </div>
             </div>
             <span className="text-sm font-mono font-bold text-ink text-right">
               {value}%

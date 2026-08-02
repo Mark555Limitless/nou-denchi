@@ -59,7 +59,7 @@ export function ResultContent() {
   if (status === "loading") {
     return (
       <main className="flex-1 flex items-center justify-center">
-        <p className="text-sm text-ink-mute">{t("result.loading")}</p>
+        <p className="text-sm text-ink-2">{t("result.loading")}</p>
       </main>
     );
   }
@@ -75,8 +75,12 @@ export function ResultContent() {
         </p>
         <Link
           href="/"
-          className="rounded-full bg-linear-to-b from-primary to-primary-deep text-primary-ink font-bold py-3.5 px-8 min-h-[44px] inline-flex items-center shadow-lg ring-1 ring-gold-soft active:scale-[0.99] active:opacity-90"
+          className="relative overflow-hidden rounded-full bg-linear-to-b from-aqua-btn to-aqua-btn-deep text-primary-ink font-bold py-3.5 px-8 min-h-[44px] inline-flex items-center justify-center shadow-lg shadow-primary/30 ring-1 ring-white/60 active:scale-[0.99] active:opacity-90"
         >
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-x-4 top-1 h-1/2 rounded-full bg-linear-to-b from-white/45 to-white/0"
+          />
           {t("result.backHome")}
         </Link>
       </main>
@@ -88,24 +92,22 @@ export function ResultContent() {
 
   return (
     <main className="flex-1 px-4 pt-6 pb-8 flex flex-col gap-4">
-      {/* タイトルは濃紺タイポ+左右に金の飾り線(mock-rich-result.png 準拠) */}
-      <h1 className="flex items-center justify-center gap-3 text-xl font-bold tracking-wide text-ink">
-        <span
-          aria-hidden
-          className="h-px w-12 bg-linear-to-r from-transparent to-gold-soft"
-        />
+      {/* タイトルは濃紺タイポのエンボス風(mock-aqua-result.png 準拠) */}
+      <h1
+        className="text-center text-2xl font-bold tracking-wide text-ink"
+        style={{
+          textShadow:
+            "0 1px 0 rgba(255,255,255,0.8), 0 2px 8px rgba(255,255,255,0.55)",
+        }}
+      >
         {t("result.title")}
-        <span
-          aria-hidden
-          className="h-px w-12 bg-linear-to-l from-transparent to-gold-soft"
-        />
       </h1>
 
       {isConfirmed && (
         <ConfirmedCelebration onShare={() => setShareVariant("day7")} />
       )}
 
-      <section className="bg-surface-2 rounded-3xl border border-hairline shadow-md p-6 flex flex-col items-center gap-4">
+      <section className="bg-white/60 backdrop-blur-md rounded-3xl border border-white/70 shadow-glass p-6 flex flex-col items-center gap-4">
         {/* 見出しは2段組み(上段=測定日時 / 下段=主見出し) */}
         <div className="text-center">
           <p className="text-base font-semibold text-ink-2">
@@ -119,13 +121,13 @@ export function ResultContent() {
               <button
                 type="button"
                 onClick={() => setProvisionalOpen(true)}
-                className="rounded-full border border-hairline bg-surface-3 text-ink-mute px-2.5 py-2 -my-1.5 text-xs min-h-[36px]"
+                className="rounded-full border border-white/70 bg-white/70 backdrop-blur-sm text-ink-2 px-2.5 py-2 -my-1.5 text-xs min-h-[36px]"
               >
                 {t("percent.provisional.badge")}
               </button>
             )}
           </div>
-          <p className="mt-1 text-xs font-mono text-ink-mute">
+          <p className="mt-1 text-xs font-mono text-ink-2">
             {t("result.timeBandNote", {
               band: t(`timeBand.${session.timeBand}`),
             })}
@@ -133,7 +135,7 @@ export function ResultContent() {
         </div>
 
         {isBest && (
-          <span className="rounded-full bg-zone-yellow/15 border border-zone-yellow-text text-zone-yellow-text px-4 py-1.5 text-sm font-extrabold tracking-wide">
+          <span className="rounded-full bg-white/80 backdrop-blur-sm border border-zone-yellow-text text-zone-yellow-text px-4 py-1.5 text-sm font-extrabold tracking-wide">
             🎉 {t("bestUpdated.label")}
           </span>
         )}
@@ -141,14 +143,14 @@ export function ResultContent() {
         <PercentCounter value={display.value} zone={zone} animate={isNew} />
 
         {display.overCap && (
-          <span className="rounded-full bg-zone-green/15 border border-zone-green-text text-zone-green-text px-3 py-1 text-sm font-bold">
+          <span className="rounded-full bg-white/80 backdrop-blur-sm border border-zone-green-text text-zone-green-text px-3 py-1 text-sm font-bold">
             {t("percent.overCap")}
           </span>
         )}
 
         <div className="flex flex-col items-center gap-1.5">
           <span
-            className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-bold ${zc.border} ${zc.text}`}
+            className={`inline-flex items-center gap-1.5 rounded-full border bg-white/80 backdrop-blur-sm px-3 py-1 text-sm font-bold shadow-sm ${zc.border} ${zc.text}`}
           >
             <span aria-hidden className={`w-2 h-2 rounded-full ${zc.bg}`} />
             {t(`zone.${zone}.label`)}
@@ -159,12 +161,12 @@ export function ResultContent() {
         </div>
       </section>
 
-      <section className="bg-surface-2 rounded-3xl border border-hairline shadow-md p-5">
+      <section className="bg-white/60 backdrop-blur-md rounded-3xl border border-white/70 shadow-glass p-5">
         <div className="flex items-baseline justify-between mb-3">
-          <h2 className="text-sm font-bold text-ink">
+          <h2 className="text-base font-bold text-ink">
             {t("result.breakdown.title")}
           </h2>
-          <span className="text-xs text-ink-mute">
+          <span className="text-xs text-ink-2">
             {t("result.breakdown.unit")}
           </span>
         </div>
@@ -174,11 +176,11 @@ export function ResultContent() {
       {/* ゲームバナーはスコアの高低に関わらず常時表示(条件分岐しない) */}
       <GameBanners />
 
-      {/* シェアは白地+青文字+青枠の上品なアウトライン型(mock 準拠) */}
+      {/* シェアは白ガラス+青文字+青枠のアウトラインピル(mock-aqua-result.png 準拠) */}
       <button
         type="button"
         onClick={() => setShareVariant("daily")}
-        className="w-full rounded-full bg-surface-2 border-2 border-primary text-primary-deep font-bold py-4 min-h-[44px] shadow-sm active:scale-[0.99] active:opacity-90"
+        className="w-full rounded-full border-2 border-primary/70 bg-white/70 backdrop-blur-sm text-primary-deep font-bold py-4 min-h-[44px] shadow-glass active:scale-[0.99] active:opacity-90"
       >
         {t("result.shareButton")}
       </button>

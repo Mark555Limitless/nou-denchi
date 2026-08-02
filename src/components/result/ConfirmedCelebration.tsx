@@ -76,14 +76,14 @@ function CelebrationEmblem() {
 
 /**
  * 「キミの100%! 確定!!」celebration(§4.4 confirmed=1)。
- * 白背景リッチテーマ: 白カード+金のオーナメント(gold-soft の枠・gold-deep の文字)+
- * 金×青の王冠エンブレムでプレミアムなお祝い感を出す(mock-rich-result.png の質感準拠)。
+ * アクア・ガラステーマ: すりガラスカード+金×青の王冠エンブレムで
+ * プレミアムなお祝い感を出す(mock-aqua-result.png の質感準拠)。
  * CSSアニメは控えめ+prefers-reduced-motion では無効。
- * Day7記念シェアカード(§6.4②)への導線を持つ。
+ * Day7記念シェアカード(§6.4②)への導線(水滴ピル)を持つ。
  */
 export function ConfirmedCelebration({ onShare }: { onShare: () => void }) {
   return (
-    <section className="bg-surface-2 rounded-3xl border-2 border-gold-soft shadow-md p-6 text-center flex flex-col items-center gap-3">
+    <section className="bg-white/60 backdrop-blur-md rounded-3xl border border-white/70 shadow-glass p-6 text-center flex flex-col items-center gap-3">
       <style>{`
         @media (prefers-reduced-motion: no-preference) {
           @keyframes nd-confirmed-pop {
@@ -105,8 +105,12 @@ export function ConfirmedCelebration({ onShare }: { onShare: () => void }) {
       <button
         type="button"
         onClick={onShare}
-        className="mt-1 w-full rounded-full border-2 border-gold-soft bg-surface-2 text-gold-deep font-bold py-3.5 min-h-[44px] shadow-sm active:opacity-80"
+        className="relative mt-1 w-full overflow-hidden rounded-full bg-linear-to-b from-aqua-btn to-aqua-btn-deep text-primary-ink font-bold py-3.5 min-h-[44px] shadow-lg shadow-primary/30 ring-1 ring-white/60 active:opacity-80"
       >
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-x-4 top-1 h-1/2 rounded-full bg-linear-to-b from-white/45 to-white/0"
+        />
         {t("result.confirmed.shareButton")}
       </button>
     </section>

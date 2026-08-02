@@ -241,7 +241,7 @@ export function PvtTask({ seed, paused, trialsOverride, onDone }: PvtTaskProps) 
           paddingTop: "env(safe-area-inset-top)",
         }}
       >
-        <p className="pt-3 font-mono text-sm text-ink-mute">
+        <p className="pt-3 font-mono text-sm text-ink-2">
           {t("measure.progress", { n: trialNo, total: totalTrials })}
         </p>
         <div className="flex-1 flex flex-col items-center justify-center gap-6 w-full">
@@ -249,11 +249,31 @@ export function PvtTask({ seed, paused, trialsOverride, onDone }: PvtTaskProps) 
             <p className="text-lg text-ink-2">{t("measure.pvt.waiting")}</p>
           )}
           {phase === "shown" && (
-            <div className="w-44 h-44 rounded-full bg-linear-to-b from-primary to-primary-deep shadow-lg shadow-primary/40 flex flex-col items-center justify-center">
-              <span ref={msElRef} className="font-mono text-4xl text-white">
+            <div className="relative w-44 h-44 rounded-full bg-radial-[at_35%_28%] from-[#9fd0f2] via-[#4a8ad8] to-[#1d4e96] shadow-lg shadow-primary/40 ring-1 ring-white/60 flex flex-col items-center justify-center">
+              {/* 水滴をまとった青いガラスのオーブ(装飾レイヤー) */}
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-0 rounded-full bg-radial-[at_50%_120%] from-white/35 via-white/0 to-white/0"
+              />
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-x-6 top-3 h-14 rounded-full bg-linear-to-b from-white/60 to-white/0 blur-[2px]"
+              />
+              <span
+                aria-hidden
+                className="pointer-events-none absolute right-8 top-10 size-3 rounded-full bg-white/70 blur-[1px]"
+              />
+              <span
+                aria-hidden
+                className="pointer-events-none absolute left-9 bottom-9 size-2 rounded-full bg-white/50 blur-[1px]"
+              />
+              <span
+                ref={msElRef}
+                className="relative font-mono text-4xl text-white"
+              >
                 0
               </span>
-              <span className="font-mono text-sm text-white">
+              <span className="relative font-mono text-sm text-white">
                 {t("measure.msUnit")}
               </span>
             </div>
@@ -278,11 +298,11 @@ export function PvtTask({ seed, paused, trialsOverride, onDone }: PvtTaskProps) 
             </p>
           )}
         </div>
-        {/* 文字サイズは text-sm の2倍(1.75rem)。375px 級の狭い端末でのみ
-            2行目が折り返さないよう 10.6vw を上限併用(min())する */}
+        {/* 下部ヒント(2段組み): モック準拠の濃紺。375px 級の狭い端末でも
+            各行が折り返さないよう 8.5vw を上限併用(min())する */}
         <PvtInstruction
-          className="pb-10 text-center text-[min(1.75rem,10vw)] leading-snug text-ink-faint"
-          iconClassName="w-7 h-7 align-[-4px]"
+          className="pb-10 text-center text-[min(1.5rem,8.5vw)] leading-snug text-ink-2"
+          iconClassName="w-6 h-6 align-[-3px]"
           style={{ paddingBottom: "max(2.5rem, env(safe-area-inset-bottom))" }}
         />
       </div>

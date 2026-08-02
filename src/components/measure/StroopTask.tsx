@@ -189,7 +189,7 @@ export function StroopTask({
   return (
     <div className="flex-1 flex flex-col px-4 pb-8 select-none">
       {/* 左は✕ボタンと重ならないよう余白を取る */}
-      <div className="flex justify-between pt-3 pl-12 font-mono text-sm text-ink-mute">
+      <div className="flex justify-between pt-3 pl-12 font-mono text-sm text-ink-2">
         <span>
           {t("measure.progress", { n: index + 1, total: totalQuestions })}
         </span>
@@ -198,7 +198,7 @@ export function StroopTask({
         )}
       </div>
       <div className="flex-1 flex flex-col items-center justify-center gap-5">
-        <p className="text-sm text-ink-mute">{t("measure.stroop.hint")}</p>
+        <p className="text-sm text-ink-2">{t("measure.stroop.hint")}</p>
         <p
           className="text-6xl font-bold"
           style={{ color: stroopInkHex[q.ink] }}
@@ -217,7 +217,7 @@ export function StroopTask({
               // キーボード操作(§7): detail===0 はキーボード由来の click
               if (e.detail === 0) handleAnswer(c);
             }}
-            className="flex flex-col items-center gap-1.5 py-3.5 rounded-2xl bg-surface-2 border border-hairline shadow-md active:bg-surface-3"
+            className="flex flex-col items-center gap-1.5 py-3.5 rounded-2xl bg-white/70 backdrop-blur border border-white/80 shadow-glass active:bg-white/90"
           >
             <span
               aria-hidden

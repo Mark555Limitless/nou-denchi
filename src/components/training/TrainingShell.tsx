@@ -5,11 +5,12 @@ import { t } from "@/lib/i18n";
 
 /**
  * トレオタ各モード共通の部品(2026-08-02 ユーザー指示[6])。
- * 白背景リッチテーマ+トレオタ用アクセント(青〜紫グラデーション)。
+ * アクア・ガラステーマ(Start画面11 準拠・2026-08-02 改訂):
+ * 水滴をまとった青いガラスの主要ボタン+すりガラスカード+気泡装飾。
  * DB保存は一切しないため、中断✕は確認ダイアログなしで即メニューへ戻る。
  */
 
-/** トレオタ主要ボタン(青〜紫グラデ+グロス+金リング) */
+/** トレオタ主要ボタン(水滴ピル: 青ガラスグラデ+上面グロス+白リング) */
 export function TrainingButton({
   label,
   onClick,
@@ -21,11 +22,11 @@ export function TrainingButton({
     <button
       type="button"
       onClick={onClick}
-      className="relative w-full overflow-hidden rounded-full bg-linear-to-b from-primary to-violet-700 py-4 text-lg font-bold text-primary-ink shadow-lg ring-1 ring-gold-soft active:opacity-85"
+      className="relative w-full overflow-hidden rounded-full bg-linear-to-b from-aqua-btn to-aqua-btn-deep py-4 text-lg font-bold text-primary-ink shadow-lg shadow-primary/30 ring-1 ring-white/60 active:translate-y-0.5 active:shadow-md"
     >
       <span
         aria-hidden
-        className="pointer-events-none absolute inset-x-3 top-1 h-1/2 rounded-full bg-linear-to-b from-white/40 to-white/0"
+        className="pointer-events-none absolute inset-x-4 top-1 h-1/2 rounded-full bg-linear-to-b from-white/45 to-white/0"
       />
       <span className="relative">{label}</span>
     </button>
@@ -46,32 +47,32 @@ export function TrainingExit() {
   );
 }
 
-/** 青〜紫の光の装飾オーブ(画像アセット不使用・RelaxGlowArt と同じ流儀) */
+/** アクアの気泡装飾オーブ(画像アセット不使用・水面の波紋+青ガラスの水滴球) */
 export function TrainingArt() {
   return (
     <div
       aria-hidden
       className="pointer-events-none relative flex h-40 w-40 items-center justify-center"
     >
-      {/* 青紫の光彩 */}
+      {/* 水色の光彩 */}
       <div
         className="absolute inset-0 rounded-full"
         style={{
           background:
-            "radial-gradient(circle, rgba(109,40,217,0.16) 0%, rgba(42,120,214,0) 70%)",
+            "radial-gradient(circle, rgba(62,127,208,0.18) 0%, rgba(127,208,198,0) 70%)",
         }}
       />
-      {/* 同心のリング(集中の波紋) */}
-      <div className="absolute inset-4 rounded-full border border-primary/30" />
-      <div className="absolute inset-9 rounded-full border border-violet-500/40" />
-      {/* 中央の光る球(青→紫グラデ+グロス+金の細リング) */}
-      <div className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-linear-to-b from-primary to-violet-700 shadow-lg ring-1 ring-gold-soft">
-        <span className="absolute inset-x-2 top-1 h-1/2 rounded-full bg-linear-to-b from-white/40 to-white/0" />
+      {/* 同心のリング(水面の波紋) */}
+      <div className="absolute inset-4 rounded-full border border-white/70" />
+      <div className="absolute inset-9 rounded-full border border-primary/30" />
+      {/* 中央の水滴球(青ガラスグラデ+グロス+白リング) */}
+      <div className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-linear-to-b from-aqua-btn to-aqua-btn-deep shadow-lg shadow-primary/30 ring-1 ring-white/60">
+        <span className="absolute inset-x-2 top-1 h-1/2 rounded-full bg-linear-to-b from-white/45 to-white/0" />
       </div>
-      {/* ただよう光の粒 */}
-      <span className="absolute right-2 top-6 h-3 w-3 rounded-full bg-violet-400/30" />
-      <span className="absolute bottom-8 left-3 h-2 w-2 rounded-full bg-primary/40" />
-      <span className="absolute bottom-3 right-6 h-2.5 w-2.5 rounded-full bg-violet-500/25" />
+      {/* ただよう気泡(白ガラス) */}
+      <span className="absolute right-2 top-6 h-3 w-3 rounded-full border border-white/80 bg-white/40" />
+      <span className="absolute bottom-8 left-3 h-2 w-2 rounded-full border border-white/70 bg-white/30" />
+      <span className="absolute bottom-3 right-6 h-2.5 w-2.5 rounded-full border border-white/70 bg-white/35" />
     </div>
   );
 }
@@ -93,7 +94,8 @@ export function TrainingIntro({
       <section className="flex flex-1 flex-col items-center justify-center gap-5 px-6 text-center">
         <TrainingArt />
         <h1 className="text-2xl font-extrabold text-ink">{title}</h1>
-        <p className="rounded-full border border-hairline bg-surface-3 px-4 py-1 text-sm font-bold text-violet-700">
+        {/* メタ(回数/時間)はすりガラスのピルで */}
+        <p className="rounded-full border border-white/70 bg-white/70 px-4 py-1 text-sm font-bold text-primary-deep shadow-sm backdrop-blur-sm">
           {meta}
         </p>
         <p className="max-w-72 text-sm leading-relaxed text-ink-2">{desc}</p>
@@ -128,10 +130,11 @@ export function TrainingDone({
     <>
       <section className="flex flex-1 flex-col items-center justify-center gap-5 px-6 text-center">
         <TrainingArt />
-        <p role="status" className="text-2xl font-extrabold text-violet-700">
+        <p role="status" className="text-2xl font-extrabold text-ink">
           {t("training.done.title")}
         </p>
-        <dl className="w-full max-w-72 rounded-3xl border border-hairline bg-surface-2 px-5 py-4 shadow-md">
+        {/* 結果カードはすりガラス */}
+        <dl className="w-full max-w-72 rounded-3xl border border-white/70 bg-white/60 px-5 py-4 shadow-glass backdrop-blur-md">
           {stats.map((s) => (
             <div
               key={s.label}
@@ -155,7 +158,7 @@ export function TrainingDone({
         <TrainingButton label={t("training.done.again")} onClick={onRetry} />
         <Link
           href="/training/"
-          className="w-full rounded-full border border-hairline bg-surface-2 py-3.5 text-center font-bold text-ink-2 shadow-sm active:opacity-80"
+          className="w-full rounded-full border-2 border-primary/70 bg-white/70 py-3.5 text-center font-bold text-primary-deep shadow-sm backdrop-blur-sm active:opacity-80"
         >
           {t("training.done.menu")}
         </Link>

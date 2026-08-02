@@ -16,18 +16,20 @@ import { t } from "@/lib/i18n";
 
 /**
  * ②時間帯別平均バー(§4.5)。朝/昼/夜/深夜の平均%。
- * バーは青グラデーション単系列(ゾーン色を系列色に使わない)・バー上に値の直接ラベル。
- * mock-rich-result.png のステータスバー(光沢ブルーの丸バー)に準拠。
+ * バーは「ガラスの水柱」風の半透明青グラデ単系列(ゾーン色を系列色に使わない)・
+ * バー上に値の直接ラベル。mock-aqua-history.png のガラス水柱に準拠。
  * データが無い時間帯はバー非表示(null)+「−」注記で扱う。
  */
 
-/** バーの青グラデーション(上=明・下=深)。Recharts の Bar は fill 1色のため defs で定義 */
+/** ガラス水柱のグラデ(上=白ハイライト・下=深い青)。Recharts の Bar は fill 1色のため defs で定義 */
 const BAR_GRADIENT_ID = "timeBandBarGradient";
-const BAR_BLUE_LIGHT = "#5da3ef";
-const BAR_BLUE_DEEP = "#1c5cab"; // --color-primary-deep
-const AXIS_INK = "#5f6d98"; // --color-ink-mute
-const GRID_HAIRLINE = "rgba(35, 47, 92, 0.12)"; // 白面上のやわらかいグリッド(--color-hairline系)
-const LABEL_INK = "#46538a"; // --color-ink-2
+const BAR_GLASS_TOP = "#ffffff"; // 上面の白ハイライト
+const BAR_BLUE_LIGHT = "#9fc8ea"; // 半透明の水色ガラス
+const BAR_BLUE_DEEP = "#2c5da8"; // --color-aqua-btn-deep
+const BAR_RIM = "rgba(255, 255, 255, 0.85)"; // ガラスの白い縁
+const AXIS_INK = "#546c99"; // --color-ink-mute
+const GRID_HAIRLINE = "rgba(28, 58, 102, 0.16)"; // ガラス面上のやわらかいグリッド(--color-hairline)
+const LABEL_INK = "#3c5687"; // --color-ink-2
 
 const BANDS: readonly TimeBand[] = ["morning", "day", "evening", "night"];
 
@@ -72,8 +74,8 @@ export function TimeBandChart({
   const missingBands = data.filter((d) => d.avg === null);
 
   return (
-    <section className="rounded-3xl border border-hairline bg-surface-2 p-5 shadow-md">
-      <h2 className="text-sm font-semibold text-ink-2">
+    <section className="rounded-3xl border border-white/70 bg-white/60 p-5 shadow-glass backdrop-blur-md">
+      <h2 className="text-base font-bold text-ink">
         {t("history.timeBand.title")}
       </h2>
       {/* 金のヘアライン(見出しの下・装飾) */}
@@ -88,6 +90,7 @@ export function TimeBandChart({
             margin={{ top: 18, right: 8, bottom: 0, left: 8 }}
           >
             <defs>
+              {/* ガラスの水柱: 上面に白ハイライト→水色→深い青(すべて半透明) */}
               <linearGradient
                 id={BAR_GRADIENT_ID}
                 x1="0"
@@ -95,8 +98,9 @@ export function TimeBandChart({
                 x2="0"
                 y2="1"
               >
-                <stop offset="0%" stopColor={BAR_BLUE_LIGHT} />
-                <stop offset="100%" stopColor={BAR_BLUE_DEEP} />
+                <stop offset="0%" stopColor={BAR_GLASS_TOP} stopOpacity={0.95} />
+                <stop offset="30%" stopColor={BAR_BLUE_LIGHT} stopOpacity={0.8} />
+                <stop offset="100%" stopColor={BAR_BLUE_DEEP} stopOpacity={0.85} />
               </linearGradient>
             </defs>
             <CartesianGrid stroke={GRID_HAIRLINE} vertical={false} />
@@ -111,8 +115,10 @@ export function TimeBandChart({
             <Bar
               dataKey="avg"
               fill={`url(#${BAR_GRADIENT_ID})`}
+              stroke={BAR_RIM}
+              strokeWidth={1}
               barSize={36}
-              radius={[8, 8, 0, 0]}
+              radius={[12, 12, 12, 12]}
               isAnimationActive={false}
             >
               <LabelList

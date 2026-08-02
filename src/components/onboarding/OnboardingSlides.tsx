@@ -35,8 +35,8 @@ function CalibrationBars() {
               style={{ height: `${h}%` }}
               className={`w-6 rounded-full ${
                 i === maxIndex
-                  ? "bg-linear-to-b from-primary to-primary-deep shadow-md ring-1 ring-gold-soft"
-                  : "bg-surface-3"
+                  ? "bg-linear-to-b from-aqua-btn to-aqua-btn-deep shadow-md shadow-primary/30 ring-1 ring-white/70"
+                  : "bg-ring-glass"
               }`}
             />
           </div>
@@ -109,11 +109,12 @@ export function OnboardingSlides({ onFinish }: { onFinish: () => void }) {
               />
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={asset("/brand/logo-clean.png")}
+                src={asset("/brand/logo-alpha.png")}
                 alt={t("onboarding.slide1.imageAlt")}
                 width={900}
                 height={672}
                 className="relative w-full max-w-xs h-auto"
+                style={{ filter: "drop-shadow(0 2px 6px rgba(255,255,255,0.8))" }}
               />
             </div>
             <GoldOrnament />
@@ -126,9 +127,11 @@ export function OnboardingSlides({ onFinish }: { onFinish: () => void }) {
         {/* ② ベスト計測ウィーク */}
         <section className={slideCls}>
           <div className="flex flex-col items-center text-center gap-5">
-            <h2 className="text-2xl font-bold">{t("onboarding.slide2.title")}</h2>
+            <h2 className="text-2xl font-bold text-ink">
+              {t("onboarding.slide2.title")}
+            </h2>
             <GoldOrnament />
-            <div className="bg-surface-2 rounded-3xl border border-hairline shadow-md p-5 w-full">
+            <div className="bg-white/60 backdrop-blur-md border border-white/70 rounded-3xl shadow-glass p-5 w-full">
               <CalibrationBars />
               <p className="mt-3 text-xs text-ink-mute">
                 {t("onboarding.slide2.visualLabel")}
@@ -146,15 +149,15 @@ export function OnboardingSlides({ onFinish }: { onFinish: () => void }) {
         {/* ③ 免責・プライバシー */}
         <section className={slideCls}>
           <div className="flex flex-col gap-4">
-            <h2 className="text-2xl font-bold text-center">
+            <h2 className="text-2xl font-bold text-center text-ink">
               {t("onboarding.slide3.title")}
             </h2>
             <GoldOrnament />
             {/* 免責事項を大きく表示([&>div]:text-sm で Disclaimer の文字を一段拡大) */}
-            <div className="bg-surface-2 rounded-3xl border border-hairline shadow-md p-5 [&>div]:text-sm">
+            <div className="bg-white/60 backdrop-blur-md border border-white/70 rounded-3xl shadow-glass p-5 [&>div]:text-sm">
               <Disclaimer detail />
             </div>
-            <div className="bg-surface-2 rounded-3xl border border-hairline shadow-md p-5">
+            <div className="bg-white/60 backdrop-blur-md border border-white/70 rounded-3xl shadow-glass p-5">
               <p className="text-sm text-ink-2 leading-relaxed">
                 {t("onboarding.slide3.privacy")}
               </p>
@@ -177,7 +180,9 @@ export function OnboardingSlides({ onFinish }: { onFinish: () => void }) {
             >
               <span
                 className={`block w-2.5 h-2.5 rounded-full transition-colors ${
-                  i === index ? "bg-primary" : "bg-surface-3"
+                  i === index
+                    ? "bg-ink"
+                    : "bg-white/85 ring-1 ring-ink/45"
                 }`}
               />
             </button>
@@ -186,8 +191,12 @@ export function OnboardingSlides({ onFinish }: { onFinish: () => void }) {
         <button
           type="button"
           onClick={next}
-          className="w-full h-12 rounded-full bg-linear-to-b from-primary to-primary-deep text-primary-ink font-bold text-base shadow-lg ring-1 ring-gold-soft active:translate-y-0.5 active:shadow-md"
+          className="relative overflow-hidden w-full h-12 rounded-full bg-linear-to-b from-aqua-btn to-aqua-btn-deep text-primary-ink font-bold text-base shadow-lg shadow-primary/30 ring-1 ring-white/60 active:translate-y-0.5 active:shadow-md"
         >
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-x-4 top-1 h-1/2 rounded-full bg-linear-to-b from-white/45 to-white/0"
+          />
           {index >= SLIDE_COUNT - 1 ? t("onboarding.start") : t("common.next")}
         </button>
       </div>

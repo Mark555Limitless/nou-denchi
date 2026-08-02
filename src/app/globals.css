@@ -1,39 +1,57 @@
 @import "tailwindcss";
 
 /*
- * デザイントークン — 白背景リッチテーマ(2026-07-31 改訂・GPT Image 2 生成の
- * docs/design/mock-rich-home.png / mock-rich-result.png 準拠)。
- * 純白 × 光沢ブルーグラデーション × 金のオーナメント × 濃紺タイポグラフィ。
- * 主要ボタンの推奨レシピ:
- *   bg-linear-to-b from-primary to-primary-deep text-primary-ink font-bold
- *   rounded-full shadow-lg ring-1 ring-gold-soft
+ * デザイントークン — アクア・ガラステーマ(2026-08-02 改訂)。
+ * ユーザー提供の確定デザイン イラスト/Start画面11.png(Nano Banana Pro 生成)と、
+ * それを基に生成した docs/design/aqua/mock-aqua-*.png 準拠。
+ * 世界観: 明るい水面(コースティクス+気泡)×すりガラスの白カード×
+ *         ブラッシュドシルバー金属×濃紺タイポ×水滴をまとった青いガラスボタン。
  *
- * ゾーン4色(fill)は検証済みステータスパレット。白面上で文字として使う場合は
- * 必ず --color-zone-*-text(コントラスト4.5:1以上を検証済み)を使うこと。
- * ゾーン色は必ずラベル文言と併記し、色単独で意味を伝えない(色覚多様性対応)。
+ * 背景は public/art/water-bg.webp を layout の固定レイヤーで全画面に敷く。
+ * カードの基本形: bg-white/60 backdrop-blur-md border border-white/70
+ *                 rounded-3xl shadow-glass
+ * 主要ボタンの推奨レシピ(水滴ピル):
+ *   bg-linear-to-b from-aqua-btn to-aqua-btn-deep text-primary-ink font-bold
+ *   rounded-full ring-1 ring-white/60 shadow-lg
+ *   + 上面グロス(absolute inset-x-3 top-1 h-1/2 の白グラデ rounded-full)
+ *
+ * 文字サイズ: 旧「全文字1.5倍」指定は解除(2026-08-02)。
+ * サイズはモックの見た目比率に合わせて各コンポーネントで決める。
+ *
+ * ゾーン4色(fill)と zone-*-text は従来どおり(コントラスト検証済み)。
+ * 色は必ずラベル文言と併記し、色単独で意味を伝えない(色覚多様性対応)。
  */
 @theme {
-  --color-surface: #ffffff;
+  /* 背景画像の下地(画像ロード前・非対応時のフォールバック) */
+  --color-surface: #d9ecf7;
+  /* ベタ塗りが必要な箇所のみ(基本はガラス bg-white/60) */
   --color-surface-2: #ffffff;
-  --color-surface-3: #edf2fa;
-  --color-ink: #232f5c;
-  --color-ink-2: #46538a;
-  --color-ink-mute: #5f6d98;
-  --color-hairline: rgba(35, 47, 92, 0.14);
+  --color-surface-3: #e3f0f9;
+  --color-ink: #1c3a66;
+  --color-ink-2: #3c5687;
+  --color-ink-mute: #546c99;
+  /* 装飾的ヒント専用の淡グレー(予備。現デザインでは未使用・本文には使わない) */
+  --color-ink-faint: #8fa6c8;
+  --color-hairline: rgba(28, 58, 102, 0.16);
 
-  /* 主要アクション: 光沢ブルーのグラデーション
-     (bg-linear-to-b from-primary to-primary-deep + text-primary-ink)。
-     白文字は下端 #1c5cab で 6.6:1、上端 #2a78d6 でも太字で成立 */
-  --color-primary: #2a78d6;
-  --color-primary-deep: #1c5cab;
+  /* 主要アクション: 水滴をまとった青いガラス */
+  --color-primary: #3e7fd0;
+  --color-primary-deep: #275b9f;
   --color-primary-ink: #ffffff;
+  --color-aqua-btn: #4f8bd8;
+  --color-aqua-btn-deep: #2c5da8;
 
-  /* 金のオーナメント(装飾専用。文字に使う場合は gold-deep=5.05:1) */
+  /* ゲージのガラスリング(トラック)と残量アーク(テールの青緑ガラス) */
+  --color-ring-glass: #c3dff0;
+  --color-ring-teal: #7fd0c6;
+  --color-ring-teal-deep: #3fa89b;
+
+  /* 金のオーナメント(オンボ等の◆。装飾専用、文字は gold-deep) */
   --color-gold: #b8912f;
   --color-gold-deep: #8a6a1c;
   --color-gold-soft: #ead9ab;
 
-  /* BOOST!! / RELAX(白面上の文字は -deep を使用・6.5:1) */
+  /* BOOST!! / RELAX(白面上の文字は -deep を使用) */
   --color-boost: #d64545;
   --color-boost-deep: #b3261e;
   --color-relax: #2f9e63;
@@ -51,23 +69,19 @@
   --color-zone-orange-text: #b5490f;
   --color-zone-red-text: #d03b3b;
 
-  /* アクセントの青(ロゴ・スコア数字にのみ使用。白面で5.4:1) */
-  --color-chart: #256abf;
-
-  /* 装飾的ヒント用の淡いグレー(コントラスト低下は意図的・aria-label で補完) */
-  --color-ink-faint: #9aa5c4;
+  /* アクセントの青(グラフ等) */
+  --color-chart: #2f6fc0;
 
   --font-sans: var(--font-geist-sans), "Hiragino Sans",
     "Hiragino Kaku Gothic ProN", "Noto Sans JP", Meiryo, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+
+  /* すりガラスカードの標準シャドウ */
+  --shadow-glass: 0 8px 24px rgba(44, 93, 168, 0.14);
 }
 
 html {
   height: 100%;
-  /* 全ページ文字サイズ 1.5倍(ユーザー指示・2026-08-02)。
-     Tailwind ユーティリティは rem 基準のため、文字・余白が一括で 1.5 倍になる。
-     px 指定の文字サイズ(text-[..px])は影響を受けないので個別に調整する。 */
-  font-size: 150%;
 }
 
 body {
@@ -85,7 +99,5 @@ body {
  * 実機ではほぼ全幅、PC等の広い画面では高さ基準で 9:16 の幅に制限する。
  */
 :root {
-  /* 28rem 相当を px 固定(448px)。rem のままだと html の font-size 150% で
-     表示枠自体が 1.5 倍に広がってしまうため。 */
   --app-max-w: min(448px, calc(100dvh * 9 / 16));
 }

@@ -50,10 +50,21 @@ export function PercentCounter({
       <span
         aria-hidden
         className={`font-mono text-8xl font-extrabold leading-none tracking-tight ${color}`}
+        style={{
+          textShadow:
+            "0 1px 0 rgba(255,255,255,0.75), 0 3px 6px rgba(28,58,102,0.3)",
+        }}
       >
         {shown}
       </span>
-      <span aria-hidden className={`font-mono text-4xl font-bold ${color}`}>
+      <span
+        aria-hidden
+        className={`font-mono text-4xl font-bold ${color}`}
+        style={{
+          textShadow:
+            "0 1px 0 rgba(255,255,255,0.75), 0 2px 4px rgba(28,58,102,0.3)",
+        }}
+      >
         %
       </span>
     </div>

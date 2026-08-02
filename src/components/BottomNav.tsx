@@ -23,7 +23,7 @@ export function BottomNav() {
   }
   return (
     <nav
-      className="fixed bottom-0 inset-x-0 border-t border-hairline bg-surface-2/95 backdrop-blur"
+      className="fixed bottom-0 inset-x-0 border-t border-white/70 bg-white/55 backdrop-blur-md"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
       <div className="mx-auto flex" style={{ maxWidth: "var(--app-max-w)" }}>

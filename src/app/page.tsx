@@ -14,34 +14,18 @@ import { asset } from "@/lib/ui/asset";
 
 /** ホーム画面(§4.2): 今日の判断力%を脳バッテリー残量メタファーで表示する。 */
 
-/** リッチテーマの背景装飾: 淡い青と金の光のグラデーション(mock-rich-home 準拠)。 */
-function RichBackdrop() {
+/** アクアテーマの装飾: 右上の半透明ホログラム脳(Start画面11 準拠)。 */
+function AquaDecor() {
   return (
     <div
       aria-hidden="true"
       className="pointer-events-none absolute inset-0 overflow-hidden"
     >
-      {/* ヘッダーのロゴ画像(白背景焼き込み)と重ならないよう、装飾はロゴ領域より下に置く */}
-      <div
-        className="absolute -right-24 top-48 h-72 w-72 rounded-full"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(42,120,214,0.10) 0%, rgba(42,120,214,0) 70%)",
-        }}
-      />
-      <div
-        className="absolute -left-24 top-1/3 h-64 w-64 rounded-full"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(184,145,47,0.09) 0%, rgba(184,145,47,0) 70%)",
-        }}
-      />
-      <div
-        className="absolute -bottom-20 -right-16 h-72 w-72 rounded-full"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(93,163,239,0.10) 0%, rgba(93,163,239,0) 70%)",
-        }}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={asset("/art/holo-brain.webp")}
+        alt=""
+        className="absolute -right-8 -top-6 w-44 opacity-70"
       />
     </div>
   );
@@ -49,15 +33,16 @@ function RichBackdrop() {
 
 function HomeHeader() {
   return (
-    <header className="relative flex flex-col items-center pb-2 pt-6 text-center">
-      {/* ロゴ&キャッチコピー(Nano Banana Pro で背景を除去した抽出版・純白背景) */}
+    <header className="relative flex flex-col items-center pb-1 pt-7 text-center">
+      {/* ロゴ&キャッチコピー(白背景を透過キーした版。水面背景に直接載る) */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src={asset("/brand/logo-clean.png")}
+        src={asset("/brand/logo-alpha.png")}
         alt={`${t("app.name")} — ${t("app.tagline")}`}
         width={900}
-        height={655}
+        height={672}
         className="mx-auto h-36 w-auto"
+        style={{ filter: "drop-shadow(0 2px 6px rgba(255,255,255,0.8))" }}
       />
     </header>
   );
@@ -91,7 +76,7 @@ export default function Home() {
         className="relative flex flex-1 flex-col overflow-hidden px-5 pb-6"
         aria-busy="true"
       >
-        <RichBackdrop />
+        <AquaDecor />
         <HomeHeader />
         <p role="status" className="sr-only">
           {t("home.loading")}
@@ -113,7 +98,7 @@ export default function Home() {
 
   return (
     <div className="relative flex flex-1 flex-col overflow-hidden px-5 pb-6">
-      <RichBackdrop />
+      <AquaDecor />
       <HomeHeader />
 
       <section className="relative flex flex-1 flex-col items-center justify-center gap-4 py-4">
@@ -136,7 +121,7 @@ export default function Home() {
         {zone && (
           <div className="flex items-center justify-center gap-2.5">
             <span
-              className={`shrink-0 rounded-full border bg-surface-2 px-3.5 py-1 text-sm font-bold shadow-sm ${zoneClasses[zone].text} ${zoneClasses[zone].border}`}
+              className={`shrink-0 rounded-full border bg-white/80 px-3.5 py-1 text-sm font-bold shadow-sm backdrop-blur-sm ${zoneClasses[zone].text} ${zoneClasses[zone].border}`}
             >
               {t(`zone.${zone}.label`)}
             </span>
@@ -158,11 +143,15 @@ export default function Home() {
         )}
       </section>
 
-      {/* 測定済みでも再測定できるよう常時表示(漆黒地に白文字) */}
+      {/* 測定済みでも再測定できるよう常時表示(水滴をまとった青いガラスのピル) */}
       <Link
         href="/measure/"
-        className="relative flex w-full items-center justify-center gap-2 rounded-full bg-linear-to-b from-primary to-primary-deep py-4 text-center text-lg font-bold text-primary-ink shadow-lg ring-1 ring-gold-soft active:translate-y-0.5 active:shadow-md"
+        className="relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-linear-to-b from-aqua-btn to-aqua-btn-deep py-4 text-center text-lg font-bold text-primary-ink shadow-lg shadow-primary/30 ring-1 ring-white/60 active:translate-y-0.5 active:shadow-md"
       >
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-x-4 top-1 h-1/2 rounded-full bg-linear-to-b from-white/45 to-white/0"
+        />
         {t("common.measure")}
         <span aria-hidden>→</span>
       </Link>

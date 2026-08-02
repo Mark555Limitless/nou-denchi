@@ -263,3 +263,26 @@
   トレーニング結果は表示のみで DB 保存なし(スコア・履歴・ベースラインに影響しない)。
   バナー4枚(トレオタ+3種)は GPT Image 2 で BOOST05/RELAX01 と同系統デザインとして生成し、
   1200×298 に統一(public/games/banner-treota / tr-pvt / tr-math / tr-stroop.webp)
+
+## 2026-08-02 追加変更 その11(ユーザー指示・アクア/ガラスデザインへ全面移行)
+
+- **確定デザイン**: ユーザー支給の イラスト/Start画面11.png(Nano Banana Pro 生成の
+  水面×ガラス×金属のスタート画面)。Nano Banana Pro に本画像+キャッチ&ロゴ05.png を
+  「画像として」読ませ、スタート画面のクリーン再現+全画面のモック
+  (docs/design/aqua/mock-aqua-*.png 7枚)+実装素材3点を生成し、モック準拠で全画面を移行
+- **実装素材**: 水面背景 public/art/water-bg.webp(layout の固定レイヤーで全画面共通)、
+  金属ディスク public/art/metal-disc.webp(円形透過・ゲージ中央)、
+  ホログラム脳 public/art/holo-brain.webp(ホーム右上。生成画像の下部ゴースト帯は
+  クロップで除去)。ロゴは白背景を透過キーした public/brand/logo-alpha.png を新設
+  (水面に直接載せる。logo-clean.png は全参照置換のうえ削除)
+- **デザイン言語**: すりガラスカード(bg-white/60 backdrop-blur-md border-white/70
+  shadow-glass)/水滴ピルボタン(from-aqua-btn to-aqua-btn-deep + ring-white/60 +
+  上面グロス)/濃紺タイポ(ink #1c3a66)+水面上の見出しは白フチ textShadow /
+  ゲージ=ガラスリング+青緑アーク+金属ディスク/PVT刺激=水滴オーブ/
+  TaskBars=水入りガラス管/下部ナビ=すりガラス
+- **文字1.5倍指定の解除**(ユーザー指示): html { font-size: 150% } を撤廃し、
+  各画面の文字サイズはモックの見た目比率に合わせて再設定。
+  PVTヒントの2段組みは維持し、色はモック準拠で濃紺(ink-2)に変更
+  (旧・淡グレー指定はデザイン最優先の指示により上書き。ink-faint トークンは予備として残置)
+- ゾーン色・BOOST赤・RELAX緑・トレオタ/ゲームバナー画像・計測ロジック・効果音は不変。
+  コントラスト検証と計測コード不変性はレビューエージェントで確認済み

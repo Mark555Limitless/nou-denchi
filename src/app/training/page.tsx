@@ -27,11 +27,23 @@ export default function TrainingMenuPage() {
         ✕
       </Link>
 
-      <header className="flex flex-col items-center gap-1.5 pt-10 pb-5 text-center">
-        <h1 className="bg-linear-to-r from-primary to-violet-700 bg-clip-text pl-[0.3em] text-3xl font-extrabold tracking-[0.3em] text-transparent">
+      <header className="flex flex-col items-center gap-2 pt-10 pb-5 text-center">
+        {/* 濃紺の大文字+白フチのエンボス(水面に映える。mock-aqua-training 準拠) */}
+        <h1
+          className="pl-[0.3em] text-4xl font-black tracking-[0.3em] text-ink"
+          style={{
+            textShadow:
+              "0 1px 0 #ffffff, 0 -1px 0 rgba(255,255,255,0.85), 1px 0 0 rgba(255,255,255,0.85), -1px 0 0 rgba(255,255,255,0.85), 0 4px 10px rgba(28,58,102,0.3)",
+          }}
+        >
           {t("training.menu.title")}
         </h1>
-        <p className="text-sm text-ink-2">{t("training.menu.desc")}</p>
+        <p
+          className="text-sm font-bold text-ink"
+          style={{ textShadow: "0 1px 3px rgba(255,255,255,0.85)" }}
+        >
+          {t("training.menu.desc")}
+        </p>
       </header>
 
       <div className="flex flex-col gap-3 pb-6">

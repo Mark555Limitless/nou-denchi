@@ -80,8 +80,8 @@ function CycleDots({ cycle }: { cycle: number }) {
 }
 
 /**
- * 呼吸円の世界観にあわせた緑の光の装飾(画像アセット不使用)。
- * 同心の淡いリング+中央の光る球+ただよう泡で BreathCircle と調和させる。
+ * 呼吸円の世界観にあわせた青緑の光の装飾(画像アセット不使用)。
+ * 水面の波紋リング+中央の青緑ガラス球+白い気泡で BreathCircle と調和させる。
  */
 function RelaxGlowArt() {
   return (
@@ -89,25 +89,25 @@ function RelaxGlowArt() {
       aria-hidden
       className="pointer-events-none relative flex h-40 w-40 items-center justify-center"
     >
-      {/* 緑の光彩 */}
+      {/* 青緑の光彩 */}
       <div
         className="absolute inset-0 rounded-full"
         style={{
           background:
-            "radial-gradient(circle, rgba(47,158,99,0.20) 0%, rgba(47,158,99,0) 70%)",
+            "radial-gradient(circle, rgba(47,158,99,0.18) 0%, rgba(127,208,198,0) 70%)",
         }}
       />
-      {/* 同心のリング(呼吸の波紋) */}
-      <div className="absolute inset-4 rounded-full border border-relax/30" />
-      <div className="absolute inset-9 rounded-full border border-relax/50" />
-      {/* 中央の光る球(緑グラデ+グロス+金の細リング) */}
-      <div className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-linear-to-b from-relax to-relax-deep shadow-lg ring-1 ring-gold-soft">
-        <span className="absolute inset-x-2 top-1 h-1/2 rounded-full bg-linear-to-b from-white/40 to-white/0" />
+      {/* 同心のリング(水面の波紋) */}
+      <div className="absolute inset-4 rounded-full border border-white/70" />
+      <div className="absolute inset-9 rounded-full border border-relax/40" />
+      {/* 中央の光る球(緑ガラスグラデ+グロス+白リング) */}
+      <div className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-linear-to-b from-relax to-relax-deep shadow-lg shadow-relax/30 ring-1 ring-white/60">
+        <span className="absolute inset-x-2 top-1 h-1/2 rounded-full bg-linear-to-b from-white/45 to-white/0" />
       </div>
-      {/* ただよう泡 */}
-      <span className="absolute right-2 top-6 h-3 w-3 rounded-full bg-relax/30" />
-      <span className="absolute bottom-8 left-3 h-2 w-2 rounded-full bg-relax/40" />
-      <span className="absolute bottom-3 right-6 h-2.5 w-2.5 rounded-full bg-relax/25" />
+      {/* ただよう気泡(白ガラス) */}
+      <span className="absolute right-2 top-6 h-3 w-3 rounded-full border border-white/80 bg-white/40" />
+      <span className="absolute bottom-8 left-3 h-2 w-2 rounded-full border border-white/70 bg-white/30" />
+      <span className="absolute bottom-3 right-6 h-2.5 w-2.5 rounded-full border border-white/70 bg-white/35" />
     </div>
   );
 }
@@ -168,7 +168,14 @@ export function RelaxSession() {
       <div className="relative flex flex-1 flex-col">
         {/* 上部: RELAX 見出し(+セッション中はサイクル進捗) */}
         <header className="flex flex-col items-center gap-2 text-center">
-          <h1 className="pl-[0.3em] text-3xl font-extrabold tracking-[0.3em] text-relax-deep">
+          {/* 白フチのエンボスで水面に映える(トレオタ見出しと同じ流儀) */}
+          <h1
+            className="pl-[0.3em] text-3xl font-extrabold tracking-[0.3em] text-relax-deep"
+            style={{
+              textShadow:
+                "0 1px 0 rgba(255,255,255,0.9), 0 3px 8px rgba(22,107,63,0.25)",
+            }}
+          >
             {t("relax.title")}
           </h1>
           {stage === "idle" && (
@@ -189,14 +196,15 @@ export function RelaxSession() {
               </p>
             </section>
             <div className="flex flex-col gap-2">
+              {/* はじめる: 緑系の水滴ピル(relax 緑は維持しつつ白リング+グロス) */}
               <button
                 type="button"
                 onClick={start}
-                className="relative w-full overflow-hidden rounded-full bg-linear-to-b from-relax to-relax-deep py-4 text-lg font-bold text-primary-ink shadow-lg ring-1 ring-gold-soft active:opacity-85"
+                className="relative w-full overflow-hidden rounded-full bg-linear-to-b from-relax to-relax-deep py-4 text-lg font-bold text-primary-ink shadow-lg shadow-relax/30 ring-1 ring-white/60 active:translate-y-0.5 active:shadow-md"
               >
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute inset-x-3 top-1 h-1/2 rounded-full bg-linear-to-b from-white/40 to-white/0"
+                  className="pointer-events-none absolute inset-x-4 top-1 h-1/2 rounded-full bg-linear-to-b from-white/45 to-white/0"
                 />
                 <span className="relative">{t("relax.start")}</span>
               </button>
@@ -218,8 +226,8 @@ export function RelaxSession() {
               </p>
               <BreathCircle phase={phase} reduced={reduced} />
             </section>
-            {/* いつでも途中終了できる */}
-            <QuitLink className="mx-auto w-full max-w-64 rounded-full border border-hairline bg-surface-2 py-3.5 text-center font-bold text-relax-deep shadow-sm active:opacity-80">
+            {/* いつでも途中終了できる(緑のアウトラインガラス) */}
+            <QuitLink className="mx-auto w-full max-w-64 rounded-full border-2 border-relax/70 bg-white/70 py-3.5 text-center font-bold text-relax-deep shadow-sm backdrop-blur-sm active:opacity-80">
               {t("relax.quit")}
             </QuitLink>
           </>
@@ -240,15 +248,15 @@ export function RelaxSession() {
               <button
                 type="button"
                 onClick={start}
-                className="relative w-full overflow-hidden rounded-full bg-linear-to-b from-relax to-relax-deep py-4 text-lg font-bold text-primary-ink shadow-lg ring-1 ring-gold-soft active:opacity-85"
+                className="relative w-full overflow-hidden rounded-full bg-linear-to-b from-relax to-relax-deep py-4 text-lg font-bold text-primary-ink shadow-lg shadow-relax/30 ring-1 ring-white/60 active:translate-y-0.5 active:shadow-md"
               >
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute inset-x-3 top-1 h-1/2 rounded-full bg-linear-to-b from-white/40 to-white/0"
+                  className="pointer-events-none absolute inset-x-4 top-1 h-1/2 rounded-full bg-linear-to-b from-white/45 to-white/0"
                 />
                 <span className="relative">{t("relax.again")}</span>
               </button>
-              <QuitLink className="w-full rounded-full border border-hairline bg-surface-2 py-3.5 text-center font-bold text-relax-deep shadow-sm active:opacity-80">
+              <QuitLink className="w-full rounded-full border-2 border-relax/70 bg-white/70 py-3.5 text-center font-bold text-relax-deep shadow-sm backdrop-blur-sm active:opacity-80">
                 {t("relax.quit")}
               </QuitLink>
             </div>

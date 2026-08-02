@@ -73,13 +73,15 @@ export default function OnboardingPage() {
     return (
       <main className="flex-1 flex flex-col gap-6 px-6 py-8">
         <div className="flex flex-col items-center gap-2 text-center">
-          <h1 className="text-2xl font-bold">{t("onboarding.form.title")}</h1>
+          <h1 className="text-2xl font-bold text-ink">
+            {t("onboarding.form.title")}
+          </h1>
           <GoldOrnament />
-          <p className="text-sm text-ink-mute leading-relaxed">
+          <p className="text-sm text-ink-2 leading-relaxed">
             {t("onboarding.form.lead")}
           </p>
         </div>
-        <div className="bg-surface-2 rounded-3xl border border-hairline shadow-md p-5">
+        <div className="bg-white/60 backdrop-blur-md border border-white/70 rounded-3xl shadow-glass p-5">
           <ProfileFields value={fields} onChange={setFields} />
         </div>
         <div className="mt-auto">
@@ -87,8 +89,12 @@ export default function OnboardingPage() {
             type="button"
             onClick={complete}
             disabled={saving}
-            className="w-full h-12 rounded-full bg-linear-to-b from-primary to-primary-deep text-primary-ink font-bold text-base shadow-lg ring-1 ring-gold-soft active:translate-y-0.5 active:shadow-md disabled:opacity-50"
+            className="relative overflow-hidden w-full h-12 rounded-full bg-linear-to-b from-aqua-btn to-aqua-btn-deep text-primary-ink font-bold text-base shadow-lg shadow-primary/30 ring-1 ring-white/60 active:translate-y-0.5 active:shadow-md disabled:opacity-50"
           >
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-x-4 top-1 h-1/2 rounded-full bg-linear-to-b from-white/45 to-white/0"
+            />
             {t("onboarding.form.submit")}
           </button>
         </div>
@@ -131,15 +137,16 @@ export default function OnboardingPage() {
         />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={asset("/brand/logo-clean.png")}
+          src={asset("/brand/logo-alpha.png")}
           alt=""
           aria-hidden
           width={900}
           height={672}
           className="relative w-60 max-w-[70vw] h-auto"
+          style={{ filter: "drop-shadow(0 2px 6px rgba(255,255,255,0.8))" }}
         />
       </div>
-      <h1 className="relative text-2xl font-bold">
+      <h1 className="relative text-2xl font-bold text-ink">
         {t("onboarding.done.title")}
       </h1>
       <GoldOrnament />
@@ -149,14 +156,18 @@ export default function OnboardingPage() {
       <div className="relative w-full flex flex-col gap-2 mt-4">
         <Link
           href="/measure/"
-          className="w-full h-12 rounded-full bg-linear-to-b from-primary to-primary-deep text-primary-ink font-bold text-base flex items-center justify-center gap-2 shadow-lg ring-1 ring-gold-soft active:translate-y-0.5 active:shadow-md"
+          className="relative overflow-hidden w-full h-12 rounded-full bg-linear-to-b from-aqua-btn to-aqua-btn-deep text-primary-ink font-bold text-base flex items-center justify-center gap-2 shadow-lg shadow-primary/30 ring-1 ring-white/60 active:translate-y-0.5 active:shadow-md"
         >
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-x-4 top-1 h-1/2 rounded-full bg-linear-to-b from-white/45 to-white/0"
+          />
           {t("onboarding.done.cta")}
           <span aria-hidden>→</span>
         </Link>
         <Link
           href="/"
-          className="w-full h-11 rounded-full text-sm text-ink-mute flex items-center justify-center active:opacity-80"
+          className="w-full h-11 rounded-full text-sm text-ink-2 flex items-center justify-center active:opacity-80"
         >
           {t("onboarding.done.later")}
         </Link>

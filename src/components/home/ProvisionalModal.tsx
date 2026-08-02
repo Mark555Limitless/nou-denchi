@@ -33,7 +33,7 @@ function ProvisionalModalInner({ onClose }: { onClose: () => void }) {
         aria-hidden="true"
         onClick={onClose}
       />
-      <div className="relative w-full max-w-sm rounded-3xl border border-hairline bg-surface-2 p-5 shadow-lg">
+      <div className="relative w-full max-w-sm rounded-3xl border border-white/70 bg-white/80 p-5 shadow-glass backdrop-blur-lg">
         <h2 className="text-base font-bold text-ink">
           {t("home.provisionalTitle")}
         </h2>
@@ -43,7 +43,7 @@ function ProvisionalModalInner({ onClose }: { onClose: () => void }) {
         <button
           type="button"
           onClick={onClose}
-          className="mt-4 w-full rounded-xl bg-surface-3 py-3 font-bold text-ink active:opacity-80"
+          className="mt-4 w-full rounded-full border border-white/80 bg-white/70 py-3 font-bold text-ink backdrop-blur-sm active:opacity-80"
         >
           {t("common.close")}
         </button>

@@ -123,26 +123,31 @@ export default function SettingsPage() {
       ) : (
         <>
           {/* プロフィール変更 */}
-          <section className="bg-surface-2 rounded-3xl border border-hairline shadow-md p-5">
-            <h2 className="font-semibold mb-4">{t("settings.profile.title")}</h2>
+          <section className="bg-white/60 backdrop-blur-md rounded-3xl border border-white/70 shadow-glass p-5">
+            <h2 className="font-bold text-ink mb-4">{t("settings.profile.title")}</h2>
             <ProfileFields value={fields} onChange={setFields} />
+            {/* 保存: 水滴をまとった青いガラスのピル */}
             <button
               type="button"
               onClick={saveEdits}
               disabled={saving}
-              className="mt-5 w-full h-12 rounded-full bg-linear-to-b from-primary to-primary-deep text-primary-ink font-bold text-base shadow-lg ring-1 ring-gold-soft active:translate-y-0.5 active:shadow-md disabled:opacity-50"
+              className="relative overflow-hidden mt-5 w-full h-12 rounded-full bg-linear-to-b from-aqua-btn to-aqua-btn-deep text-primary-ink font-bold text-base shadow-lg shadow-primary/30 ring-1 ring-white/60 active:translate-y-0.5 active:shadow-md disabled:opacity-50"
             >
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-x-4 top-1 h-1/2 rounded-full bg-linear-to-b from-white/45 to-white/0"
+              />
               {t("settings.profile.save")}
             </button>
           </section>
 
           {/* ベースラインの説明(アコーディオン) */}
-          <details className="group bg-surface-2 rounded-3xl border border-hairline shadow-md">
+          <details className="group bg-white/60 backdrop-blur-md rounded-3xl border border-white/70 shadow-glass">
             <summary className="list-none cursor-pointer p-5 flex items-center justify-between gap-3 min-h-12 [&::-webkit-details-marker]:hidden">
-              <h2 className="font-semibold">{t("settings.baseline.title")}</h2>
+              <h2 className="font-bold text-ink">{t("settings.baseline.title")}</h2>
               <span
                 aria-hidden
-                className="text-ink-mute transition-transform group-open:rotate-180"
+                className="text-primary transition-transform group-open:rotate-180"
               >
                 ⌄
               </span>
@@ -156,49 +161,55 @@ export default function SettingsPage() {
           </details>
 
           {/* ベースライン再計測 */}
-          <section className="bg-surface-2 rounded-3xl border border-hairline shadow-md p-5">
-            <h2 className="font-semibold">{t("settings.recalib.title")}</h2>
-            <p className="mt-1 text-sm text-ink-mute leading-relaxed">
+          <section className="bg-white/60 backdrop-blur-md rounded-3xl border border-white/70 shadow-glass p-5">
+            <h2 className="font-bold text-ink">{t("settings.recalib.title")}</h2>
+            <p className="mt-1 text-sm text-ink-2 leading-relaxed">
               {t("settings.recalib.desc")}
             </p>
+            {/* 再計測: アウトラインの白ガラスピル */}
             <button
               type="button"
               onClick={() => setRecalibStep(1)}
-              className="mt-3 w-full h-12 rounded-full bg-surface-3 text-ink font-semibold text-base active:opacity-80"
+              className="mt-3 w-full h-12 rounded-full border-2 border-primary/70 bg-white/70 backdrop-blur-sm text-primary-deep font-bold text-base active:opacity-80"
             >
               {t("settings.recalib.button")}
             </button>
           </section>
 
           {/* データ全削除 */}
-          <section className="bg-surface-2 rounded-3xl border border-hairline shadow-md p-5">
-            <h2 className="font-semibold">{t("settings.wipe.title")}</h2>
-            <p className="mt-1 text-sm text-ink-mute leading-relaxed">
+          <section className="bg-white/60 backdrop-blur-md rounded-3xl border border-white/70 shadow-glass p-5">
+            <h2 className="font-bold text-ink">{t("settings.wipe.title")}</h2>
+            <p className="mt-1 text-sm text-ink-2 leading-relaxed">
               {t("settings.wipe.desc")}
             </p>
+            {/* 削除: 赤系はそのまま(ガラスの赤いピル) */}
             <button
               type="button"
               onClick={() => setWipeStep(1)}
-              className="mt-3 w-full h-12 rounded-xl bg-zone-red text-white font-semibold text-base active:opacity-80"
+              className="relative overflow-hidden mt-3 w-full h-12 rounded-full bg-zone-red text-white font-bold text-base shadow-lg shadow-zone-red/30 ring-1 ring-white/60 active:translate-y-0.5 active:shadow-md"
             >
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-x-4 top-1 h-1/2 rounded-full bg-linear-to-b from-white/40 to-white/0"
+              />
               {t("settings.wipe.button")}
             </button>
           </section>
 
           {/* 免責事項(受け入れ基準7) */}
-          <section className="bg-surface-2 rounded-3xl border border-hairline shadow-md p-5">
-            <h2 className="font-semibold mb-2">{t("settings.disclaimer.title")}</h2>
+          <section className="bg-white/60 backdrop-blur-md rounded-3xl border border-white/70 shadow-glass p-5">
+            <h2 className="font-bold text-ink mb-2">{t("settings.disclaimer.title")}</h2>
             <Disclaimer detail />
           </section>
 
           {/* アプリ情報 */}
-          <section className="bg-surface-2 rounded-3xl border border-hairline shadow-md p-5">
-            <h2 className="font-semibold mb-2">{t("settings.about.title")}</h2>
+          <section className="bg-white/60 backdrop-blur-md rounded-3xl border border-white/70 shadow-glass p-5">
+            <h2 className="font-bold text-ink mb-2">{t("settings.about.title")}</h2>
             <p className="text-sm text-ink-2">{t("app.name")}</p>
-            <p className="text-sm text-ink-mute">
+            <p className="text-sm text-ink-2">
               {t("settings.about.version", { version: APP_VERSION })}
             </p>
-            <p className="mt-2 text-xs text-ink-mute leading-relaxed">
+            <p className="mt-2 text-xs text-ink-2 leading-relaxed">
               {t("settings.about.privacy")}
             </p>
           </section>

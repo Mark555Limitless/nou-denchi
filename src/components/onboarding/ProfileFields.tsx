@@ -41,7 +41,7 @@ export function ProfileFields({
           onChange={(e) =>
             onChange({ ...value, ageBand: e.target.value as AgeBand | "" })
           }
-          className="w-full h-11 rounded-xl bg-surface-3 border border-hairline px-3 text-base text-ink"
+          className="w-full h-11 rounded-xl bg-white/70 backdrop-blur-sm border border-white/80 px-3 text-base text-ink shadow-sm"
           style={{ colorScheme: "light" }}
         >
           {AGE_OPTIONS.map((o) => (

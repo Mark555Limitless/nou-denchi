@@ -29,7 +29,7 @@ export function PvtInstruction({
     >
       <span aria-hidden className="block">
         <span
-          className={`inline-block rounded-full bg-linear-to-b from-primary to-primary-deep ${iconClassName}`}
+          className={`inline-block rounded-full bg-radial-[at_35%_28%] from-[#9fd0f2] via-[#4a8ad8] to-[#1d4e96] ring-1 ring-white/60 ${iconClassName}`}
         />
         {t("measure.pvt.instructionAfter")}
       </span>

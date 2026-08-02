@@ -25,9 +25,9 @@ import { zoneClasses } from "@/lib/ui/zone";
  */
 
 /** チャート描画色。SVG属性にはトークンの実値を渡す(globals.css @theme と同値) */
-const CHART_BLUE = "#256abf"; // --color-chart(ブランドアクセントとして系列色のみ許容)
-const AXIS_INK = "#5f6d98"; // --color-ink-mute
-const GRID_HAIRLINE = "rgba(35, 47, 92, 0.12)"; // 白面上のやわらかいグリッド(--color-hairline系)
+const CHART_BLUE = "#2f6fc0"; // --color-chart(ブランドアクセントとして系列色のみ許容)
+const AXIS_INK = "#546c99"; // --color-ink-mute
+const GRID_HAIRLINE = "rgba(28, 58, 102, 0.16)"; // ガラス面上のやわらかいグリッド(--color-hairline)
 
 export type TrendRangeDays = 7 | 30;
 
@@ -104,13 +104,13 @@ function TrendTooltip({ active, payload }: TooltipContentProps) {
   const p = payload[0].payload as TrendPoint | undefined;
   if (!p) return null;
   return (
-    <div className="rounded-xl border border-hairline bg-surface-2 px-3 py-2 shadow-lg">
-      <p className="text-[17px] text-ink-mute">{formatDateTime(p.startedAt)}</p>
+    <div className="rounded-xl border border-white/70 bg-white/85 px-3 py-2 shadow-glass backdrop-blur-md">
+      <p className="text-[11px] text-ink-2">{formatDateTime(p.startedAt)}</p>
       <p className="mt-0.5 font-mono text-base tabular-nums text-ink">
         {p.value}
         <span className="text-xs">%</span>
       </p>
-      <p className={`text-[17px] ${zoneClasses[p.zone].text}`}>
+      <p className={`text-[11px] font-bold ${zoneClasses[p.zone].text}`}>
         {t(`zone.${p.zone}.label`)}
       </p>
     </div>
@@ -142,8 +142,8 @@ export function TrendChart({
   );
 
   return (
-    <section className="rounded-3xl border border-hairline bg-surface-2 p-5 shadow-md">
-      <h2 className="text-sm font-semibold text-ink-2">
+    <section className="rounded-3xl border border-white/70 bg-white/60 p-5 shadow-glass backdrop-blur-md">
+      <h2 className="text-base font-bold text-ink">
         {t("history.trend.title")}
       </h2>
       {/* 金のヘアライン(見出しの下・装飾) */}
@@ -156,7 +156,7 @@ export function TrendChart({
         <div
           role="tablist"
           aria-label={t("history.trend.title")}
-          className="mt-3 grid grid-cols-2 gap-1 rounded-full bg-surface-3 p-1"
+          className="mt-3 grid grid-cols-2 gap-1 rounded-full bg-white/50 p-1 ring-1 ring-white/70 backdrop-blur-sm"
         >
           {ranges.map((d) => {
             const active = d === days;
@@ -169,8 +169,8 @@ export function TrendChart({
                 onClick={() => setDays(d)}
                 className={`h-10 rounded-full text-sm transition-colors ${
                   active
-                    ? "bg-surface-2 font-semibold text-ink shadow-sm"
-                    : "text-ink-mute"
+                    ? "bg-white font-bold text-ink shadow-sm"
+                    : "font-semibold text-ink-2"
                 }`}
               >
                 {rangeLabel(d)}
@@ -215,17 +215,28 @@ export function TrendChart({
             <Tooltip
               content={TrendTooltip}
               cursor={{
-                stroke: "rgba(35, 47, 92, 0.25)",
+                stroke: "rgba(28, 58, 102, 0.25)",
                 strokeDasharray: "4 4",
               }}
             />
+            {/* データ点は気泡風(白フチの青丸) */}
             <Line
               dataKey="value"
               type="monotone"
               stroke={CHART_BLUE}
               strokeWidth={2}
-              dot={{ r: 3, fill: CHART_BLUE, stroke: "none" }}
-              activeDot={{ r: 5, fill: CHART_BLUE, stroke: "none" }}
+              dot={{
+                r: 3.5,
+                fill: CHART_BLUE,
+                stroke: "#ffffff",
+                strokeWidth: 1.5,
+              }}
+              activeDot={{
+                r: 5.5,
+                fill: CHART_BLUE,
+                stroke: "#ffffff",
+                strokeWidth: 2,
+              }}
               isAnimationActive={false}
             />
           </LineChart>
