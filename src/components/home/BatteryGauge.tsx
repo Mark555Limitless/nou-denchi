@@ -65,23 +65,30 @@ export function BatteryGauge({
     const rad = ((deg - 90) * Math.PI) / 180;
     return `${(CX + r * Math.cos(rad)).toFixed(2)} ${(CY + r * Math.sin(rad)).toFixed(2)}`;
   };
-  /** ガラス管のドーナツ扇形パス(両端は丸キャップ) */
-  const donutSector = (a0: number, sweep: number): string => {
+  /** ガラス管のドーナツ扇形パス(端は平ら。終端は本物のキャップ画像を重ねて閉じる) */
+  const donutSector = (a0: number, sweep: number, pad = 0): string => {
     const a1 = a0 + sweep;
     const large = sweep > 180 ? 1 : 0;
-    const capR = ((R_OUT - R_IN) / 2).toFixed(2);
+    const rOut = (R_OUT + pad).toFixed(2);
+    const rIn = Math.max(0, R_IN - pad).toFixed(2);
     return [
-      `M ${pt(R_IN, a0)}`,
-      `A ${capR} ${capR} 0 0 1 ${pt(R_OUT, a0)}`,
-      `A ${R_OUT.toFixed(2)} ${R_OUT.toFixed(2)} 0 ${large} 1 ${pt(R_OUT, a1)}`,
-      `A ${capR} ${capR} 0 0 1 ${pt(R_IN, a1)}`,
-      `A ${R_IN.toFixed(2)} ${R_IN.toFixed(2)} 0 ${large} 0 ${pt(R_IN, a0)}`,
+      `M ${pt(R_OUT + pad, a0)}`,
+      `A ${rOut} ${rOut} 0 ${large} 1 ${pt(R_OUT + pad, a1)}`,
+      `L ${pt(Math.max(0, R_IN - pad), a1)}`,
+      `A ${rIn} ${rIn} 0 ${large} 0 ${pt(Math.max(0, R_IN - pad), a0)}`,
       "Z",
     ].join(" ");
   };
   // ほぼ満充電(約101%以上)は素材の丸キャップ両端をそのまま見せる(クリップなし)
   const fullRing = frac >= 0.96;
-  const arcPath = donutSector(A0, Math.max(0, frac) * USABLE);
+  const sweep = Math.max(0, frac) * USABLE;
+  const arcPath = donutSector(A0, sweep);
+  // 終端キャップ: 素材の左側の焼き込みキャップ(約-13.3°〜-8.8°)を切り出し、
+  // 終端角(A0+sweep)へ回転して重ねる(修正指示10→11: 紺の縁が回り込んだ本物の管端)
+  const CAP_END_DEG = -8.8; // 素材の左キャップの端(切れ目の左縁)
+  const capStampPath = donutSector(CAP_END_DEG - 5.2, 5.4, 1.5);
+  const capRotate = A0 + sweep - CAP_END_DEG;
+  const showCapStamp = !fullRing && sweep > 6;
 
   return (
     <div className="relative aspect-square w-[70vw] max-w-[297px]">
@@ -100,6 +107,12 @@ export function BatteryGauge({
           {!fullRing && (
             <clipPath id="gaugeArc">
               <path d={arcPath} />
+            </clipPath>
+          )}
+          {/* 終端キャップ切り出し(素材の焼き込みキャップ周辺の扇形) */}
+          {showCapStamp && (
+            <clipPath id="gaugeCap">
+              <path d={capStampPath} />
             </clipPath>
           )}
         </defs>
@@ -137,6 +150,20 @@ export function BatteryGauge({
             preserveAspectRatio="xMidYMid meet"
             clipPath={fullRing ? undefined : "url(#gaugeArc)"}
           />
+        )}
+        {/* 終端の本物の管端(素材キャップを終端角へ回転して重ねる) */}
+        {measured && frac > 0 && showCapStamp && (
+          <g transform={`rotate(${capRotate.toFixed(2)} ${CX} ${CY})`}>
+            <image
+              href={asset("/art/gauge.webp")}
+              x={CX - S / 2}
+              y={CY - S / 2}
+              width={S}
+              height={S}
+              preserveAspectRatio="xMidYMid meet"
+              clipPath="url(#gaugeCap)"
+            />
+          </g>
         )}
       </svg>
 
