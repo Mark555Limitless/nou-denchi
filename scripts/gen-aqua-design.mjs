@@ -176,6 +176,14 @@ const jobs = [
 条件: 文字・UI・ロゴ・脳・物体は一切描かない。純粋な背景のみ。中央部は特に穏やかでフラット(上にUIが載るため)。明るさは参照画像と同じく白っぽい水色。`,
   },
   {
+    name: "asset-button",
+    file: "asset-button.png",
+    prompt: `参照画像の最下部にある「測定する」ボタンを注意深く観察してください。
+濃い青のガラス質のピル(丸角横長)で、表面に水滴が複数のり、上面に光沢、縁に明るいリムがあります。
+このボタンを「文字なし」で忠実に再現してください。
+条件: 純白(#ffffff)背景の中央に、ボタン1つだけを大きく横長に。**文字・矢印は一切描かない**(無地のボタン面)。形は角の丸いピル型、色・質感・水滴・光沢は参照画像のボタンと同一に。`,
+  },
+  {
     name: "asset-gauge",
     file: "asset-gauge.png",
     prompt: `参照画像はスマホアプリの確定デザインです。画面中央にある円形ゲージ(スコア表示部品)を注意深く観察してください。構造は:
@@ -222,7 +230,7 @@ const main = async () => {
         : [{ path: REF_START, mime: "image/png" }];
     if (!j.name.startsWith("asset-")) refs.push({ path: REF_LOGO, mime: "image/png" });
     const aspect =
-      j.name === "asset-metal-disc" || j.name === "asset-gauge" ? "1:1" :
+      j.name === "asset-metal-disc" || j.name === "asset-gauge" ? "1:1" : j.name === "asset-button" ? "16:9" :
       j.name === "asset-logo-v2" ? "16:9" : "9:16";
     await nanoBanana(j.name, j.prompt, refs, aspect, path.join(OUT, j.file));
   }

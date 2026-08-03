@@ -113,12 +113,12 @@ export function OnboardingSlides({ onFinish }: { onFinish: () => void }) {
                 alt={t("onboarding.slide1.imageAlt")}
                 width={900}
                 height={672}
-                className="relative w-full max-w-xs h-auto"
+                className="relative w-full max-w-64 h-auto"
                 style={{ filter: "drop-shadow(0 2px 6px rgba(255,255,255,0.8))" }}
               />
             </div>
             <GoldOrnament />
-            <p className="text-sm text-ink-2 leading-relaxed">
+            <p className="whitespace-pre-line text-[17px] text-ink-2 leading-relaxed">
               {t("onboarding.slide1.body")}
             </p>
           </div>

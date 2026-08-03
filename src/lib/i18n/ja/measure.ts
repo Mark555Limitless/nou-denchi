@@ -30,7 +30,7 @@ export const measure = {
   // インタースティシャル(次タスク予告)
   "measure.interstitial.next": "つぎのタスク",
   "measure.math.desc": "計算の答えを\n選んでタップ!!",
-  "measure.stroop.desc": "ことばに惑わされず「文字の色」のボタンをタップ(20問)",
+  "measure.stroop.desc": "言葉に惑わされず\n「文字の色」のボタンをタップ",
   "measure.stroop.hint": "文字の「色」は?",
 
   // 保存中

@@ -55,31 +55,36 @@ export function BatteryGauge({
   const scale = S / IMG_MAX;
   const R_OUT = 870 * scale; // 管外縁(余白ぶん少し広め)
   const R_IN = 708 * scale; // 管内縁(グロー帯との境界)
-  const GAP_DEG = 20; // 12時の切れ目(素材に焼き込み済み)
-  const USABLE = 360 - GAP_DEG;
+  // 素材の切れ目は12時のわずかに左(実測: 中心角353°・開口約4°)。
+  // 開示アークは切れ目の右端(A0)から時計回りに伸ばし、途中で止まるときも
+  // 端が平らに切れないよう丸キャップ(半円)で閉じる(修正指示01→02)。
+  const A0 = -4.6; // 切れ目の右端(deg・12時起点時計回り)
+  const USABLE = 355; // 切れ目を除いた開示可能角度
   /** 12時起点・時計回り deg → viewBox 座標 */
   const pt = (r: number, deg: number): string => {
     const rad = ((deg - 90) * Math.PI) / 180;
     return `${(CX + r * Math.cos(rad)).toFixed(2)} ${(CY + r * Math.sin(rad)).toFixed(2)}`;
   };
-  /** ガラス管のドーナツ扇形パス(a0°から時計回りに sweep°) */
+  /** ガラス管のドーナツ扇形パス(両端は丸キャップ) */
   const donutSector = (a0: number, sweep: number): string => {
     const a1 = a0 + sweep;
     const large = sweep > 180 ? 1 : 0;
+    const capR = ((R_OUT - R_IN) / 2).toFixed(2);
     return [
-      `M ${pt(R_OUT, a0)}`,
+      `M ${pt(R_IN, a0)}`,
+      `A ${capR} ${capR} 0 0 1 ${pt(R_OUT, a0)}`,
       `A ${R_OUT.toFixed(2)} ${R_OUT.toFixed(2)} 0 ${large} 1 ${pt(R_OUT, a1)}`,
-      `L ${pt(R_IN, a1)}`,
+      `A ${capR} ${capR} 0 0 1 ${pt(R_IN, a1)}`,
       `A ${R_IN.toFixed(2)} ${R_IN.toFixed(2)} 0 ${large} 0 ${pt(R_IN, a0)}`,
       "Z",
     ].join(" ");
   };
   // ほぼ満充電(約101%以上)は素材の丸キャップ両端をそのまま見せる(クリップなし)
   const fullRing = frac >= 0.96;
-  const arcPath = donutSector(GAP_DEG / 2 + 1, Math.max(0, frac) * (USABLE - 2));
+  const arcPath = donutSector(A0, Math.max(0, frac) * USABLE);
 
   return (
-    <div className="relative aspect-square w-[78vw] max-w-[330px]">
+    <div className="relative aspect-square w-[70vw] max-w-[297px]">
       <svg
         viewBox="0 0 220 220"
         className="h-full w-full"
@@ -109,7 +114,7 @@ export function BatteryGauge({
           strokeWidth={R_OUT - R_IN - 7}
           strokeLinecap="round"
           strokeDasharray={`${2 * Math.PI * ((R_IN + R_OUT) / 2) * ((USABLE - 6) / 360)} ${2 * Math.PI * ((R_IN + R_OUT) / 2)}`}
-          transform={`rotate(${-90 + GAP_DEG / 2 + 3} ${CX} ${CY})`}
+          transform={`rotate(${-90 + A0 + 3} ${CX} ${CY})`}
         />
         {/* ゲージ写真素材(ディスク+グロー: 常時表示) */}
         <image

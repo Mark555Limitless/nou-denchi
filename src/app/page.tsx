@@ -97,7 +97,7 @@ export default function Home() {
   const provisional = latest?.baselineType === "provisional";
 
   return (
-    <div className="relative flex flex-1 flex-col overflow-hidden px-5 pb-6">
+    <div className="relative flex flex-1 flex-col overflow-hidden px-5 pb-9">
       <AquaDecor />
       <HomeHeader />
 
@@ -139,16 +139,29 @@ export default function Home() {
 
       </section>
 
-      {/* 測定済みでも再測定できるよう常時表示(水滴をまとった青いガラスのピル) */}
+      {/* 測定済みでも再測定できるよう常時表示。
+          ボタンは NBP が Start画面11 の「測定する」を文字なしで再現した
+          濃青水滴ピル画像(public/art/button-measure.webp)+白文字オーバーレイ */}
       <Link
         href="/measure/"
-        className="relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-linear-to-b from-aqua-btn/85 to-aqua-btn-deep/90 py-4 text-center text-lg font-bold text-primary-ink shadow-lg shadow-primary/30 ring-1 ring-white/70 backdrop-blur-[2px] active:translate-y-0.5 active:shadow-md"
+        className="relative block w-full select-none active:translate-y-0.5"
+        style={{ filter: "drop-shadow(0 8px 18px rgba(44,93,168,0.35))" }}
       >
-        <span
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={asset("/art/button-measure.webp")}
+          alt=""
           aria-hidden
-          className="pointer-events-none absolute inset-x-4 top-1 h-1/2 rounded-full bg-linear-to-b from-white/45 to-white/0"
+          width={848}
+          height={160}
+          className="h-auto w-full"
         />
-        <span className="relative">{t("common.measure")}</span>
+        <span
+          className="absolute inset-0 flex items-center justify-center text-xl font-bold text-white"
+          style={{ textShadow: "0 1px 3px rgba(20,45,90,0.55)" }}
+        >
+          {t("common.measure")}
+        </span>
       </Link>
 
       <ProvisionalModal

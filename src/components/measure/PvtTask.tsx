@@ -309,10 +309,10 @@ export function PvtTask({ seed, paused, trialsOverride, onDone }: PvtTaskProps) 
             375px 級の狭い端末でも各行が折り返さないよう 8.5vw を上限併用(min())する */}
         <PvtInstruction
           className="mt-auto text-center text-[min(1.5rem,8.5vw)] leading-snug text-[#a9bfdc]"
-          iconClassName="w-6 h-6 align-[-3px]"
+          iconClassName="w-9 h-9 align-[-7px]"
           style={{
             paddingBottom: "max(2.5rem, env(safe-area-inset-bottom))",
-            marginBottom: "20vh",
+            marginBottom: "15vh",
           }}
         />
       </div>

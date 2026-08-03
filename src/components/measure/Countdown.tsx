@@ -36,7 +36,11 @@ export function Countdown({ onDone }: { onDone: () => void }) {
         <p className="text-3xl font-bold text-ink">
           {t("measure.taskTitle", { name: t("task.pvt.label") })}
         </p>
-        <PvtInstruction className="text-[21px] leading-snug text-ink-faint" iconClassName="w-5 h-5 align-[-3px]" />
+        <PvtInstruction
+          className="text-[21px] leading-snug text-ink-faint"
+          iconClassName="w-[30px] h-[30px] align-[-6px]"
+          style={{ transform: "translateY(5vh)" }}
+        />
       </div>
       {/* 白いヘアラインのアクセント(装飾。◆菱形はユーザー指示*13で削除) */}
       <div aria-hidden className="flex w-full max-w-56 items-center gap-3">
