@@ -55,17 +55,19 @@ export function BatteryGauge({
   const scale = S / IMG_MAX;
   const R_OUT = 870 * scale; // 管外縁(余白ぶん少し広め)
   const R_IN = 708 * scale; // 管内縁(グロー帯との境界)
-  // 素材の切れ目は12時のわずかに左(実測: 中心角353°・開口約4°)。
-  // 開示アークは切れ目の右端(A0)から時計回りに伸ばし、途中で止まるときも
-  // 端が平らに切れないよう丸キャップ(半円)で閉じる(修正指示01→02)。
-  const A0 = -4.6; // 切れ目の右端(deg・12時起点時計回り)
-  const USABLE = 355; // 切れ目を除いた開示可能角度
+  // 素材の切れ目は12時のわずかに左。実測(gauge.webp を走査):
+  //   切れ目 -9.0°〜-5.4° / 管の外縁 1.000・内縁 0.830(対 半径)/ 管幅73px
+  //   → 管端の丸キャップが占める角度は約5.2°
+  const A0 = -5.2; // 開示アークの起点=切れ目の時計回り側の端(素材の焼き込みキャップ)
+  const CAP_TIP = -9.0; // 素材の終端キャップ(反時計回り側)の先端
+  const CAP_SPAN = 5.2; // 丸キャップが占める角度
+  const USABLE = 351; // 満了時にキャップ先端が CAP_TIP に一致する開示角
   /** 12時起点・時計回り deg → viewBox 座標 */
   const pt = (r: number, deg: number): string => {
     const rad = ((deg - 90) * Math.PI) / 180;
     return `${(CX + r * Math.cos(rad)).toFixed(2)} ${(CY + r * Math.sin(rad)).toFixed(2)}`;
   };
-  /** ガラス管のドーナツ扇形パス(端は平ら。終端は本物のキャップ画像を重ねて閉じる) */
+  /** ガラス管のドーナツ扇形パス(端は平ら。終端は本物のキャップ画像を継ぎ足す) */
   const donutSector = (a0: number, sweep: number, pad = 0): string => {
     const a1 = a0 + sweep;
     const large = sweep > 180 ? 1 : 0;
@@ -79,16 +81,33 @@ export function BatteryGauge({
       "Z",
     ].join(" ");
   };
-  // ほぼ満充電(約101%以上)は素材の丸キャップ両端をそのまま見せる(クリップなし)
-  const fullRing = frac >= 0.96;
+  // ほぼ満了は素材の両キャップをそのまま見せる(クリップなし)
+  const fullRing = frac >= 0.995;
   const sweep = Math.max(0, frac) * USABLE;
   const arcPath = donutSector(A0, sweep);
-  // 終端キャップ: 素材の左側の焼き込みキャップ(約-13.3°〜-8.8°)を切り出し、
-  // 終端角(A0+sweep)へ回転して重ねる(修正指示10→11: 紺の縁が回り込んだ本物の管端)
-  const CAP_END_DEG = -8.8; // 素材の左キャップの端(切れ目の左縁)
-  const capStampPath = donutSector(CAP_END_DEG - 5.2, 5.4, 1.5);
-  const capRotate = A0 + sweep - CAP_END_DEG;
-  const showCapStamp = !fullRing && sweep > 6;
+  // 終端キャップ(修正指示12→13): 素材に焼き込まれた管端(先端 CAP_TIP)を
+  // 「キャップ+手前3°の胴体」で切り出し、先端がアーク終端の先(+CAP_SPAN)に
+  // 来るよう回転して敷く。胴体3°ぶんはこの後に描くアークの下に隠れるため、
+  // 継ぎ目が出ずに参照どおりの丸い管端だけが現れる。
+  const CAP_BODY = 3; // アークの下に隠す胴体の長さ(deg)
+  const capStampPath = donutSector(
+    CAP_TIP - CAP_SPAN - CAP_BODY,
+    CAP_SPAN + CAP_BODY,
+    0.6,
+  );
+  const capRotate = A0 + sweep + CAP_SPAN - CAP_TIP;
+  const showCapStamp = !fullRing && sweep > CAP_BODY + 1;
+  // 継ぎ目ぼかし用グラデーションの軸(回転前の素材座標・管の中央半径上)。
+  // 胴体側の端(不透明度0)→ キャップ寄り(不透明度1)へ滑らかに変化させ、
+  // 回転コピー由来の濃淡の段差を消す。
+  const R_MID = (R_OUT + R_IN) / 2;
+  const fadeA0 = CAP_TIP - CAP_SPAN - CAP_BODY;
+  const xy = (r: number, deg: number): [number, number] => {
+    const rad = ((deg - 90) * Math.PI) / 180;
+    return [CX + r * Math.cos(rad), CY + r * Math.sin(rad)];
+  };
+  const [fx1, fy1] = xy(R_MID, fadeA0);
+  const [fx2, fy2] = xy(R_MID, fadeA0 + CAP_BODY * 0.95);
 
   return (
     <div className="relative aspect-square w-[70vw] max-w-[297px]">
@@ -109,11 +128,24 @@ export function BatteryGauge({
               <path d={arcPath} />
             </clipPath>
           )}
-          {/* 終端キャップ切り出し(素材の焼き込みキャップ周辺の扇形) */}
+          {/* 終端キャップ: 胴体側を透明→不透明にぼかすマスク(継ぎ目消し) */}
           {showCapStamp && (
-            <clipPath id="gaugeCap">
-              <path d={capStampPath} />
-            </clipPath>
+            <>
+              <linearGradient
+                id="gaugeCapFade"
+                gradientUnits="userSpaceOnUse"
+                x1={fx1.toFixed(2)}
+                y1={fy1.toFixed(2)}
+                x2={fx2.toFixed(2)}
+                y2={fy2.toFixed(2)}
+              >
+                <stop offset="0%" stopColor="#000000" />
+                <stop offset="100%" stopColor="#ffffff" />
+              </linearGradient>
+              <mask id="gaugeCap" maskUnits="userSpaceOnUse">
+                <path d={capStampPath} fill="url(#gaugeCapFade)" />
+              </mask>
+            </>
           )}
         </defs>
         {/* 未達分のかすかなトラック(位置の手がかり。参照に馴染む白ガラスの細帯) */}
@@ -151,7 +183,7 @@ export function BatteryGauge({
             clipPath={fullRing ? undefined : "url(#gaugeArc)"}
           />
         )}
-        {/* 終端の本物の管端(素材キャップを終端角へ回転して重ねる) */}
+        {/* 終端の本物の管端(素材キャップを終端の先へ回転し、胴体側をぼかして重ねる) */}
         {measured && frac > 0 && showCapStamp && (
           <g transform={`rotate(${capRotate.toFixed(2)} ${CX} ${CY})`}>
             <image
@@ -161,7 +193,7 @@ export function BatteryGauge({
               width={S}
               height={S}
               preserveAspectRatio="xMidYMid meet"
-              clipPath="url(#gaugeCap)"
+              mask="url(#gaugeCap)"
             />
           </g>
         )}
