@@ -131,12 +131,6 @@ export default function Home() {
           </div>
         )}
 
-        {latest?.baselineType === "personalTimeBand" && (
-          <p className="text-center text-xs text-ink-mute">
-            {t("percent.timeBandNote")}
-          </p>
-        )}
-
       </section>
 
       {/* 測定済みでも再測定できるよう常時表示。

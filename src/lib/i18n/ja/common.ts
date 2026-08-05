@@ -27,7 +27,6 @@ export const common = {
   "percent.provisional.badge": "推定",
   "percent.provisional.explain":
     "この%は旧バージョンの暫定基準による推定です。現在は、これまでの最高スコアがそのまま「100%」の基準になります。",
-  "percent.timeBandNote": "この時間帯のベスト基準で算出",
   "percent.globalNote": "全体ベスト基準で算出(この時間帯のデータが貯まると切替)",
 
   "calibration.confirmed.title": "キミの100%! 確定!!",
