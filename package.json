@@ -11,9 +11,13 @@
     "test:watch": "vitest",
     "gen:icons": "node scripts/gen-icons.mjs",
     "postbuild": "node scripts/gen-sw.mjs",
-    "deploy:pages": "bash scripts/deploy-pages.sh"
+    "deploy:pages": "bash scripts/deploy-pages.sh",
+    "build:ios": "NEXT_PUBLIC_BASE_PATH= npm run build && npx cap sync ios",
+    "ios:open": "npm run build:ios && npx cap open ios"
   },
   "dependencies": {
+    "@capacitor/core": "^8.5.0",
+    "@capacitor/ios": "^8.5.0",
     "dexie": "^4.4.4",
     "next": "16.2.12",
     "react": "19.2.4",
@@ -21,6 +25,7 @@
     "recharts": "^3.10.1"
   },
   "devDependencies": {
+    "@capacitor/cli": "^8.5.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

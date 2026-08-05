@@ -386,3 +386,30 @@
   アークの上に重ねて滑らかに合成。20倍拡大でも段差が見えないことを確認
 - 検証: 30% / 89% / 満了の各表示で、両端が参照(修正指示13)と同じ
   「紺の縁が回り込んだ丸い管端」になることをブラウザで確認
+
+## 2026-08-05 追加変更 その18(iOSアプリ化・App Store 提出準備)
+
+- **方針**: Web版と同一の静的エクスポート(`out/`)を Capacitor でネイティブアプリに同梱し、
+  端末内のみで動かす。ネイティブ機能・プラグインは追加しない(通信ゼロ・完全オフラインを維持)。
+  ネイティブ側の追加コードはゼロなので、Web版とiOS版で挙動が分岐しない
+- **basePath の取り違え防止**: Pages 用ビルド(`NEXT_PUBLIC_BASE_PATH=/nou-denchi`)を
+  同梱すると白画面になるため、iOS向けは `npm run build:ios` に固定
+  (`NEXT_PUBLIC_BASE_PATH=` を空にしてビルド → `cap sync ios`)
+- **Service Worker はネイティブでは無効化**: 全ファイルが同梱され常に最新なので
+  キャッシュも自動リロードも不要・有害(`capacitor:` スキームでは SW 自体が動かない)。
+  判定は `src/lib/ui/platform.ts` の `isNativeApp()`(protocol === "capacitor:")
+- **審査対策として決めたこと**:
+  - iPhone のみ(`TARGETED_DEVICE_FAMILY = 1`)。iPad用スクリーンショット等の
+    審査面を増やさないため。iPad対応は必要になった時点で戻せる
+  - 縦固定。回転による再レイアウトが反応時間の計測に影響しないようにする
+  - `ITSAppUsesNonExemptEncryption = false` を Info.plist に明示(毎回の質問を省略)
+  - `PrivacyInfo.xcprivacy` を同梱し、トラッキングなし・収集データなしを宣言
+  - キーワード・名称に「脳トレ」を使わない(日本で第三者の登録商標)
+  - 医療機器でない旨は既存の免責表示(オンボーディング・設定)で担保し、審査メモにも明記
+- **プライバシーポリシーを新設**: App Store は公開URLが必須。`public/privacy/index.html`
+  (素のHTML・アプリUIに非依存)として追加し、Pages で
+  `https://mark555limitless.github.io/nou-denchi/privacy/` に公開
+- **アイコン/起動画面**: `scripts/gen-icons.mjs` に iOS 用の出力を追加。
+  App Store 用 1024px はアルファ不可のため `flatten` で不透明化。
+  起動画面は同じ図柄を 2732x2732 の中央に小さく置き、どの画面比でも切れないようにした
+- 手順は [IOS_RELEASE.md](IOS_RELEASE.md)、ストア掲載内容は [APPSTORE_METADATA.md](APPSTORE_METADATA.md)

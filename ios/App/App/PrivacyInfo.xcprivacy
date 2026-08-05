@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!--
+	  プライバシーマニフェスト(2026-08-05 App Store 提出)。
+	  「脳でんち」は測定結果を端末内(IndexedDB)にのみ保存し、
+	  ネットワーク送信・解析SDK・広告を一切持たない。
+	  したがってトラッキングなし・収集データなしを宣言する。
+	  App Store Connect の「プライバシー」も「データを収集しません」で申告すること。
+	-->
+	<key>NSPrivacyTracking</key>
+	<false/>
+	<key>NSPrivacyTrackingDomains</key>
+	<array/>
+	<key>NSPrivacyCollectedDataTypes</key>
+	<array/>
+	<!-- 「理由の宣言が必要なAPI」はアプリ側では未使用(Capacitor 本体は同梱の
+	     マニフェストで自身の使用分を宣言している) -->
+	<key>NSPrivacyAccessedAPITypes</key>
+	<array/>
+</dict>
+</plist>

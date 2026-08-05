@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // iOSアプリ(Capacitor)は out/ のビルド成果物をそのまま同梱するだけなので
+    // 生成物を lint 対象にしない(2026-08-05)
+    "ios/**",
   ]),
 ]);
 
