@@ -4,13 +4,18 @@
     {
       "name": "nou-denchi-dev",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
       "port": 3000
     },
     {
       "name": "pages-preview",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["/private/tmp/claude-501/-Users-ohno-m1-Desktop-AI-Claude---/d7623914-34a8-4bd7-a756-a59ca9afa68e/scratchpad/pages-preview-server.mjs"],
+      "runtimeArgs": [
+        "/private/tmp/claude-501/-Users-ohno-m1-Desktop-AI-Claude---/1cc454cc-c9f1-411f-8fc2-cfa8c76ab573/scratchpad/pages-preview-server.mjs"
+      ],
       "port": 3100
     }
   ]

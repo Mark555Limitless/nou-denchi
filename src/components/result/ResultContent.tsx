@@ -91,7 +91,11 @@ export function ResultContent() {
   const zc = zoneClasses[zone];
 
   return (
-    <main className="flex-1 px-4 pt-6 pb-8 flex flex-col gap-4">
+    <main
+      className="flex-1 px-4 pt-6 pb-8 flex flex-col gap-4"
+      // iOSノッチ/Dynamic Island を避ける。env() 非対応環境では pt-6 のまま(2026-08-08)
+      style={{ paddingTop: "calc(env(safe-area-inset-top) + 1.5rem)" }}
+    >
       {/* タイトルは濃紺タイポのエンボス風(mock-aqua-result.png 準拠) */}
       <h1
         className="text-center text-2xl font-bold tracking-wide text-ink"

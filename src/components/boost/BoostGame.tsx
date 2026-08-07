@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { t } from "@/lib/i18n";
+import { BOOST_BEST_KEY } from "@/lib/config";
 import {
   playBoostClear,
   playBoostRoundClear,
@@ -76,7 +77,7 @@ const TOTAL_ROUNDS = 3;
 const COUNTDOWN_STEP_MS = 600;
 const GO_FLASH_MS = 550;
 const ROUND_FLASH_MS = 650;
-const BEST_KEY = "nou-denchi-boost-best";
+const BEST_KEY = BOOST_BEST_KEY;
 /** 褒め文言の段階(合計タイム・27タップぶん) */
 const PRAISE_FAST_MS = 22_000;
 const PRAISE_MID_MS = 32_000;

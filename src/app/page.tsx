@@ -33,7 +33,11 @@ function AquaDecor() {
 
 function HomeHeader() {
   return (
-    <header className="relative flex flex-col items-center pb-1 pt-7 text-center">
+    <header
+      className="relative flex flex-col items-center pb-1 pt-7 text-center"
+      // iOSノッチ/Dynamic Island を避ける。env() 非対応環境では pt-7 のまま(2026-08-08)
+      style={{ paddingTop: "calc(env(safe-area-inset-top) + 1.75rem)" }}
+    >
       {/* ロゴ&キャッチコピー(白背景を透過キーした版。水面背景に直接載る) */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img

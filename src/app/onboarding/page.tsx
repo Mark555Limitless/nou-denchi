@@ -63,7 +63,11 @@ export default function OnboardingPage() {
 
   if (step === "slides") {
     return (
-      <main className="flex-1 flex flex-col">
+      <main
+        className="flex-1 flex flex-col"
+        // iOSノッチ/Dynamic Island を避ける(2026-08-08)
+        style={{ paddingTop: "env(safe-area-inset-top)" }}
+      >
         <OnboardingSlides onFinish={() => setStep("form")} />
       </main>
     );
@@ -71,7 +75,11 @@ export default function OnboardingPage() {
 
   if (step === "form") {
     return (
-      <main className="flex-1 flex flex-col gap-6 px-6 py-8">
+      <main
+        className="flex-1 flex flex-col gap-6 px-6 py-8"
+        // iOSノッチ/Dynamic Island を避ける。env() 非対応環境では py-8 のまま(2026-08-08)
+        style={{ paddingTop: "calc(env(safe-area-inset-top) + 2rem)" }}
+      >
         <div className="flex flex-col items-center gap-2 text-center">
           <h1 className="text-2xl font-bold text-ink">
             {t("onboarding.form.title")}
@@ -104,7 +112,11 @@ export default function OnboardingPage() {
 
   // step === "done"
   return (
-    <main className="relative flex-1 flex flex-col items-center justify-center gap-5 px-6 py-8 text-center overflow-hidden">
+    <main
+      className="relative flex-1 flex flex-col items-center justify-center gap-5 px-6 py-8 text-center overflow-hidden"
+      // iOSノッチ/Dynamic Island を避ける。env() 非対応環境では py-8 のまま(2026-08-08)
+      style={{ paddingTop: "calc(env(safe-area-inset-top) + 2rem)" }}
+    >
       {/* 背景の淡い光彩(青と金・装飾) */}
       <div
         aria-hidden

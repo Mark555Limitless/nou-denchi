@@ -3,6 +3,13 @@ import type { Zone } from "@/lib/engine/types";
 export const SCHEMA_VERSION = 1;
 export const APP_NAME = "脳でんち";
 
+/**
+ * BOOST!! 自己ベストタイム(ms)の localStorage キー。
+ * 設定画面の「データ全削除」(§4.6 wipeAllData)でも必ず消去する
+ * (プライバシーポリシー「全消去できます」との整合。2026-08-08 提出前監査)。
+ */
+export const BOOST_BEST_KEY = "nou-denchi-boost-best";
+
 /** Phase 2 を見据えた機能フラグ(§8)。MVPでは全機能開放・ゲーティングなし。 */
 export const featureFlags = {
   premiumGating: false,

@@ -1,4 +1,4 @@
-import { SCHEMA_VERSION } from "@/lib/config";
+import { BOOST_BEST_KEY, SCHEMA_VERSION } from "@/lib/config";
 import type { AgeBand, BaselineScope } from "@/lib/engine/types";
 import { db, type BaselineRecord, type SessionRecord, type UserProfile } from "./db";
 
@@ -78,11 +78,17 @@ export async function resetCalibration(): Promise<void> {
   await updateProfile({ calibrationStartAt: Date.now() });
 }
 
-/** データ全削除(§4.6) */
+/**
+ * データ全削除(§4.6)。IndexedDB の全テーブルに加え、localStorage に持つ
+ * BOOST!! 自己ベストも消す(ポリシー「全消去できます」との整合。2026-08-08)。
+ */
 export async function wipeAllData(): Promise<void> {
   await Promise.all([
     db.profile.clear(),
     db.sessions.clear(),
     db.baselines.clear(),
   ]);
+  if (typeof localStorage !== "undefined") {
+    localStorage.removeItem(BOOST_BEST_KEY);
+  }
 }

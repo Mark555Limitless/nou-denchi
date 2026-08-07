@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { t } from "@/lib/i18n";
 import type { Zone } from "@/lib/engine/types";
 import { generateShareCard } from "@/lib/share/shareCard";
 import { timeLabel } from "@/lib/ui/format";
+import { isNativeApp } from "@/lib/ui/platform";
 import { useDialogFocus } from "@/lib/ui/useDialogFocus";
 
 interface Props {
@@ -22,6 +23,11 @@ interface Props {
  * シェアカードのプレビュー+シェア/保存モーダル(§6.2)。
  * Web Share API(files対応)があれば navigator.share、
  * 非対応なら PNG ダウンロード+シェア文言のクリップボードコピー+トースト。
+ *
+ * 2026-08-08 iOSネイティブ(Capacitor)対応: WKWebView は <a download>(blob:)を
+ * 処理できず何も起こらないため、ネイティブでは「保存」も共有シート経由にする
+ * (シートの「画像を保存」で写真に保存できる)。保存を自前で完了させた訳では
+ * ないので成功トーストは出さない。files 共有まで非対応の環境では「保存」を隠す。
  */
 export function ShareCardModal({
   percent,
@@ -88,6 +94,16 @@ export function ShareCardModal({
       ? `${t("share.day7.title")}\n${t("share.hashtags")}`
       : `${t("percent.label", { time: timeLabel(dateMs) })} ${percent}%\n${t("share.hashtags")}`;
 
+  const native = isNativeApp();
+  // files 付き Web Share の対応判定。カード生成前でも判定できるよう空ファイルで見る
+  const canShareFiles = useMemo(() => {
+    if (typeof navigator === "undefined") return false;
+    if (typeof navigator.canShare !== "function") return false;
+    return navigator.canShare({
+      files: [new File([], fileName, { type: "image/png" })],
+    });
+  }, [fileName]);
+
   function download() {
     if (!url) return;
     const a = document.createElement("a");
@@ -98,17 +114,34 @@ export function ShareCardModal({
     a.remove();
   }
 
-  async function handleShare() {
+  /** 共有シートを開く。「保存」からはカード画像のみ(文言なし)を渡す */
+  async function shareViaSheet(withText: boolean) {
     if (!blob) return;
     const file = new File([blob], fileName, { type: "image/png" });
-    if (
-      typeof navigator.canShare === "function" &&
-      navigator.canShare({ files: [file] })
-    ) {
-      try {
-        await navigator.share({ files: [file], text: shareText });
-      } catch {
-        // ユーザーによるキャンセル等は無視
+    try {
+      await navigator.share({
+        files: [file],
+        ...(withText ? { text: shareText } : {}),
+      });
+    } catch {
+      // ユーザーによるキャンセル等は無視
+    }
+  }
+
+  async function handleShare() {
+    if (!blob) return;
+    if (canShareFiles) {
+      await shareViaSheet(true);
+      return;
+    }
+    if (native) {
+      // files 非対応のネイティブ環境: 文言のみ共有シートへ(ダウンロードは不可)
+      if (typeof navigator.share === "function") {
+        try {
+          await navigator.share({ text: shareText });
+        } catch {
+          // キャンセル等は無視
+        }
       }
       return;
     }
@@ -123,9 +156,17 @@ export function ShareCardModal({
   }
 
   function handleSave() {
+    if (native) {
+      // WKWebView は <a download> を処理できない。共有シートの「画像を保存」に委ねる
+      void shareViaSheet(false);
+      return;
+    }
     download();
     showToast(t("result.share.saved"));
   }
+
+  // ネイティブで files 共有まで使えない場合、「保存」は成立しないので出さない
+  const showSaveButton = !native || canShareFiles;
 
   return (
     <div
@@ -165,7 +206,9 @@ export function ShareCardModal({
             </p>
           )}
         </div>
-        <div className="grid grid-cols-2 gap-3">
+        <div
+          className={`grid gap-3 ${showSaveButton ? "grid-cols-2" : "grid-cols-1"}`}
+        >
           <button
             type="button"
             onClick={handleShare}
@@ -178,14 +221,16 @@ export function ShareCardModal({
             />
             {t("result.share.share")}
           </button>
-          <button
-            type="button"
-            onClick={handleSave}
-            disabled={!url}
-            className="rounded-full border-2 border-primary/70 bg-white/70 backdrop-blur-sm text-primary-deep font-bold py-3.5 min-h-[44px] shadow-sm disabled:opacity-40 active:opacity-80"
-          >
-            {t("result.share.save")}
-          </button>
+          {showSaveButton && (
+            <button
+              type="button"
+              onClick={handleSave}
+              disabled={!url}
+              className="rounded-full border-2 border-primary/70 bg-white/70 backdrop-blur-sm text-primary-deep font-bold py-3.5 min-h-[44px] shadow-sm disabled:opacity-40 active:opacity-80"
+            >
+              {t("result.share.save")}
+            </button>
+          )}
         </div>
       </div>
       {toast && (

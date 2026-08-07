@@ -112,7 +112,11 @@ export default function SettingsPage() {
   };
 
   return (
-    <main className="flex-1 flex flex-col gap-4 px-4 py-6">
+    <main
+      className="flex-1 flex flex-col gap-4 px-4 py-6"
+      // iOSノッチ/Dynamic Island を避ける。env() 非対応環境では py-6 のまま(2026-08-08)
+      style={{ paddingTop: "calc(env(safe-area-inset-top) + 1.5rem)" }}
+    >
       <div className="flex flex-col items-center gap-2 pb-1">
         <h1 className="text-xl font-bold">{t("settings.title")}</h1>
         <GoldOrnament />

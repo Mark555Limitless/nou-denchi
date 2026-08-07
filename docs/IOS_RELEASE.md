@@ -14,8 +14,10 @@ Web版と同じコードを、iOSネイティブアプリとして App Store に
 
 この2つは Apple ID とお支払いが必要なため、**必ずご本人の操作**で行う。
 
-1. **Xcode**(無料)
+1. **Xcode**(無料・**バージョン26以降が必須**)
    Mac App Store から「Xcode」をインストール(約10GB・数十分)。
+   2026年4月28日以降、App Store へのアップロードには **Xcode 26(iOS 26 SDK)
+   以降でのビルドが必須**。Mac App Store から入れれば常に最新なので条件を満たす。
    インストール後、ターミナルで一度だけ以下を実行して、コマンドラインの
    参照先を Xcode 本体に切り替える(管理者パスワードを聞かれる)。
 
@@ -23,7 +25,10 @@ Web版と同じコードを、iOSネイティブアプリとして App Store に
    sudo xcode-select -s /Applications/Xcode.app/Contents/Developer && xcodebuild -runFirstLaunch
    ```
 
-2. **Apple Developer Program**(年額 ¥15,800)
+   切り替え後、`xcodebuild -version` が **26.x 以上**であることを確認する。
+
+2. **Apple Developer Program**(年額 US$99。日本からはおよそ1.3万円前後・
+   為替により変動し、**登録画面に表示される額が正**)
    <https://developer.apple.com/programs/enroll/> から登録。
    本人確認に1〜2日かかることがある。**登録が完了するまで提出はできない。**
 
@@ -160,4 +165,5 @@ npm run build:ios
 | Signing でエラー | Xcode > Settings > Accounts に Apple ID が入っているか、Developer Program の登録が完了しているかを確認 |
 | 効果音が鳴らない | Web Audio はユーザー操作後にしか鳴らない仕様。画面を1回タップしてから確認する |
 | `xcodebuild` が見つからない | 手順0の `xcode-select -s` を実行していない |
+| アップロード後に SDK バージョン不足で拒否される | 古い Xcode でビルドしている。Xcode を 26 以降に更新して Archive からやり直す(2026年4月28日以降の要件) |
 | 履歴が消える | シミュレータの「Erase All Content and Settings」を実行していないか確認。実機では消えない |

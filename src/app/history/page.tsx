@@ -38,7 +38,11 @@ export default function HistoryPage() {
   return (
     <main className="flex flex-1 flex-col px-4 pb-6">
       {/* 見出し: 濃紺タイポ+両脇に金のヘアライン(モックの見出し装飾に準拠) */}
-      <header className="flex items-center justify-center gap-3 pb-2 pt-6">
+      <header
+        className="flex items-center justify-center gap-3 pb-2 pt-6"
+        // iOSノッチ/Dynamic Island を避ける。env() 非対応環境では pt-6 のまま(2026-08-08)
+        style={{ paddingTop: "calc(env(safe-area-inset-top) + 1.5rem)" }}
+      >
         <span
           aria-hidden
           className="h-px w-10 bg-linear-to-r from-transparent to-gold-soft"
