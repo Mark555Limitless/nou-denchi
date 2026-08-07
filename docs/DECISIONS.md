@@ -445,3 +445,24 @@
 - **任意(未対応と理由)**: BOOST!! の「脳を急激に活性化させる」等の効能表現の
   緩和はユーザー承認済み文言のため無断変更しない(審査で指摘されたら要相談)。
   DEVELOPMENT_TEAM の pbxproj コミットは Xcode GUI 運用のため不要
+
+## 2026-08-08 追加変更 その20(クラウドビルド対応 — Xcode 不要の提出経路)
+
+ローカルの空き容量が乏しく(26GB)Xcode 約17GB を入れたくないという要望を受け、
+Codemagic(クラウドMac・無料枠500分/月)経由の提出経路を整備した。
+
+- **codemagic.yaml**(リポジトリ直下): npm ci → build:ios → 署名適用 →
+  agvtool でビルド番号採番 → IPA 作成 → TestFlight 自動アップロード。
+  署名は App Store Connect API キーからの自動生成(証明書・プロファイル管理不要)
+- **共有スキーム App.xcscheme を新規作成**: Xcode GUI を一度も開いていないため
+  ユーザースキームが存在せず、CI の `xcodebuild -scheme App` が失敗する状態だった。
+  pbxproj のターゲットID(504EC3031FED79650016851F)を参照して手書きで共有化
+- **pbxproj に `VERSIONING_SYSTEM = apple-generic` を追加**: agvtool による
+  ビルド番号の自動インクリメントに必須
+- **手順書 docs/CLOUD_RELEASE.md を新設**(IOS_RELEASE.md はローカルXcode派向けに併存)
+- **App Store 用スクリーンショット5枚を生成**: `docs/appstore/screenshots/`
+  (1290x2796 = 6.9インチ)。ヘッドレスChrome(430x932@3x・iPhone UA)で
+  ライブ版にデモデータ(15セッション・ベスト100%・最新98%)を IndexedDB 注入して
+  実画面を撮影。Xcode/シミュレータ不要で規定サイズを満たす
+- 選定理由: Xcode Cloud は初期設定にローカル Xcode が必須のため除外。
+  Codemagic は API キーのみで証明書自動生成でき、Mac 非依存で完結する

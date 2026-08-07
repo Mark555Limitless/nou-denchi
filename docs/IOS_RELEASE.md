@@ -15,9 +15,27 @@ Web版と同じコードを、iOSネイティブアプリとして App Store に
 この2つは Apple ID とお支払いが必要なため、**必ずご本人の操作**で行う。
 
 1. **Xcode**(無料・**バージョン26以降が必須**)
-   Mac App Store から「Xcode」をインストール(約10GB・数十分)。
+   Mac App Store から「Xcode」をインストール。
    2026年4月28日以降、App Store へのアップロードには **Xcode 26(iOS 26 SDK)
    以降でのビルドが必須**。Mac App Store から入れれば常に最新なので条件を満たす。
+
+   **必要なディスク容量(2026-08 実測ベース)**
+
+   | 内容 | サイズ | 要否 |
+   |---|---|---|
+   | ダウンロード(App Store 表示) | 約 2.4 GB | — |
+   | Xcode 本体(展開後・macOS SDK 込み) | 約 8.6 GB | **必須** |
+   | iOS プラットフォーム(iOS SDK + 現行シミュレータ) | 約 8.4 GB | **必須** |
+   | watchOS / tvOS / visionOS | 各 5〜8 GB | 不要 |
+   | Metal Toolchain | 約 3 GB | 不要(本アプリはMetal未使用) |
+   | 旧iOS版シミュレータランタイム | 各 5〜8 GB | 不要 |
+
+   → **必要最小は約 17 GB**。インストール中は展開用に一時的にもう数GB要る。
+
+   初回起動時に出るコンポーネント選択シートでは **iOS だけにチェック**し、
+   watchOS/tvOS/visionOS と Metal Toolchain は**外す**。あとから
+   Xcode > Settings > Components でいつでも追加・削除できる。
+
    インストール後、ターミナルで一度だけ以下を実行して、コマンドラインの
    参照先を Xcode 本体に切り替える(管理者パスワードを聞かれる)。
 

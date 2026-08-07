@@ -1,0 +1,55 @@
+# Codemagic クラウドビルド設定(2026-08-08)。
+# ローカルに Xcode を入れずに App Store へ提出するための構成。
+# 手順の全体像は docs/CLOUD_RELEASE.md を参照。
+#
+# 前提(Codemagic の Web UI 側で1回だけ設定):
+#   Teams > Personal Account > Integrations > Developer Portal で
+#   App Store Connect API キーを「noudenchi-asc」という名前で登録すること
+#   (名前を変える場合は下の integrations.app_store_connect も合わせる)。
+#
+# 起動はダッシュボードの「Start new build」から手動(自動トリガーなし)。
+workflows:
+  ios-release:
+    name: iOS App Store ビルド(TestFlightへ自動アップロード)
+    instance_type: mac_mini_m2
+    max_build_duration: 60
+    integrations:
+      app_store_connect: noudenchi-asc
+    environment:
+      node: 24
+      xcode: latest # 2026-04-28 以降は iOS 26 SDK(Xcode 26+)でのビルドが必須
+      ios_signing:
+        # 証明書・プロビジョニングプロファイルは API キーから自動生成される
+        distribution_type: app_store
+        bundle_identifier: com.marklimitless.noudenchi
+    scripts:
+      - name: 依存関係のインストール
+        script: npm ci
+      - name: Web ビルド + iOS プロジェクトへ同期(basePath なし必須)
+        script: npm run build:ios
+      - name: 署名プロファイルを Xcode プロジェクトへ適用
+        script: xcode-project use-profiles
+      - name: ビルド番号を採番(Codemagic のビルド回数で単調増加)
+        script: |
+          cd ios/App
+          agvtool new-version -all $BUILD_NUMBER
+      - name: IPA を作成
+        script: |
+          xcode-project build-ipa \
+            --project ios/App/App.xcodeproj \
+            --scheme App
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        # TestFlight まで自動で上げる。App Store 審査への提出は
+        # App Store Connect 上で掲載情報を整えてから手動で行う
+        submit_to_testflight: true
+      email:
+        recipients:
+          - ohno555masaaki@gmail.com
+        notify:
+          success: true
+          failure: true
