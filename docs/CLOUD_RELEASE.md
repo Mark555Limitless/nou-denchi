@@ -192,6 +192,8 @@ Codemagic が Apple Distribution 証明書を自動作成するために、
 | 症状 | 原因と対処 |
 |---|---|
 | Specify build configuration に workflow が出ない | ブランチが main 以外を向いている/「Check for configuration files」を押していない。yaml はビルドのたびにリポジトリから読み直される |
+| 「No signing certificate "iOS Distribution" found」で ARCHIVE FAILED | `keychain initialize`→`keychain add-certificates` の2ステップが yaml に無い(証明書は取得後キーチェーンに入れて初めて xcodebuild から見える)。現行 yaml は対応済み |
+| App Store distribution だけ赤で終わる(Complete test information is required…) | **アップロード自体は成功している**。外部テスター向けベータ審査への自動提出(`submit_to_testflight: true`)が、TestFlight テスト情報(Feedback Email 等)未入力で失敗しただけ。内部テスト・App Store 申請には不要なので現行 yaml は false。外部テスターを招く時だけ <https://appstoreconnect.apple.com/apps/6799632701/testflight/test-info> を入力して true に戻す |
 | fetch-signing-files でエラー | 手順4-4 の `CERTIFICATE_PRIVATE_KEY` が未登録、Group 名が `ios-signing` と不一致、Secret 漏れ、または鍵が PEM 形式でない |
 | ビルドが署名エラー | **Codemagic 側**(手順4-3)のキー名が `noudenchi-asc` になっているか。Apple 側(手順2)の名前は無関係なので変えなくてよい。Developer Program の登録が完了しているか。API キーの権限が **App Manager** か(Developer 権限だとアップロードで失敗) |
 | アップロードで「アプリが見つからない」 | 手順3のアプリ枠(バンドルID一致)を作っていない |

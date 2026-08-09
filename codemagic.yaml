@@ -70,9 +70,11 @@ workflows:
     publishing:
       app_store_connect:
         auth: integration
-        # TestFlight まで自動で上げる。App Store 審査への提出は
-        # App Store Connect 上で掲載情報を整えてから手動で行う
-        submit_to_testflight: true
+        # アップロードのみ行う(内部テストはこれだけで可能)。
+        # true にすると「外部テスター向けベータ審査」へ自動提出されるが、
+        # App Store Connect の TestFlight テスト情報(Feedback Email等)が
+        # 未入力だと失敗する(ビルド#2の実障害。内部テスト・App Store申請には不要)
+        submit_to_testflight: false
       email:
         recipients:
           - ohno555masaaki@gmail.com
