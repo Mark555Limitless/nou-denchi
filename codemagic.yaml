@@ -33,11 +33,18 @@ workflows:
         script: npm ci
       - name: Web ビルド + iOS プロジェクトへ同期(basePath なし必須)
         script: npm run build:ios
+      - name: キーチェーンを初期化
+        script: keychain initialize
       - name: 署名用の証明書・プロファイルを取得(無ければ Apple 側に自動作成)
         script: |
           app-store-connect fetch-signing-files "$BUNDLE_ID" \
             --type IOS_APP_STORE \
             --create
+      # 取得した証明書はキーチェーンに入れて初めて xcodebuild から見える。
+      # これを欠くと「No signing certificate "iOS Distribution" found」で
+      # ARCHIVE FAILED になる(初回ビルド#1の実障害。2026-08-09)
+      - name: 証明書をキーチェーンへ登録
+        script: keychain add-certificates
       - name: 署名設定を Xcode プロジェクトへ適用
         script: xcode-project use-profiles
       - name: ビルド番号を採番(TestFlight最新+1。まだ無ければCodemagicのビルド回数)
