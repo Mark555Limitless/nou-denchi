@@ -60,8 +60,13 @@ Codemagic が自動生成する。Mac も Keychain も .p12 も不要。
 
 1. <https://developer.apple.com/account/resources/identifiers/list> →
    「+」→ App IDs → App → 以下を入力して登録:
-   - Description: `nou-denchi`
+   - Description: **`Noudenchi`**
+     - ⚠️ この欄は**英数字と半角スペースのみ**。日本語(`脳でんち`)・ハイフン
+       (`nou-denchi`)・記号(`@ & * ' " - + .`)は弾かれる
+     - 開発者ポータルの一覧に出るだけの**自分用ラベル**。利用者には見えず、
+       App Store の表示名(`脳でんち`)とも無関係。**後から変更できる**
    - Bundle ID: **Explicit** で `com.marklimitless.noudenchi`
+     (⚠️ こちらは**後から変更不可**。1文字も違えないこと)
    - Capabilities: 何もチェックしない
 2. App Store Connect → マイ App → 「+」→ 新規 App:
    - プラットフォーム: iOS / 名前: `脳でんち` / 主言語: 日本語
