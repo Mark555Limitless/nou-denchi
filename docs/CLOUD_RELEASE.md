@@ -76,19 +76,73 @@ Codemagic が自動生成する。Mac も Keychain も .p12 も不要。
 
 ## 4. Codemagic をセットアップ(無料枠 500分/月)
 
-1. <https://codemagic.io/> に **GitHub アカウント**でサインアップ
-2. Add application → `Mark555Limitless/nou-denchi` を選択
-   (設定ファイルは `codemagic.yaml` が自動検出される)
-3. Teams → Personal Account → Integrations → **Developer Portal** → Manage keys:
-   手順2の **Issuer ID / Key ID / .p8** を登録し、名前を **`noudenchi-asc`** にする
-   - ⚠️ **ここの名前だけは固定**。`codemagic.yaml` の
-     `integrations.app_store_connect` と1文字でも違うと署名で失敗する
-   - 手順2で Apple 側に付けた名前(`Codemagic` 等)とは**無関係**。揃える必要はない
+UI のボタン表記は英語の原文で記す(2026-08 時点の公式ドキュメント準拠)。
+**Team は作らないこと**(Team にすると無料500分が消える。個人 = Personal account のまま使う)。
+
+### 4-1. サインアップ
+
+1. <https://codemagic.io/signup> → **Sign up with GitHub**
+2. GitHub 側の認可画面で **Authorize Codemagic** をクリック
+   - この認可は**本人確認(ログイン)専用**で、リポジトリへのアクセス権は渡らない。
+     サインアップ直後にリポジトリ一覧が空でも正常
+3. クレジットカード登録は不要(求められたら何かおかしいので中断して確認)
+
+### 4-2. リポジトリを追加(GitHub App のインストール)
+
+1. **Applications** ページ右上の **Add application**
+2. Git provider で **GitHub** → **Next: Authorize integration**
+3. 新しいウィンドウで **Authorize Codemagic CI/CD**
+4. 続けて **Install GitHub App** をクリック
+5. GitHub のインストール画面でアカウント(Mark555Limitless)を選び、
+   ⚠️ **Select repositories only** を選んで **nou-denchi だけ**にチェック
+   (All repositories は全リポジトリへの読み取り権を渡すので選ばない)
+6. **Install & Authorize**(パスワード確認が出ることがある)
+7. Codemagic に戻り、ドロップダウンから `Mark555Limitless/nou-denchi` を選択
+8. **Select project type** は **Ionic** を選ぶ
+   (Capacitor 専用タイルは無い。Ionic が Capacitor 用の選択肢。
+    ビルド内容は codemagic.yaml で決まるため、この選択は表示にしか影響しない)
+9. **Finish: Add application**
+
+### 4-3. App Store Connect API キーを登録
+
+1. 左ナビのチーム選択で **Personal account** を選び **Settings** を開く
+2. **Integrations** セクション → **Developer Portal** の **Connect**
+   (2回目以降は **Manage keys** → **Add key**)
+3. フォームに入力:
+   - **App Store Connect API key name**: ⚠️ **`noudenchi-asc`** で固定。
+     `codemagic.yaml` の `integrations.app_store_connect` と1文字でも違うと失敗する。
+     Apple 側でキーに付けた名前(`Codemagic` 等)とは**無関係**。揃える必要はない
+   - **Issuer ID**: 手順2で控えた値
+   - **Key ID**: 手順2で控えた値
+   - **API key**: **Choose a .p8 file** で .p8 をアップロード
+4. **Save**
+
+### 4-4. 署名用の秘密鍵を登録(自動コード署名に必須)
+
+Codemagic が Apple Distribution 証明書を自動作成するために、
+**App Store Connect API キーとは別の** RSA 秘密鍵が1本必要。
+生成済み: `脳でんち_非公開情報/App Store登録/Codemagic署名用秘密鍵/codemagic_signing_key`
+(再生成する場合: `ssh-keygen -t rsa -b 2048 -m PEM -f codemagic_signing_key -q -N ""`)
+
+1. Codemagic の **Applications** → nou-denchi → アプリ設定の
+   **Environment variables** タブを開く
+2. 次の内容で追加:
+   - **Variable name**: `CERTIFICATE_PRIVATE_KEY`(この名前で固定)
+   - **Variable value**: 上記ファイルの中身を貼り付け
+     (ターミナルで `pbcopy < ファイルパス` するとクリップボードに入る)
+   - **Group**: `ios-signing`(⚠️ `codemagic.yaml` の `environment.groups` と一致必須)
+   - **Secret**: ⚠️ 必ずチェックを入れる
+3. **Add** で保存
 
 ## 5. ビルド実行(ボタン1つ)
 
-ダッシュボードで nou-denchi → **Start new build** → workflow
-「iOS App Store ビルド」を選んで開始。15〜25分で:
+1. Applications → nou-denchi → **codemagic.yaml** タブ右上でブランチ **main** を選び、
+   **Check for configuration files** をクリック(yaml を認識させる)
+2. **Start your first build**(2回目以降は **Start new build**)をクリック
+3. **Specify build configuration** ポップアップで branch **main** と
+   workflow **ios-release(iOS App Store ビルド…)** を選び **Start new build**
+
+15〜25分で:
 
 - IPA のビルドと署名
 - App Store Connect へのアップロード
@@ -137,7 +191,9 @@ Codemagic が自動生成する。Mac も Keychain も .p12 も不要。
 
 | 症状 | 原因と対処 |
 |---|---|
-| ビルドが署名エラー | **Codemagic 側**(手順4)のキー名が `noudenchi-asc` になっているか。Apple 側(手順2)の名前は無関係なので変えなくてよい。Developer Program の登録が完了しているか |
+| Specify build configuration に workflow が出ない | ブランチが main 以外を向いている/「Check for configuration files」を押していない。yaml はビルドのたびにリポジトリから読み直される |
+| fetch-signing-files でエラー | 手順4-4 の `CERTIFICATE_PRIVATE_KEY` が未登録、Group 名が `ios-signing` と不一致、Secret 漏れ、または鍵が PEM 形式でない |
+| ビルドが署名エラー | **Codemagic 側**(手順4-3)のキー名が `noudenchi-asc` になっているか。Apple 側(手順2)の名前は無関係なので変えなくてよい。Developer Program の登録が完了しているか。API キーの権限が **App Manager** か(Developer 権限だとアップロードで失敗) |
 | アップロードで「アプリが見つからない」 | 手順3のアプリ枠(バンドルID一致)を作っていない |
 | 起動しても真っ白 | `npm run build:ios` を経由しない成果物を同梱している(codemagic.yaml を変更した場合のみ起こり得る) |
 | TestFlight に出てこない | アップロード後の処理に10〜30分かかる。「輸出コンプライアンス」は Info.plist 設定済みのため質問されない |

@@ -1,38 +1,55 @@
-# Codemagic クラウドビルド設定(2026-08-08)。
+# Codemagic クラウドビルド設定(2026-08-09 改訂: 自動コード署名方式へ修正)。
 # ローカルに Xcode を入れずに App Store へ提出するための構成。
 # 手順の全体像は docs/CLOUD_RELEASE.md を参照。
 #
-# 前提(Codemagic の Web UI 側で1回だけ設定):
-#   Teams > Personal Account > Integrations > Developer Portal で
-#   App Store Connect API キーを「noudenchi-asc」という名前で登録すること
-#   (名前を変える場合は下の integrations.app_store_connect も合わせる)。
+# 前提(Codemagic の Web UI 側で1回だけ設定する2点):
+# 1. 左ナビで Personal account を選択 > Settings > Integrations >
+#    Developer Portal の「Connect」で App Store Connect API キーを登録し、
+#    「App Store Connect API key name」を noudenchi-asc にすること
+#    (名前を変える場合は下の integrations.app_store_connect も合わせる)。
+# 2. アプリ設定 > Environment variables タブで、変数 CERTIFICATE_PRIVATE_KEY を
+#    グループ ios-signing に Secret として登録すること(値はローカル生成した
+#    RSA秘密鍵。docs/CLOUD_RELEASE.md 手順4-4参照)。証明書・プロビジョニング
+#    プロファイルは fetch-signing-files がこの鍵とAPIキーで Apple 側に自動作成する。
 #
 # 起動はダッシュボードの「Start new build」から手動(自動トリガーなし)。
 workflows:
   ios-release:
     name: iOS App Store ビルド(TestFlightへ自動アップロード)
-    instance_type: mac_mini_m2
-    max_build_duration: 60
+    instance_type: mac_mini_m2 # 無料枠で使える唯一のmacOSマシン
+    max_build_duration: 120 # 初回はSPM解決等で長引くため上限まで確保(消費は実測分のみ)
     integrations:
       app_store_connect: noudenchi-asc
     environment:
-      node: 24
       xcode: latest # 2026-04-28 以降は iOS 26 SDK(Xcode 26+)でのビルドが必須
-      ios_signing:
-        # 証明書・プロビジョニングプロファイルは API キーから自動生成される
-        distribution_type: app_store
-        bundle_identifier: com.marklimitless.noudenchi
+      groups:
+        - ios-signing # CERTIFICATE_PRIVATE_KEY を含むグループ(UI側で作成)
+      vars:
+        BUNDLE_ID: com.marklimitless.noudenchi
+        # App Store Connect のアプリ Apple ID(マイApp > App情報 に表示される数値)
+        APP_STORE_APPLE_ID: 6799632701
     scripts:
       - name: 依存関係のインストール
         script: npm ci
       - name: Web ビルド + iOS プロジェクトへ同期(basePath なし必須)
         script: npm run build:ios
-      - name: 署名プロファイルを Xcode プロジェクトへ適用
-        script: xcode-project use-profiles
-      - name: ビルド番号を採番(Codemagic のビルド回数で単調増加)
+      - name: 署名用の証明書・プロファイルを取得(無ければ Apple 側に自動作成)
         script: |
+          app-store-connect fetch-signing-files "$BUNDLE_ID" \
+            --type IOS_APP_STORE \
+            --create
+      - name: 署名設定を Xcode プロジェクトへ適用
+        script: xcode-project use-profiles
+      - name: ビルド番号を採番(TestFlight最新+1。まだ無ければCodemagicのビルド回数)
+        script: |
+          LATEST=$(app-store-connect get-latest-testflight-build-number "$APP_STORE_APPLE_ID" 2>/dev/null || true)
+          if echo "$LATEST" | grep -qE '^[0-9]+$'; then
+            NEXT=$((LATEST + 1))
+          else
+            NEXT=$BUILD_NUMBER
+          fi
           cd ios/App
-          agvtool new-version -all $BUILD_NUMBER
+          agvtool new-version -all "$NEXT"
       - name: IPA を作成
         script: |
           xcode-project build-ipa \
@@ -41,6 +58,8 @@ workflows:
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
+      # クラッシュログのシンボル化に必要
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
     publishing:
       app_store_connect:
         auth: integration
