@@ -21,7 +21,7 @@ App Store へ提出する手順。ローカルのディスク消費はゼロ。
 <https://appstoreconnect.apple.com/> → ユーザとアクセス → 統合 →
 App Store Connect API → キーを生成。
 
-- 名前: 任意(例: codemagic)
+- 名前: **`Codemagic`**(自由に決めてよい。理由は下記)
 - アクセス権: **App Manager**
 
 控えるもの(Codemagic 登録で使う):
@@ -34,6 +34,27 @@ App Store Connect API → キーを生成。
 
 この3点だけで、配布証明書・プロビジョニングプロファイルは
 Codemagic が自動生成する。Mac も Keychain も .p12 も不要。
+
+### ⚠️ 「名前」が2か所出てくる — 別物なので混同しないこと
+
+| どこ | 何の名前 | 決め方 |
+|---|---|---|
+| **手順2**(Apple 側・この節) | API キーのラベル | **自由**。`Codemagic` 推奨 |
+| **手順4**(Codemagic 側) | 連携の登録名 | **`noudenchi-asc` 固定** |
+
+**手順4の名前だけがビルドの成否に関わる**(`codemagic.yaml` の
+`integrations.app_store_connect` と一致しないと署名で失敗する)。
+手順2の名前は何にしても動く。
+
+**手順2で `Codemagic` を推す理由**: このラベルは Apple の管理画面に並ぶだけで、
+認証には使われずユーザーにも見えない(.p8 のファイル名も `AuthKey_<KeyID>.p8` で
+名前は入らない)。選ぶ基準は「将来の自分が見て何の鍵か分かるか」だけなので、
+**鍵を使う相手(=Codemagic)**を名前にするのが最も分かりやすい。
+
+- ❌ アプリ名(`脳でんち`) … キーは**アカウント全体**で有効でアプリに紐づかない。
+  2つ目のアプリを出したとき名前と実体がずれる
+- ❌ 個人名・グループ名 … これは人の資格情報ではなく**システム用の資格情報**。
+  「誰の鍵か」より「何に使う鍵か」が分かる名前にする
 
 ## 3. バンドル ID とアプリ枠を作成(ブラウザのみ)
 
@@ -55,7 +76,9 @@ Codemagic が自動生成する。Mac も Keychain も .p12 も不要。
    (設定ファイルは `codemagic.yaml` が自動検出される)
 3. Teams → Personal Account → Integrations → **Developer Portal** → Manage keys:
    手順2の **Issuer ID / Key ID / .p8** を登録し、名前を **`noudenchi-asc`** にする
-   (`codemagic.yaml` の `integrations.app_store_connect` と一致させること)
+   - ⚠️ **ここの名前だけは固定**。`codemagic.yaml` の
+     `integrations.app_store_connect` と1文字でも違うと署名で失敗する
+   - 手順2で Apple 側に付けた名前(`Codemagic` 等)とは**無関係**。揃える必要はない
 
 ## 5. ビルド実行(ボタン1つ)
 
@@ -109,7 +132,7 @@ Codemagic が自動生成する。Mac も Keychain も .p12 も不要。
 
 | 症状 | 原因と対処 |
 |---|---|
-| ビルドが署名エラー | Integrations のキー名が `noudenchi-asc` になっているか。Developer Program の登録が完了しているか |
+| ビルドが署名エラー | **Codemagic 側**(手順4)のキー名が `noudenchi-asc` になっているか。Apple 側(手順2)の名前は無関係なので変えなくてよい。Developer Program の登録が完了しているか |
 | アップロードで「アプリが見つからない」 | 手順3のアプリ枠(バンドルID一致)を作っていない |
 | 起動しても真っ白 | `npm run build:ios` を経由しない成果物を同梱している(codemagic.yaml を変更した場合のみ起こり得る) |
 | TestFlight に出てこない | アップロード後の処理に10〜30分かかる。「輸出コンプライアンス」は Info.plist 設定済みのため質問されない |
