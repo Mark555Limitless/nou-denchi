@@ -121,7 +121,7 @@ UI のボタン表記は英語の原文で記す(2026-08 時点の公式ドキ�
 
 Codemagic が Apple Distribution 証明書を自動作成するために、
 **App Store Connect API キーとは別の** RSA 秘密鍵が1本必要。
-生成済み: `脳でんち_非公開情報/App Store登録/Codemagic署名用秘密鍵/codemagic_signing_key`
+生成済み: `脳でんち_非公開/App Store登録/Codemagic署名用秘密鍵/codemagic_signing_key`
 (再生成する場合: `ssh-keygen -t rsa -b 2048 -m PEM -f codemagic_signing_key -q -N ""`)
 
 1. Codemagic の **Applications** → nou-denchi → アプリ設定の
