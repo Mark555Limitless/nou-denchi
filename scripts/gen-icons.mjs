@@ -60,7 +60,10 @@ for (const { file, size, maskable } of outputs) {
 
 // favicon.ico(16/32/48 を PNG 埋め込みで1ファイルに束ねる)
 const icoSizes = [16, 32, 48];
-const icoImages = await Promise.all(icoSizes.map((s) => iconPng(s)));
+// Next.js は favicon.ico 内の PNG を RGBA でしか読めない(RGB だとビルドが失敗する)ため不透明のままアルファ付きにする
+const icoImages = await Promise.all(
+  icoSizes.map(async (s) => sharp(await iconPng(s)).ensureAlpha(1).png().toBuffer()),
+);
 const header = Buffer.alloc(6 + 16 * icoSizes.length);
 header.writeUInt16LE(0, 0);
 header.writeUInt16LE(1, 2);
