@@ -537,3 +537,27 @@ Codemagic(クラウドMac・無料枠500分/月)経由の提出経路を整備�
 - ASCプロモーションテキスト(審査なしで即反映)の末尾「無料、広告なし。」を
   「無料・広告なし・課金なし。カード確認はApple側の要因です。」に差し替え(既存の自筆文は保持・165/170字)。
   説明文(概要)本体はバージョン提出なしでは変更不可のため次回更新時に検討
+
+## 2026-10-04 その25(アイコン刷新・v1.0.1・デスクトップ対応の整理)
+
+**アプリアイコンを「電池マーク」から「頭+電球+稲妻」の図案へ変更した(ユーザー指示)。**
+
+- 原画は `docs/design/app-icon/app-icon-1024.png`(1024×1024・不透明・sRGB)。
+  ユーザー支給ファイルは拡張子 .png だが中身が JPEG だったため PNG に変換して格納
+- `scripts/gen-icons.mjs` を電池SVG方式から原画ベースへ改訂し、次を一括生成:
+  PWA any 192/512・maskable 512/1024(図柄を0.8倍にして半径40%の安全円に収める)・
+  favicon.ico(16/32/48)・apple-icon 180・icon 32・iOS AppIcon 1024・iOS 起動画面 2732
+- 罠1: iOS のアプリアイコンはアルファ禁止(ITMS-90717)。全出力を flatten+sRGB タグで統一
+- 罠2: Next.js は favicon.ico 内の PNG を **RGBA でしか読めない**(RGB だと
+  "The PNG is not in RGBA format!" でビルド失敗)。ICO だけ不透明のままアルファ付きにする
+- 罠3: sharp は composite をパイプライン最後に適用するので、合成画像の透過除去は別パスで行う
+- iOS は **v1.0.1**(MARKETING_VERSION)として新ビルド・再審査が必要
+  (ストアのアイコンはビルド内の AppIcon から取られ、ASC で単独差し替えできない)
+- **デスクトップ対応の現状**:
+  - Mac(Apple シリコン): iPhone アプリが Mac App Store に既定で掲載済み
+    (ストア表示「iPhoneに対応・macOSでは検証されていません」・macOS 12以降/M1以降)。
+    iPhone 縦画面サイズの固定ウィンドウで動く。Intel Mac は対象外
+  - Windows / Intel Mac / その他: Web 版(GitHub Pages)が PWA のインストール条件を満たしており、
+    Chrome・Edge の「インストール」、Mac Safari の「Dockに追加」でアプリとして使える
+  - manifest の `id` を `./` → `/nou-denchi/` に修正(相対 id は start_url のオリジン直下に
+    解決され、/nou-denchi/ が付かないため)。1024 maskable も追加し Web 版を再デプロイ済み
