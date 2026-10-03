@@ -9,6 +9,8 @@
     "lint": "eslint",
     "test": "vitest run",
     "test:watch": "vitest",
+    "verify": "tsc --noEmit --incremental false && eslint --max-warnings 0 && vitest run && node scripts/check-asset-refs.mjs",
+    "verify:full": "npm run verify && npm run build",
     "gen:icons": "node scripts/gen-icons.mjs",
     "postbuild": "node scripts/gen-sw.mjs",
     "deploy:pages": "bash scripts/deploy-pages.sh",
