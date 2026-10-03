@@ -1,5 +1,9 @@
 # UI実装エージェント向け契約書(Phase B)
 
+> **旧版の注記(2026-10-04)**: 本書は 2026-07 の並列UI実装時の契約書。現在の全エージェント共通ルールは
+> ルートの `AGENTS.md`(実装は Codex・検証は `npm run verify`)。下の絶対ルール4(build禁止)と
+> 「デザイン言語」節(ダークネイビー基調)は当時のもので、現行のアクア・ガラステーマとは異なる。
+
 このリポジトリは Next.js 16 (App Router) + TypeScript + Tailwind CSS 4 + 静的エクスポート
 (`output: 'export'`, `trailingSlash: true`)。**画面はすべてクライアントコンポーネント**(先頭に `"use client"`)。
 モバイルファースト(layout.tsx が `max-w-md` センタリング済・下部ナビの高さぶん `pb-20` 確保済)。
