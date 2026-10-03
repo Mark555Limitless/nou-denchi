@@ -2,7 +2,7 @@
   "name": "脳でんち",
   "short_name": "脳でんち",
   "description": "キミ！いま何%!? — 1〜2分の認知テストで「今の判断力」を全盛期比で測定するセルフコンディション管理アプリ",
-  "id": "./",
+  "id": "/nou-denchi/",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
@@ -25,6 +25,12 @@
     {
       "src": "icons/icon-maskable-512.png",
       "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/icon-maskable-1024.png",
+      "sizes": "1024x1024",
       "type": "image/png",
       "purpose": "maskable"
     }
